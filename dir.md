@@ -3,3 +3,5 @@
     course staff.
 * admin-docs
   * Contains internal docs on workflow, style, etc. -- all admin things.
+* resources
+  * Contains textbooks, external docs, etc.
