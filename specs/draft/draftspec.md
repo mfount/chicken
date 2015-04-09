@@ -10,11 +10,17 @@ _1. Names and emails_
 Michael Fountaine
 
 mfount@college.harvard.edu
+
 Chan Kang
+
 chankang@college.harvard.edu
+
 Aleksandar Makelov
+
 amakelov@college.harvard.edu
+
 Ben Wetherfield
+
 bwetherfield@college.harvard.edu
 
 _2. Overview.
@@ -22,8 +28,13 @@ _2. Overview.
   - how will we solve it, vaguely?
   - goals for project?_
 
-We will implement some sorting algorithms and prove their correctness
-using
+We will implement some sorting algorithms in coq and prove their correctness 
+using coq's proof capabilities. The first chapters of Software Foundations
+provide useful lemmas to prove along the way.
+Goals for the project include developing familiarity to some of the proof-based 
+tools available to programmers and developing a more formal way to reason
+about correctness of code, along the lines of what we did in CS51.
+
 
 _3. Prioritized (specific, concrete) feature list.
   1. "Core features": a minimal feature set sth the project can be considered
@@ -52,3 +63,6 @@ _5. Next steps ("a contract with yourselves").
       familiar with them / do some basic exercises.
   - Which problems might we run into later in our project?
   - We need to get our environments set up._
+  - 
+  - Download `coq-8.4pl5` and IDE
+  - Work through 1/2 star problems in the inital chapters of Software Foundations
