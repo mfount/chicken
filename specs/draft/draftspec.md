@@ -8,6 +8,7 @@ Draft Specification
 _1. Names and emails_
 
 Michael Fountaine
+
 mfount@college.harvard.edu
 Chan Kang
 chankang@college.harvard.edu
