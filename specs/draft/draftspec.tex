@@ -156,49 +156,37 @@ All methods described below will have corresponding proofs.
 \end{itemize}
 
 \paragraph{Algorithms}
-These are the algorithms and subroutines we'll need for the mutable versions of the algorithms, which we expect to be harder; if we decide to do the pure versions, we will make adjustments accordingly.
+These are the algorithms and subroutines we'll need for the mutable (and often in-place) versions of the sorts, which we expect to be harder; if we decide to do the pure versions, we will make adjustments accordingly.
 \begin{itemize}
   \item \textbf{Insertion sort:} The subroutine \verb|(insertion n t)| takes as input an array $t$ where the first $n-1$ elements are sorted, and returns an array where the first $n$ elements are sorted, by inserting the $n$-th element in its place. Then insertion sort itself proceeds by running \verb|(insertion n t)| for $n=1,2,3,\ldots,N$ for a list $t$ of length $N$. 
-  \item \textbf{Mergesort:} 
-  \item \textbf{Tree sort:}
+  \item \textbf{Mergesort:} Here the basic subroutine is \verb|(merge t)| which takes a list $t$ in which the first and second halves are sorted, and merges them. Here we'll need to use some extra memory. Then mergesort proceeds by calling itself recursively on each half, and then merging them together.
+  \item \textbf{Tree sort:} We first build a binary search tree from the array by a subroutine \verb|(bst_build t)|; then we have another subroutine \verb|(bst_traverse t)| that traverses it in in-order.
   \item \textbf{Heap sort:} The algorithm proceeds by making the array into a heap in-place, and then gradually pushing the largest elements to the right side of the heap. Here, we're representing a binary tree implicitly as an array, where the children of the $i$-th element are the $2i+1$-th and $2i+2$-th elements. We have the following subroutines:
   \begin{itemize}
-	\item Predicate \verb|(heap t n k)| checks if in a list $t$, the tree rooted at the $k$-th element of elements of index at most $n$ is a heap
-	\item Predicate \verb|(inftree t n v k)| checks for a tree represented as above whether all elements are $\leq v$.
-	\item Subroutine \verb|(downheap t k n)| takes an array $t$ where the tree of elements rooted at the $k$-th element and of indices $\leq n$ is a heap, \emph{except} possibly for the root node. It then makes a bunch of swaps that make this tree into a heap (invariants need figuring out of course). 
+	\item Predicate \verb|(heap t n k)| checks if in a list $t$, the tree of elements of index $\leq n$ rooted at the $k$-th element.
+	\item Predicate \verb|(inftree t n v k)| checks if in a list $t$, every element in the tree of elements of index $\leq n$ rooted at the $k$-th element is less than $v$.
+	\item Subroutine \verb|(downheap t k n)| takes a list $t$ where the tree of elements of index $\leq n$ rooted at the $k$-th element is a heap \emph{except} possibly for the root node. It then makes a bunch of swaps that make this tree into a heap. 
 \end{itemize}
-	
-	\item Then, heapsort is easy: first build the heap using \verb|downheap| a bunch of times, and then swap the 1st element with the $N$-th, $N-1$-th, etc. and rebuild the heap to the appropriate index between swaps.
-  \item \textbf{Simple timsort:}
-    Timsort, as described below, omitting heuristics.
-  \item \textbf{Timsort:}
-	  First we pass over the list and make sure each run is of at
-    least some minimum length $c$.
+Having these subroutines, heapsort is easy: first build the heap using \verb|downheap| a bunch of times, and then swap the 1-st element with the $i$-th and rebuild the heap up to index $i-1$, for $i = N, N-1, \ldots, 1$
+  \item \textbf{Simple timsort:} The idea of timsort is to use the sorted chunks (called \emph{runs}) often present in real-world data. At a high level, the algorithm works by first making sure all runs are of some minimum length (using insertion sort if necessary), and then passing over the list and merging the runs in an intelligent way. 
+  
+  As we do the second pass, we push the starting index and length of each run on a stack, and merge consecutive runs in order to preserve a certain invariant of the stack:  if $A,B,C$ are the lengths of three consecutive runs on the stack (with $A$ being the topmost), we require that $B>C$ and $A>B+C$.  
+  
+  So at any point we end up with a bunch of runs whose sizes grow faster than the Fibonacci sequence, i.e. at least exponentially fast; so it's easy to see there are at most logarithmically many runs at each point in time, which is important for memory reasons and for running time (it's faster to merge a sequence of lists with exponentially-increasing size than to naively merge a list split into equal parts.
+  
+  The way the invariant is preserved is where things get weird: apparently, there is a bug in the algorithm on the wikipedia page (which attempts to restore the invariant by only fixing the top three runs), but there is a fix we have to look into.
+  
+  It's hard to know in advance what interface would be best for our proof, but here's a guess:
+  	\begin{itemize}
+  	\item Predicate \verb|(run t i j)| - this checks if the subarray between the $i$-th and $j$-th index of $t$ is a run, i.e. is already in sorted order.
+	\item Subroutine \verb|insertion-sort| - this is just as insertion sort above.
+	\item Subroutine \verb|merge| - this is supposed to take the next run and do any merges necessary to preserve the invariant; of course, it will be based on the merge procedure.
+	\item Now piecing together all the parts should be easy. In the end, we end up with a sequence of runs that we merge in the obvious way.
+\end{itemize}
 
-    Then we pass over it again and push the base address (that is, the index of
-    the first element) and length of every run (this could be done in the above
-    pass, but let's separate them for clarity).
-    But as we push runs on the stack,
-    we also sometimes merge consecutive runs until some invariant
-    (that `attempts
-    to keep the run lengths as close to each other as possible to balance the
-    merges' as the wikipedia page says) is satisfied.
-    The condition is that if
-    $X,Y,Z$ are the lengths of the top three runs on the stack, we must have
-	  \begin{align*}
-	  X > Y + Z \text{ and } Y >Z
-    \end{align*}
-    (There are also other invariants to maintain.)
-	  So at any point we end up with a bunch of runs whose sizes grow
-    faster than the Fibonacci sequence, i.e. at least exponentially fast; so
-    it's easy to see there are at most logarithmically
-    many runs at each point in
-    time, which seems to be important for memory reasons.
-    It's also important for
-    running-time reasons it seems - it's much faster to merge these
-    exponentially-increasing guys than to naively merge a list split into
-    equal parts!
-	  Additionally, there are some memory optimizations (`galloping').
+  \item \textbf{Timsort:}
+
+	  Additionally, there are some memory optimizations (`galloping') during the merges that we might try to include if we end up having the time for it.
 \end{itemize}
 
 \paragraph{Proofs}  % A note on them....
