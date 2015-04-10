@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage{chicken}
+
+\DateAndTitle{10 April 2015}{Draft Specification}
+
+\begin{document}
+
+\section{Names and Emails}
+\begin{itemize}
+  \item Aleksandar Makelov --- \texttt{amakelov@college.harvard.edu}
+  \item Ben Wetherfield --- \texttt{bwetherfield@college.harvard.edu}
+  \item Chan Kang --- \texttt{chankang@college.harvard.edu}
+  \item Michael Fountaine --- \texttt{mfount@college.harvard.edu}
+\end{itemize}
+
+\section{Overview}
+\begin{description}
+  \item[\textbf{Problem:}]
+    Verify Timsort, python's preferred sorting algorithm!
+  \item[\textbf{Solution sketch:}]
+    We will take an incremental approach:
+    We're going to start with an abstract
+    "implementation" of Timsort,
+    possibly black-boxing certian difficult-to-implement features
+    such as heuristics used in the algorithm,
+    and implement a verified version of that implementation to sort
+    lists of natural numbers (defined inductively).
+    Timsort is a hybrid sorting
+    algorithm, requiring other sorting sub-algorithms and some simple data
+    structures, so we will divide our project into interfaces for each of
+    these, along with interfaces for proof tactics.
+  \item[\textbf{Goals:}]
+    Primarily, we'd like to verify Timsort as a way to learn more about
+    Coq and certified programming. (Or, if Timsort proves to be too
+    complicated (by our estimation by the time the final spec is due),
+    we hope to verify another hybrid/adaptive sorting algorithm,
+    with that same learning outcome in mind.)
+\end{description}
+
+\section{Prioritized Feature List}
+\paragraph{Core Features}
+\paragraph{Cool Extensions}
+
+\section{Technical Specification}
+\section{Next Steps}
+
+\end{document}
