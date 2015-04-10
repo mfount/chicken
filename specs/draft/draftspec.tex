@@ -151,6 +151,32 @@ these features will take to implement, including proofs.)
 \end{itemize}
 
 \paragraph{Proofs}  % A note on them....
+\emph{Note:} We will be able to better characterize proofs after
+working through Software Foundations (Pierce \emph{et al.}) - Next
+Steps below.\\
+At this stage, we know:
+\begin{itemize}
+\item Proofs in coq are guided by tactics. These are like hints you
+  give to the prover, such as ‘rewrite this as the other side of this
+  equality we already proved’, ‘rewrite both sides in a canonical
+  way’,  etc.
+\item We expect to use the ``Reflexivity'' keyword a lot for more
+  basic properties of our data structures.
+\item When we get onto proofs of correctness of algorithms, we will
+  have to break proofs into subcomponents
+\item There are various ways of doing this:
+\begin{enumerate}
+\item Example, Theorem, Lemma, Fact and Remark keywords (all
+  functionally the same) break up larger proof into steps (subproofs)
+\item The Case proof tactic (chapter 3 of Software Foundations) can be
+  used to break a proof clearly into cases (as in the familiar
+  structure of an induction proof)
+\item This could break a proof into say a case of the Reflexivity
+  tactic and the Induction tactic - this is a common formulation.
+\item Ltac can be used to make common tactics.
+\end{enumerate}
+
+\end{itemize}
 
 \section{Next Steps}
 \begin{itemize}
