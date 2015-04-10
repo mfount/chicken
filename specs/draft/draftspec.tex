@@ -5,6 +5,7 @@
 
 \begin{document}
 
+
 \section{Names and Emails}
 \begin{itemize}
   \item Aleksandar Makelov --- \texttt{amakelov@college.harvard.edu}
@@ -13,10 +14,11 @@
   \item Michael Fountaine --- \texttt{mfount@college.harvard.edu}
 \end{itemize}
 
+
 \section{Overview}
 \begin{description}
   \item[\textbf{Problem:}]
-    Verify Timsort, python's preferred sorting algorithm!
+    Using Coq, verify Timsort, python's preferred sorting algorithm!
   \item[\textbf{Solution sketch:}]
     We will take an incremental approach:
     We're going to start with an abstract
@@ -31,23 +33,146 @@
     these, along with interfaces for proof tactics.
     We're going to hone our sorting algorithm verification chops
     by working through insertion sort and mergesort, both of which
-    are part of Timsort, followed by tree sort sort and heap sort
+    are part of Timsort, followed by tree sort and heap sort
     to test our data structures, followed by Timsort itself!
   \item[\textbf{Goals:}]
     Primarily, we'd like to verify Timsort as a way to learn more about
     Coq and certified programming. (If Timsort proves to be too
     complicated (by our estimation by the time the final spec is due),
     we will be able to accomplish this same learning outcome by working
-    through insertion, merge, tree, and heap sorts.
+    through insertion, merge, tree, and heap sorts.)
 \end{description}
 
 % A) fundamentals of coq & proofs -> prove mergesort -> prove insertion sort -> prove a simplified version of timsort with black boxes around the heuristics -> (now into bonus...) prove timsort with heuristics -> prove python's timsort -> ...
 
+
 \section{Prioritized Feature List}
+(\emph{Note:} Generally, we need to read more about Coq to understand
+where to draw the line between ``core'' and ``cool''; that is, how long
+these features will take to implement, including proofs.)
+
 \paragraph{Core Features}
+\begin{itemize}
+  \item \textbf{Fundamentals.}
+    Ordered sets, natural numbers (defined inductively), lists and arrays,
+    stacks (to be used as Timsort's memory and temporary memory).
+  \item \textbf{Insertion sort.}
+    Verified insertion sort of lists of natural numbers.
+  \item \textbf{Merge sort.}
+    Verified merge sort of lists of natural numbers.
+  \item \textbf{Trees.}
+    Binary search trees of natural numbers.
+  \item \textbf{Tree Sort.}
+    Verified tree sort of
+    binary search trees of natural numbers.
+  \item \textbf{Heaps.}
+    Priority queues of natural numbers.
+  \item \textbf{Heap Sort.}
+    Verified heap sort of
+    binary search trees of natural numbers.
+  \item \textbf{Simplified Timsort.}
+    This will operate on lists of natural numbers, represented perhaps
+    as trees or priority queues.
+
+    Timsort is a hybrid of insertion sort and mergesort, plus some heuristics
+    about memory management and other optimizations. Our ``simplified
+    timsort'' will omit these heuristics when possible.
+\end{itemize}
+
 \paragraph{Cool Extensions}
+\begin{itemize}
+  \item \textbf{Timsort.}
+    Verified timsort; that is, simplified timsort plus heuristics.
+    This version would have the same time asymptotics as python's
+    implementation of Timsort:
+    $\Theta(n)$ best case,
+    $\Theta(n \log n)$ average case,
+    $\Theta(n \log n)$ worst case,
+    where $n$ is the length of the list.
+
+  \item \textbf{Polymorphic timsort.}
+    A verified timsort that works on polymorphic lists. (Unlike in OCaml,
+    this seems actually to be a good bit of work in Coq, having to prove
+    things about each subtype of our ordered set type.)
+
+  \item \textbf{Export to OCaml.}
+    One of Coq's initial purposes is to export verified OCaml (or Haskell
+    or Scheme) code; for this cool extension, we can try to turn some or all
+    of our verified algorithm implementations into usable OCaml.
+
+  \item \textbf{Python's timsort.}
+    This final possible extensions could be to modify our verified Timsort
+    algorithm to use exactly the heuristics found in the current Python 3.x
+    release, as opposed to the heuristics we end up using in our implemented
+    version of the full Timsort algorithm.
+    We could also attempt to use the same space complexity of
+    Timsort, $O(n)$.
+\end{itemize}
+
 
 \section{Technical Specification}
+\paragraph{Data Structures}
+\paragraph{Algorithms}
+\begin{itemize}
+  \item \textbf{Mergesort:}
+  \item \textbf{Insertion sort:}
+  \item \textbf{Tree sort:}
+  \item \textbf{Heap sort:}
+  \item \textbf{Simple timsort:}
+    Timsort, as described below, omitting heuristics.
+  \item \textbf{Timsort:}
+	  First we pass over the list and make sure each run is of at
+    least some minimum length $c$.
+
+    Then we pass over it again and push the base address (that is, the index of
+    the first element) and length of every run (this could be done in the above
+    pass, but let's separate them for clarity).
+    But as we push runs on the stack,
+    we also sometimes merge consecutive runs until some invariant
+    (that `attempts
+    to keep the run lengths as close to each other as possible to balance the
+    merges' as the wikipedia page says) is satisfied.
+    The condition is that if
+    $X,Y,Z$ are the lengths of the top three runs on the stack, we must have
+	  \begin{align*}
+	  X > Y + Z \text{ and } Y >Z
+    \end{align*}
+    (There are also other invariants to maintain.)
+	  So at any point we end up with a bunch of runs whose sizes grow
+    faster than the Fibonacci sequence, i.e. at least exponentially fast; so
+    it's easy to see there are at most logarithmically
+    many runs at each point in
+    time, which seems to be important for memory reasons.
+    It's also important for
+    running-time reasons it seems - it's much faster to merge these
+    exponentially-increasing guys than to naively merge a list split into
+    equal parts!
+	  Additionally, there are some memory optimizations (`galloping').
+\end{itemize}
+
+\paragraph{Proofs}  % A note on them....
+
 \section{Next Steps}
+\begin{itemize}
+  \item
+    Install Coq 8.4-pl5 and ensure that it's running correctly.
+    Also install an IDE, most likely emacs with Proof General.
+  \item
+    Read early parts of \emph{SF} \cite{sf} and \emph{CPDT} \cite{cpdt},
+    doing excercises to familiarize ourselves with Gallina (Coq's functional
+    language, similar to Caml) syntax and Coq's Proof functionality.
+
+    Specifically, we will initially work through at least the 1-star and
+    2-star exercises in the opening three chapters of \emph{SF}.
+    (This will give us the implementations of lists and nats.)
+\end{itemize}
+
+\begin{thebibliography}{xx}
+  \bibitem{cpdt}
+    Chlipala, Adam. \emph{Certified Programming with Dependent Types}.
+
+  \bibitem{sf}
+    Pierce, Benjamin, et al. \emph{Software Foundations}.
+\end{thebibliography}
 
 \end{document}
