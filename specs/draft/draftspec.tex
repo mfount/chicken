@@ -160,7 +160,7 @@ These are the algorithms and subroutines we'll need for the mutable (and often i
 \begin{itemize}
   \item \textbf{Insertion sort:} The subroutine \verb|(insertion n t)| takes as input an array $t$ where the first $n-1$ elements are sorted, and returns an array where the first $n$ elements are sorted, by inserting the $n$-th element in its place. Then insertion sort itself proceeds by running \verb|(insertion n t)| for $n=1,2,3,\ldots,N$ for a list $t$ of length $N$. 
   \item \textbf{Mergesort:} Here the basic subroutine is \verb|(merge t)| which takes a list $t$ in which the first and second halves are sorted, and merges them. Here we'll need to use some extra memory. Then mergesort proceeds by calling itself recursively on each half, and then merging them together.
-  \item \textbf{Tree sort:} We first build a binary search tree from the array by a subroutine \verb|(bst_build t)|; then we have another subroutine \verb|(bst_traverse t)| that traverses it in in-order.
+  \item \textbf{Tree sort:} We first build a binary search tree from the array by a subroutine \verb|(bst_build t)|; then we have another subroutine \verb|(bst_traverse t)| that traverses it in-order.
   \item \textbf{Heap sort:} The algorithm proceeds by making the array into a heap in-place, and then gradually pushing the largest elements to the right side of the heap. Here, we're representing a binary tree implicitly as an array, where the children of the $i$-th element are the $2i+1$-th and $2i+2$-th elements. We have the following subroutines:
   \begin{itemize}
 	\item Predicate \verb|(heap t n k)| checks if in a list $t$, the tree of elements of index $\leq n$ rooted at the $k$-th element.
@@ -172,7 +172,7 @@ Having these subroutines, heapsort is easy: first build the heap using \verb|dow
   
   As we do the second pass, we push the starting index and length of each run on a stack, and merge consecutive runs in order to preserve a certain invariant of the stack:  if $A,B,C$ are the lengths of three consecutive runs on the stack (with $A$ being the topmost), we require that $B>C$ and $A>B+C$.  
   
-  So at any point we end up with a bunch of runs whose sizes grow faster than the Fibonacci sequence, i.e. at least exponentially fast; so it's easy to see there are at most logarithmically many runs at each point in time, which is important for memory reasons and for running time (it's faster to merge a sequence of lists with exponentially-increasing size than to naively merge a list split into equal parts.
+  So at any point we end up with a bunch of runs whose sizes grow faster than the Fibonacci sequence, i.e. at least exponentially fast; so it's easy to see there are at most logarithmically many runs at each point in time, which is important for memory reasons and for running time (it's faster to merge a sequence of lists with exponentially-increasing size than to naively merge a list split into equal parts).
   
   The way the invariant is preserved is where things get weird: apparently, there is a bug in the algorithm on the wikipedia page (which attempts to restore the invariant by only fixing the top three runs), but there is a fix we have to look into.
   
