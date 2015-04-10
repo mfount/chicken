@@ -1,0 +1,133 @@
+% chicken.sty
+% Cohesive LaTeX style for The Chicken Group's cs51 project documents
+% because why not? (It's just ripped off of my math hw cls.)
+%
+% Date:   2015-04-09
+% Author: Michael Fountaine, mfount at college harvard edu
+%
+% Local macro namespace: chkn@ (e.g., \chkn@font)
+%
+%
+% vim: set filetype=tex:
+%
+\ProvidesPackage{chicken}
+    [2015/04/09 Caw-ca-caw, caw-ca-caw, A-coodle-ee-oodle-doo]
+\NeedsTeXFormat{LaTeX2e}
+
+\RequirePackage{xifthen}
+
+%%%%%%%%%
+% Fonts %
+%%%%%%%%%
+
+% Palatino for text:
+\RequirePackage[sc]{mathpazo} %palatino
+% suggested so page color matches that of cm font
+\linespread{1.05}
+% for palatino. for non en_US text, really.
+\RequirePackage[T1]{fontenc}
+
+% Euler for math:
+{\RequirePackage{eucal}}
+
+
+%%%%%%%%%%%%%%%%%%%
+% Fixing defaults %
+%%%%%%%%%%%%%%%%%%%
+
+% We're going to use frenchspacing, too.
+\frenchspacing
+
+% Fix spacing around \lefts and \rights
+\let\originalleft\left
+\let\originalright\right
+\renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
+\renewcommand{\right}{\aftergroup\egroup\originalright}
+
+
+%%%%%%%%%%%%%%%%%%%
+% Document header %
+%%%%%%%%%%%%%%%%%%%
+
+% Build header.
+% necessary data: (due) date, title
+% Setting default values of parameters to be errors
+% in case the parameters are unset.
+\newcommand{\error@msg}[1]{%
+    You must set the #1 with the command\MessageBreak
+    \space\space\protect\DateAndTitle
+}
+
+% initialize these necessary data to error messages.
+\newcommand{\hw@date}{%
+    \PackageError{chicken}{\error@msg{date}}{\error@msg{date}}
+}
+\newcommand{\hw@title}{%
+    \PackageError{chicken}{\error@msg{title}}{\error@msg{title}}
+}
+
+% Setting commands to be used by user to set header data.
+% If an arg is deliberately empty, set the corresponding \hw@... macro
+% to empty also to get rid of the \ClassError.
+
+\newcommand{\DateAndTitle}[2]{%
+    \ifthenelse{\isempty{#1}}{%
+        \renewcommand{\hw@date}{}
+    }{%
+        \renewcommand{\hw@date}{#1}
+    }%
+    \ifthenelse{\isempty{#2}}{%
+        \renewcommand{\hw@title}{}
+    }{%
+        \renewcommand{\hw@title}{#2}
+    }
+}
+
+% Actually build the header:
+\RequirePackage{fancyhdr}
+\RequirePackage{lastpage}
+\RequirePackage[margin=1in]{geometry}
+
+\pagestyle{fancy}
+
+\lhead{
+  \textbf{CS51 Project}: \texttt{chicken}\\
+  Aleksandar Makelov,
+  Benjamin Wetherfield,
+  Chan Kang,
+  Michael Fountaine
+}
+
+\rhead{%
+  \textbf{\hw@title}\\\hw@date
+}
+
+\cfoot{}
+\rfoot{\footnotesize{p. \thepage\ of \pageref{LastPage}}}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Require other useful packages %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{amssymb}
+\RequirePackage{amsmath}
+\RequirePackage{amsthm}
+%\RequirePackage{mathtools}
+
+
+%%%%%%%%%%%%%%%%%%
+% Helpful macros %
+%%%%%%%%%%%%%%%%%%
+
+% (Add your own whenever you want!)
+
+\renewcommand{\emptyset}{\varnothing}
+\renewcommand{\dots}{\ldots}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\xto}{\xrightarrow}
+\newcommand{\from}{\colon}

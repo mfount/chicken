@@ -7,3 +7,5 @@
   * Contains textbooks, external docs, etc.
 * specs
   * Contains project specs, including those submitted to cs51 staff.
+* latex
+  * contains latex boilerplate (particularly the main style file)
