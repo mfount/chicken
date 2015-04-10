@@ -114,10 +114,19 @@ these features will take to implement, including proofs.)
 \paragraph{Data Structures}
 \paragraph{Algorithms}
 \begin{itemize}
-  \item \textbf{Mergesort:}
-  \item \textbf{Insertion sort:}
+These are the algorithms and subroutines we'll need for the mutable versions of the algorithms, which we expect to be harder; if we decide to do the pure versions, we will make adjustments accordingly.
+\begin{itemize}
+  \item \textbf{Insertion sort:} The subroutine \verb|(insertion n t)| takes as input an array $t$ where the first $n-1$ elements are sorted, and returns an array where the first $n$ elements are sorted, by inserting the $n$-th element in its place. Then insertion sort itself proceeds by running \verb|(insertion n t)| for $n=1,2,3,\ldots,N$ for a list $t$ of length $N$. 
+  \item \textbf{Mergesort:} 
   \item \textbf{Tree sort:}
-  \item \textbf{Heap sort:}
+  \item \textbf{Heap sort:} The algorithm proceeds by making the array into a heap in-place, and then gradually pushing the largest elements to the right side of the heap. Here, we're representing a binary tree implicitly as an array, where the children of the $i$-th element are the $2i+1$-th and $2i+2$-th elements. We have the following subroutines:
+  \begin{itemize}
+	\item Predicate \verb|(heap t n k)| checks if in a list $t$, the tree rooted at the $k$-th element of elements of index at most $n$ is a heap
+	\item Predicate \verb|(inftree t n v k)| checks for a tree represented as above whether all elements are $\leq v$.
+	\item Subroutine \verb|(downheap t k n)| takes an array $t$ where the tree of elements rooted at the $k$-th element and of indices $\leq n$ is a heap, \emph{except} possibly for the root node. It then makes a bunch of swaps that make this tree into a heap (invariants need figuring out of course). 
+\end{itemize}
+	
+	\item Then, heapsort is easy: first build the heap using \verb|downheap| a bunch of times, and then swap the 1st element with the $N$-th, $N-1$-th, etc. and rebuild the heap to the appropriate index between swaps.
   \item \textbf{Simple timsort:}
     Timsort, as described below, omitting heuristics.
   \item \textbf{Timsort:}
