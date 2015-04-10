@@ -29,13 +29,19 @@
     algorithm, requiring other sorting sub-algorithms and some simple data
     structures, so we will divide our project into interfaces for each of
     these, along with interfaces for proof tactics.
+    We're going to hone our sorting algorithm verification chops
+    by working through insertion sort and mergesort, both of which
+    are part of Timsort, followed by tree sort sort and heap sort
+    to test our data structures, followed by Timsort itself!
   \item[\textbf{Goals:}]
     Primarily, we'd like to verify Timsort as a way to learn more about
-    Coq and certified programming. (Or, if Timsort proves to be too
+    Coq and certified programming. (If Timsort proves to be too
     complicated (by our estimation by the time the final spec is due),
-    we hope to verify another hybrid/adaptive sorting algorithm,
-    with that same learning outcome in mind.)
+    we will be able to accomplish this same learning outcome by working
+    through insertion, merge, tree, and heap sorts.
 \end{description}
+
+% A) fundamentals of coq & proofs -> prove mergesort -> prove insertion sort -> prove a simplified version of timsort with black boxes around the heuristics -> (now into bonus...) prove timsort with heuristics -> prove python's timsort -> ...
 
 \section{Prioritized Feature List}
 \paragraph{Core Features}
