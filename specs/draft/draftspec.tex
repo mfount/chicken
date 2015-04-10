@@ -121,38 +121,17 @@ arrays (and references) in Coq.
 
 \section{Technical Specification}
 \paragraph{Data Structures}
-All methods described below will have corresponding proofs.
+We will, of course, prove all methods associated with these types/structures.
 
 \begin{itemize}
-  \item \textbf{Ordered set:}
-    \emph{Data:}
-    \emph{Methods:}
-
-  \item \textbf{Natural numbers:}
-    \emph{Data:}
-    \emph{Methods:}
-
-  \item \textbf{List of natural numbers:}
-    \emph{Data:}
-    \emph{Methods:}
-
-  \item \textbf{Array of natural numbers:}
+  \item Ordered set.
+  \item Natural numbers.
+  \item List of natural numbers.
+  \item Array of natural numbers.
     (Unclear if necessary.)
-    \emph{Data:}
-    \emph{Methods:}
-
-  \item \textbf{Stack:}
-    \emph{Data:}
-    \emph{Methods:}
-
-  \item \textbf{Tree:}
-    \emph{Data:}
-    \emph{Methods:}
-
-  \item \textbf{Heap (a.k.a. Priority Queue):}
-    \emph{Data:}
-    \emph{Methods:}
-
+  \item Stack.
+  \item Tree.
+  \item Heap (a.k.a. Priority Queue).
 \end{itemize}
 
 \paragraph{Algorithms}
@@ -185,34 +164,40 @@ Having these subroutines, heapsort is easy: first build the heap using \verb|dow
 \end{itemize}
 
   \item \textbf{Timsort:}
-
 	  Additionally, there are some memory optimizations (`galloping') during the merges that we might try to include if we end up having the time for it.
 \end{itemize}
 
 \paragraph{Proofs}  % A note on them....
 \emph{Note:} We will be able to better characterize proofs after
-working through Software Foundations (Pierce \emph{et al.}) - Next
-Steps below.\\
+working through \emph{Software Foundations} \cite{sf}
+(See ``Next Steps'' below.)
+
 At this stage, we know:
 \begin{itemize}
 \item Proofs in coq are guided by tactics. These are like hints you
-  give to the prover, such as ‘rewrite this as the other side of this
-  equality we already proved’, ‘rewrite both sides in a canonical
-  way’,  etc.
-\item We expect to use the ``Reflexivity'' keyword a lot for more
+  give to the prover, such as ``rewrite this as the other side of this
+  equality we already proved'', ``rewrite both sides in a canonical
+  way'',  etc.
+\item We expect to use the ``Reflexivity'' keyword frequently for
+  verifying more
   basic properties of our data structures.
+  Proofs in Coq that use reflexivity as a tactic are generally very
+  simple proofs using, say, rewrite rules.
 \item When we get onto proofs of correctness of algorithms, we will
-  have to break proofs into subcomponents
+  have to break proofs into subcomponents.
 \item There are various ways of doing this:
 \begin{enumerate}
 \item Example, Theorem, Lemma, Fact and Remark keywords (all
-  functionally the same) break up larger proof into steps (subproofs)
+  functionally the same) break up larger proof into subproofs.
 \item The Case proof tactic (chapter 3 of Software Foundations) can be
   used to break a proof clearly into cases (as in the familiar
-  structure of an induction proof)
+  structure of an induction proof).
 \item This could break a proof into say a case of the Reflexivity
-  tactic and the Induction tactic - this is a common formulation.
-\item Ltac can be used to make common tactics.
+  tactic and the Induction tactic.
+  Our reading of the references and some example Coq code
+  indicates that this is a common formulation that appears
+  when doing structural induction.
+\item Ltac can be used to create common tactics.
 \end{enumerate}
 
 \end{itemize}
