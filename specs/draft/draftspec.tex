@@ -156,7 +156,7 @@ All methods described below will have corresponding proofs.
 \end{itemize}
 
 \paragraph{Algorithms}
-These are the algorithms and subroutines we'll need for the mutable (and often in-place) versions of the sorts, which we expect to be harder; if we decide to do the pure versions, we will make adjustments accordingly.
+These are the algorithms and subroutines we'll need for the mutable (and often in-place) versions of the sorts, which we expect to be harder; if we decide to do the pure versions, we will make adjustments accordingly. The ideas are based on the paper \cite{filliatre1999certification}, which describes how to prove correctness for insertion sort, quicksort and mergesort. It also provides some general predicates for formally verifying sorting algorithms, like \verb|(sorted t)| which tests for sortedness, and \verb|(permutation t t')| which tests whether $t'$ is a permutation of $t$.
 \begin{itemize}
   \item \textbf{Insertion sort:} The subroutine \verb|(insertion n t)| takes as input an array $t$ where the first $n-1$ elements are sorted, and returns an array where the first $n$ elements are sorted, by inserting the $n$-th element in its place. Then insertion sort itself proceeds by running \verb|(insertion n t)| for $n=1,2,3,\ldots,N$ for a list $t$ of length $N$. 
   \item \textbf{Mergesort:} Here the basic subroutine is \verb|(merge t)| which takes a list $t$ in which the first and second halves are sorted, and merges them. Here we'll need to use some extra memory. Then mergesort proceeds by calling itself recursively on each half, and then merging them together.
@@ -174,7 +174,7 @@ Having these subroutines, heapsort is easy: first build the heap using \verb|dow
   
   So at any point we end up with a bunch of runs whose sizes grow faster than the Fibonacci sequence, i.e. at least exponentially fast; so it's easy to see there are at most logarithmically many runs at each point in time, which is important for memory reasons and for running time (it's faster to merge a sequence of lists with exponentially-increasing size than to naively merge a list split into equal parts).
   
-  The way the invariant is preserved is where things get weird: apparently, there is a bug in the algorithm on the wikipedia page (which attempts to restore the invariant by only fixing the top three runs), but there is a fix we have to look into.
+  The way the invariant is preserved is where things get weird: apparently, there is a bug in the algorithm on the wikipedia page (which attempts to restore the invariant by only fixing the top three runs), but there is a fix \cite{deopenjdk} we have to look into.
   
   It's hard to know in advance what interface would be best for our proof, but here's a guess:
   	\begin{itemize}
@@ -230,6 +230,8 @@ At this stage, we know:
     Specifically, we will initially work through at least the 1-star and
     2-star exercises in the opening three chapters of \emph{SF}.
     (This will give us the implementations of lists and nats.)
+        \item In a similar vein, get an idea of how long it would take to verify correctness of the basic sorting algorithms 
+    \item Understand timsort in more depth.
 \end{itemize}
 
 \begin{thebibliography}{xx}
@@ -241,6 +243,9 @@ At this stage, we know:
     
     \bibitem{filliatre1999certification}
     Filliatre, Jean-Christophe and Magaud, Nicolas. \emph{Certification of sorting algorithms in the system COQ}
+    
+    \bibitem{deopenjdk}
+    de Gouw, Stijn and Rot, Jurriaan and de Boer, Frank S and Bubel, Richard and Hahnle, Reiner. \emph{OpenJDK’s java. utils. Collection. sort () is broken: The good, the bad and the worst case}
 \end{thebibliography}
 
 
