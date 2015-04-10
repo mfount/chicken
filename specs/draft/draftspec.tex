@@ -156,7 +156,6 @@ All methods described below will have corresponding proofs.
 \end{itemize}
 
 \paragraph{Algorithms}
-\begin{itemize}
 These are the algorithms and subroutines we'll need for the mutable versions of the algorithms, which we expect to be harder; if we decide to do the pure versions, we will make adjustments accordingly.
 \begin{itemize}
   \item \textbf{Insertion sort:} The subroutine \verb|(insertion n t)| takes as input an array $t$ where the first $n-1$ elements are sorted, and returns an array where the first $n$ elements are sorted, by inserting the $n$-th element in its place. Then insertion sort itself proceeds by running \verb|(insertion n t)| for $n=1,2,3,\ldots,N$ for a list $t$ of length $N$. 
