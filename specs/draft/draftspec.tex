@@ -40,16 +40,25 @@
     Coq and certified programming. (If Timsort proves to be too
     complicated (by our estimation by the time the final spec is due),
     we will be able to accomplish this same learning outcome by working
-    through insertion, merge, tree, and heap sorts.)
+    through insertion, merge, tree, and heap sorts. Or, perhaps, we will
+    include another hybrid search algorithm instead of Timsort.)
 \end{description}
 
-% A) fundamentals of coq & proofs -> prove mergesort -> prove insertion sort -> prove a simplified version of timsort with black boxes around the heuristics -> (now into bonus...) prove timsort with heuristics -> prove python's timsort -> ...
+% A) fundamentals of coq & proofs -> prove mergesort -> prove insertion sort ->
+% prove a simplified version of timsort with black boxes around the heuristics
+% -> (now into bonus...) prove timsort with heuristics -> prove python's
+%  timsort -> ...
 
 
 \section{Prioritized Feature List}
-(\emph{Note:} Generally, we need to read more about Coq to understand
+\emph{Note:} Generally, we need to read more about Coq to understand
 where to draw the line between ``core'' and ``cool''; that is, how long
-these features will take to implement, including proofs.)
+these features will take to implement, including proofs.
+
+Additionally, we are unsure of whether to verify the in-place,
+imperative versions of these algorithms or the pure versions.
+The deciding factor will most likely be the difficulty of implementing
+arrays (and references) in Coq.
 
 \paragraph{Core Features}
 \begin{itemize}
@@ -112,6 +121,40 @@ these features will take to implement, including proofs.)
 
 \section{Technical Specification}
 \paragraph{Data Structures}
+All methods described below will have corresponding proofs.
+
+\begin{itemize}
+  \item \textbf{Ordered set:}
+    \emph{Data:}
+    \emph{Methods:}
+
+  \item \textbf{Natural numbers:}
+    \emph{Data:}
+    \emph{Methods:}
+
+  \item \textbf{List of natural numbers:}
+    \emph{Data:}
+    \emph{Methods:}
+
+  \item \textbf{Array of natural numbers:}
+    (Unclear if necessary.)
+    \emph{Data:}
+    \emph{Methods:}
+
+  \item \textbf{Stack:}
+    \emph{Data:}
+    \emph{Methods:}
+
+  \item \textbf{Tree:}
+    \emph{Data:}
+    \emph{Methods:}
+
+  \item \textbf{Heap (a.k.a. Priority Queue):}
+    \emph{Data:}
+    \emph{Methods:}
+
+\end{itemize}
+
 \paragraph{Algorithms}
 \begin{itemize}
   \item \textbf{Mergesort:}
