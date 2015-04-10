@@ -1,0 +1,112 @@
+\input{/home/alexander/workspace/shared/learn/preamble-art}
+\title{Thoughts}
+\author{}
+\begin{document}
+\maketitle
+
+\section{Software foundations}
+\label{sec:}
+
+Chapters I got to read: Preface, Basics: Functional programming in Coq, Induction: Proof by induction, Lists: Working with structured data (not all of it).
+
+\begin{itemize}
+	\item Syntax is very similar to OCaml structurally; some things have different names, but not too many of them. 
+	\item Proofs are guided by \emph{tactics}. These are like hints you drop to the prover, such as `rewrite this as the other side of this equality we already proved', `rewrite both sides in a canonical way', etc.
+\end{itemize}
+
+
+% section  (end)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Certification of sorting algorithms in the system coq\cite{filliatre1999certification}}
+\label{sec:}
+
+
+
+% section  (end)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+	\item This paper verifies IMPERATIVE implementations of insertion sort, merge sort and heap sort. They say coq supports that.
+	\item The language used is very similar to (a subset of) OCaml: we have functions, conditionals, let expressions references, and while loops.
+	\item In-place sorting only
+	\item Only integer values
+	\item The general idea to prove correctness of a function is (as usual) to use \emph{pre-conditions} -- which tell us what the input is guaranteed to satisfy, and \emph{post-conditions} -- which tell us what the output should satisfy. Clearly, this doesn't require much imagination. But to deal with loops, we need a trick called a loop invariant, which, if true at each iteration, guarantees correctness. The magic is that then we don't have to unfold the loop when we do the proof, but only make sure that the code that is repeated preserves the invariant (or that it preserves a certain invariant depending on which case we're in, for some \emph{constant} number of cases; this is called a \emph{case} invariant). This seems to be the meat of the business in these proofs of correctness.
+	\item the \verb|(sorted t)| predicate tells us whether the part of list $t$ between indices $i$ and $j$ is sorted.
+	\item the \verb|(permutation t t')| predicate tells us whether lists $t$ and $t'$ are permutations of each other.
+	\begin{itemize}
+	\item This is done by generating the group of all permutations via transpositions; we define \verb|(exchange t t' i j)| to be the predicate that $t$ and $t'$ differ only in the order of the $i$-th and $j$-th entry.		
+\end{itemize}
+\item Insertion sort: 
+\begin{itemize}
+	\item Subroutine \verb|(insertion n t)| inserts the $n$-th element of an array $t$ into an already sorted sub-array. Some care is needed in defining the invariant...
+	\item Once we have the correctness of the above, the correctness of insertion sort follows easily...
+\end{itemize}
+\item Quick sort:
+\begin{itemize}
+	\item Subroutine \verb|(partition t i j)| takes the sub-part of the array $t$ between indices $i$ and $j$ and rearranges it into two halves, such that all elements on the left are less than or equal to all elements on the right, and returns the index of the partitioning element (the pivot).
+	\begin{itemize}
+	\item Subsubroutine \verb|(swap i j)| just swaps the $i$-th and $j$-th guys. Easy. This is useful for \verb|partition|.
+\end{itemize}
+	\item Subroutine \verb|(divide-and-conquer t)| calls \verb|partition| on the list $t$ and then recursively calls itself on the two halves to sort them. This is quicksort.
+	\item These guys didn't prove it in the case when we pick the pivot in a smart way (they always pick the first element). Possible room for us to do something new? They say it's not a huge change, just more annoying. Ugh...
+\end{itemize}
+\item Heap sort:
+\begin{itemize}
+	\item Data structure: this represents a binary tree implicitly as an array, where the children of the $i$-th guy are the $2i+1$-th and $2i+2$-th guys. 
+	\item The algorithm proceeds by making the array into a heap in-place, and then maintaining the left half as a heap and the right half as the already sorted elements, by repeatedly putting the top guy in the heap at the end of the array.
+	\item Predicate \verb|(heap t n k)| checks if in a list $t$, the tree rooted at the $k$-th guy of elements of index at most $n$ is a heap
+	\item Predicate \verb|(inftree t n v k)| checks for a tree represented as above whether all elements are $\leq v$.
+	\item Subroutine \verb|(downheap t k n)| takes an array $t$ where the tree of elements rooted at the $k$-th element and of indices $\leq n$ is a heap, \emph{except} possibly for the root node. It then makes a bunch of swaps that make this tree into a heap (invariants need figuring out of course).
+	\item Then, heapsort is easy: first build the heap using \verb|downheap| a bunch of times, and then swap the 1st element with the $N$-th, $N-1$-th, etc. and rebuild the heap to the appropriate index between swaps.
+\end{itemize}
+\end{itemize}
+
+\section{Ideas}
+\label{sec:}
+
+
+\begin{itemize}
+\item It seems that coming up with the right interface for proving correctness of a sorting algorithm requries some care and thought about how the proof might go. So we can sort of guess what it could look like for timsort, but I'm still not absolutely sure.
+
+Here is a description of the main ideas behind timsort: 
+\begin{itemize}
+	\item First we pass over the list and make sure each run is of at least some minimum length $c$.
+	\item Then we pass over it again and push the base address (that is, the index of the first element) and length of every run (this could be done in the above pass, but let's separate them for clarity). But as we push runs on the stack, we also sometimes merge consecutive runs until some invariant (that `attempts to keep the run lengths as close to each other as possible to balance the merges' as the wikipedia page says) is satisfied. The condition is that if $X,Y,Z$ are the lengths of the top three runs on the stack, we must have
+	\begin{align*}
+	X > Y + Z \text{ and } Y >Z
+\end{align*}
+	Here's where things get weird and the bug happens: these rules (from the wikipedia page) are actually buggy, and the guys who found the bug have some other rules. 
+	\item So at any point we end up with a bunch of runs whose sizes grow faster than the Fibonacci sequence, i.e. at least exponentially fast; so it's easy to see there are at most logarithmically many runs at each point in time, which seems to be important for memory reasons. It's also important for running-time reasons it seems - it's much faster to merge these exponentially-increasing guys than to naively merge a list split into equal parts!
+	\item Okay, the wikipedia article is kind of poorly written. This \url{http://svn.python.org/projects/python/trunk/Objects/listsort.txt} seems better. 
+	\item There are some memory optimizations (`galloping'), but let's ignore them for now...
+\end{itemize}
+
+
+
+
+Anyway, 
+\begin{itemize}
+	\item Subroutine \verb|insertion-sort| - this is just as above.
+	\item Predicate \verb|(run t i j)| - this checks if the subarray between the $i$-th and $j$-th index of $t$ is a run, i.e. is already in sorted order.
+	\item Subroutine \verb|merge| - this is supposed to take the next run and do any merges necessary to preserve the invariant...
+	\item Now piecing together all the parts should be easy. In the end, we end up with a sequence of runs that we merge in the obvious way.
+\end{itemize}
+	\item We could probably easily verify the correctness of algorithms that use sorting algorithms as a substantive building block. The \textsc{3-SUM} problem is an example: 
+	\begin{problem}
+	\label{prob:}
+	Given an array of $n$ integers, are there three that sum to zero?
+\end{problem}
+But that seems kind of lame...
+
+\item Modularization: it's easy to imagine how we could have a common coq module containing the language constructs the paper uses (that can probably be implemented in coq? or maybe we can just import them from somewhere?), another common module dealing with abstract properties related to sorting, like the predicates for being sorted and being a permutation, and then specific modules for the different sorts. It'd be cool if we notice similarities between the routines that we can share between modules!
+\end{itemize}
+
+% section  (end)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\nocite{*} \bibliographystyle{alpha} \bibliography{thoughts}
+\end{document}
