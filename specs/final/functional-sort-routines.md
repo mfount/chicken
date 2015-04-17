@@ -36,7 +36,7 @@ function:
 
 _Lemmas within proofs will take the form of proving sub-methods, then proving
 the correctness of the entire procedure using these sub-method-proofs as lemmas._
-_For an example, see `chicken/coq/InsertionSort.v`_
+_For an example, see_ `chicken/coq/InsertionSort.v`
 
 Insertion sort:
 - Procedure (`insert n t`): 
