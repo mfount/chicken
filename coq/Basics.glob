@@ -207,7 +207,7 @@ R14353:14353 Basics <> n var
 R14366:14366 Basics Playground1 O constr
 R14371:14371 Basics Playground1 O constr
 R14379:14379 Basics Playground1 S constr
-R14508:14518 Basics Playground1 <> mod
+R14508:14518 Basics <> <> mod
 def 14533:14540 <> minustwo
 R14547:14549 Coq.Init.Datatypes <> nat ind
 R14554:14556 Coq.Init.Datatypes <> nat ind
@@ -311,7 +311,7 @@ R17789:17789 Basics <> n var
 R17795:17795 Coq.Init.Datatypes <> S constr
 R17801:17801 Coq.Init.Datatypes <> S constr
 R17809:17813 Basics <> minus def
-R18064:18074 Basics Playground2 <> mod
+R18064:18074 Basics <> <> mod
 def 18087:18089 <> exp
 R18105:18107 Coq.Init.Datatypes <> nat ind
 R18112:18114 Coq.Init.Datatypes <> nat ind

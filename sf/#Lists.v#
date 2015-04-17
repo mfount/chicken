@@ -1,6 +1,6 @@
 (** * Lists: Working with Structured Data *)
 
-Require Export Induction. 
+Require Export Induction.
 
 Module NatList. 
 
@@ -155,7 +155,7 @@ Notation "[ x ; .. ; y ]" := (cons x .. (cons y nil) ..).
     the next three declarations mean exactly the same thing: *)
 
 Definition mylist1 := 1 :: (2 :: (3 :: nil)).
-Definition mylist2 := 1 :: 2 :: 3 :: nil.
+Definition mylist2 := 1 :: 2 :: 3 :: [].
 Definition mylist3 := [1;2;3].
 
 (** The [at level 60] part tells Coq how to parenthesize
@@ -301,7 +301,11 @@ Proof. reflexivity.  Qed.
 
 
 Fixpoint alternate (l1 l2 : natlist) : natlist :=
-  (* FILL IN HERE *) admit.
+  match l1, l2 with
+  | h1 :: t1 , h2 :: t2 => h1 :: h2 :: (t1 :: t2
+  | nil , _ => l2
+  | _, nil => l1
+end.
 
 
 Example test_alternate1:        alternate [1;2;3] [4;5;6] = [1;4;2;5;3;6].
