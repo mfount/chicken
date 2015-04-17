@@ -1,4 +1,4 @@
-TODOS: what will the implementation and proof of heaps look like?
+TODO: what will the implementation and proof of heaps look like?
 
 __INTERFACES__
 
