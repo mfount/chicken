@@ -115,24 +115,64 @@ be functional; in particular, we'll use persistent data structures.
 
 \section{Technical Specification}
 \subsection{Interfaces.} References to code written thus far are included
-throughout this subsection.
+throughout this section. \verb|chicken| is the root directory of our github
+repository, located at \verb|https://github.com/mfount/chicken|.
+
+Also, all libraries originating from SF \cite{sf} (which we've populated
+with exercise solutions), will eventually be refactored into neater,
+application-specific libraries once we have a clearer picture of how
+we will refactor code to optimize proofs.
+
 \paragraph{Data Structures, related methods, and proofs of them.}
 
 \begin{itemize}
   \item \textbf{Booleans.}
+Our code for bools so far is contained in \verb`chicken/coq/Basics.v`,
+a library provided with SF \cite{sf}, which we have filled out with solutions
+to the relevant exercises.
+This includes axioms and definitions pertaining to bools
+(e.g. \verb+not false = true+), proofs of simple lemmas (primarily done
+using the \verb+destruct+ tactic to prove by case exhaustion)
+familiar binary operations, and proofs of them.
+
   \item \textbf{Natural numbers.}
-- TODO: there is code for this in `chicken/coq/Basics.v` and `chicken/coq/Induction.v`,
-  which includes `ble_nat` (`<=` for nats) and its proof (likewise for other comparison
-  functions, which we can pass into sorts).
-- proofs of axioms and comparison functions are also included.
+    There is code for nats in \verb|chicken/coq/Basics.v| and
+    \verb|chicken/coq/Induction.v|, another SF library that we have
+    supplemented with solutions to relevant exercises.
+    Nats are defined inductively using a unary representation
+    (as Peano naturals).
+    Most of the lemmas pertaining to nats are proven using
+    the \verb+induction+ tactic.
+
+    For our purposes, the set of natural numbers is most usefully
+    structured as an ordered set, so we've verified (or made progress
+    toawrd verifying) the order properties of the natural numbers
+    as comparison methods, for example
+    \verb`ble_nat` (\verb`<=` for nats).
+
   \item \textbf{Polymorphic lists.}
+We will be sorting objects of the type \verb`list nat` (informally,
+``natlists'') throughout this project.
+Also, we will use lists of lists, \verb`list (list nat)` in Simsort.
+Definitions of polymorphic lists are found in \verb`chicken/coq/Poly.v`
+and \verb`chicken/coq/Lists.v`
+other SF libraries modified as described above.
+(The former defines polymorphic lists,
+and the latter defines, specifically, lists of nats.)
+
   \item \textbf{Stack.}
     We're going to implement this using polymorphic lists.
+    \todo{Methods will include\dots}
+
   \item \textbf{Heap.}
+    \todo{Pseudocode here!}
+
 \end{itemize}
 
 \paragraph{Algorithms and proofs of them.}
 \begin{itemize}
+  \item \textbf{Fundamental methods and proofs relevant to all
+                sorting algorithms.}
   \item \textbf{Mergesort.}
   \item \textbf{Insertion sort.}
   \item \textbf{Heap sort.}
