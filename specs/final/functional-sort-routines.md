@@ -93,7 +93,7 @@ Simple timsort (`simsort`):
 	the runs are put on a stack, and then if X, Y, Z are the lengths of the top 3 runs, the algorithm merges the runs
 	until the invariant X > Y + Z, Y > Z is satisfied.
 	
-	stack can be done as a list or using dictionary type which is defined in Poly.v.
+	stack can be done as a list or using dictionary type which is defined in `chicken/coq/Poly.v`.
 
 	Note that to prove this we'll have to put some more careful thought into everything! So at this point I'm not sure how
 	it would work.
