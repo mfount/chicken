@@ -2,15 +2,6 @@ Require Export Poly.
 
 Module InsertionSort.
 
-Eval compute in nat.
-Eval compute in list.
-
-Definition hd (default:nat) (l:(list nat)) : nat :=
-  match l with
-  | nil => default
-  | h :: t => h
-  end.
-
 Fixpoint insert (x : nat) (l:(list nat)) : (list nat) :=
   match l with
     | [] => [x]
@@ -75,5 +66,9 @@ Theorem is_sorted_part3 : forall (l : list nat),
 Proof.
   Admitted.
 
+Theorem insertion_sort_pf : forall (l : list nat),
+                              is_sorted_le (insertion_sort l) = true.
+Proof.
+  Admitted.
 
 End InsertionSort.
