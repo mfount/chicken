@@ -21,13 +21,7 @@
 \section{Overview}
 \begin{description}
   \item[\textbf{Problem:}]
-    Using Coq, verify Timsort, python's preferred sorting algorithm!
-    \todo{Improve motivation? Possibly include discussion of failures of
-    implementations of Timsort in languages other than Python 3.x.}
-    Timsort is a hybrid of insertion sort and mergesort, plus some heuristics
-    about memory management and other optimizations.
-    Our simplified version will include a reduced version of these
-    heuristics.
+    Using Coq, verify Timsort, python's preferred sorting algorithm and widely used in a variety of languages! Yet implementations of Timsort have been known to fail. We turn to Coq for its support of \emph{verifiable} code and draw on its formal proof techniques, which assures us that we won't run into nasty surprises, dreaded holes in the correctness of the algorithm! Coq supports the exporting of programs into other languages such as ocaml, so we expect to render a sorting procedure that is not only water-tightly verified, but also usable in a broader context. Timsort is a hybrid of insertion sort and mergesort, plus some heuristics about memory management and other optimizations. Our simplified version will include a reduced version of these heuristics.
 
   \item[\textbf{Solution sketch:}]
     We will take an incremental approach (and all of our algorithms
