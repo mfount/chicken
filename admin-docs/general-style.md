@@ -3,3 +3,4 @@
   this.)
 * Indents are two spaces.
 * No spaces or caps in filenames. Use hyphens instead of spaces.
+  * Exception: Coq files seem to be traditionally WrittenInThisStyle.
