@@ -4,6 +4,8 @@ Along the way, we use the following placeholder for proofs we will do later:
 
 `Definition admit {T: Type} : T.  Admitted.`
 
+__Data structures and sorts__
+
 booleans:
 - TODO: there is code for this in `chicken/coq/Basics.v`
 - this includes the proofs of axioms and binary operations
