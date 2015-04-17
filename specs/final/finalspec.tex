@@ -24,6 +24,11 @@
     Using Coq, verify Timsort, python's preferred sorting algorithm!
     \todo{Improve motivation? Possibly include discussion of failures of
     implementations of Timsort in languages other than Python 3.x.}
+    Timsort is a hybrid of insertion sort and mergesort, plus some heuristics
+    about memory management and other optimizations.
+    Our simplified version will include a reduced version of these
+    heuristics.
+
   \item[\textbf{Solution sketch:}]
     We will take an incremental approach (and all of our algorithms
     will be functional, using persistent data structures).
@@ -35,77 +40,57 @@
     be independently verified; the combined algorithm implementation
     will be thoroughly unit-tested.
     For short, call this algorithm Simsort.
+    Implementing Simsort will be the conclusion of our core functionality.
 
     Next, we will implement heaps and a verified heapsort;
     by replacing insertion sort with heapsort in Simsort,
     we should get a constant-factor time improvement.
-    \todo{resume here}
+    Then, our primary goal beyond core functionality will
+    be verification of Simsort.
+    From there, we will implement extra extensions, as discussed below,
+    possibly adding more heuristics to Simsort, approaching verification
+    of Timsort in full.
 
-    and implement a verified version of that implementation to sort
-    lists of natural numbers (defined inductively).
-    Timsort is a hybrid sorting
-    algorithm, requiring other sorting sub-algorithms and some simple data
-    structures, so we will divide our project into interfaces for each of
-    these, along with interfaces for proof tactics.
-    We're going to hone our sorting algorithm verification chops
-    by working through insertion sort and mergesort, both of which
-    are part of Timsort, followed by tree sort and heap sort
-    to test our data structures, followed by Timsort itself!
   \item[\textbf{Goals:}]
-    Primarily, we'd like to verify Timsort as a way to learn more about
-    Coq and certified programming. (If Timsort proves to be too
-    complicated (by our estimation by the time the final spec is due),
-    we will be able to accomplish this same learning outcome by working
-    through insertion, merge, tree, and heap sorts. Or, perhaps, we will
-    include another hybrid search algorithm instead of Timsort.)
-\end{description}
+    Primarily, we'd like to verify Timsort (i.e., Simsort) as a way to
+    learn more about Coq and certified programming.
 
-% A) fundamentals of coq & proofs -> prove mergesort -> prove insertion sort ->
-% prove a simplified version of timsort with black boxes around the heuristics
-% -> (now into bonus...) prove timsort with heuristics -> prove python's
-%  timsort -> ...
+\end{description}
 
 
 \section{Prioritized Feature List}
-\emph{Note:} Generally, we need to read more about Coq to understand
-where to draw the line between ``core'' and ``cool''; that is, how long
-these features will take to implement, including proofs.
-
-Additionally, we are unsure of whether to verify the in-place,
-imperative versions of these algorithms or the pure versions.
-The deciding factor will most likely be the difficulty of implementing
-arrays (and references) in Coq.
+\emph{Note:} All algorithms and data structures used in this project will
+be functional; in particular, we'll use persistent data structures.
 
 \paragraph{Core Features}
 \begin{itemize}
   \item \textbf{Fundamentals.}
-    Ordered lists, natural numbers (defined inductively), lists and arrays,
-    stacks (to be used as Timsort's memory and temporary memory).
-  \item \textbf{Insertion sort.}
+    Natural numbers (defined inductively), polymorphic lists,
+    stacks (for very basic representations of memory needed within Timsort
+    heuristics).
+  \item \textbf{Verified insertion sort.}
     Verified insertion sort of lists of natural numbers.
-  \item \textbf{Merge sort.}
+  \item \textbf{Verified merge sort.}
     Verified merge sort of lists of natural numbers.
-  \item \textbf{Trees.}
-    Binary search trees of natural numbers.
-  \item \textbf{Tree Sort.}
-    Verified tree sort of
-    binary search trees of natural numbers.
-  \item \textbf{Heaps.}
-    Priority queues of natural numbers.
-  \item \textbf{Heap Sort.}
-    Verified heap sort of
-    binary search trees of natural numbers.
-  \item \textbf{Simplified Timsort.}
-    This will operate on lists of natural numbers, represented perhaps
-    as trees or priority queues.
+  \item \textbf{Simsort.}
+    Fully tested implementation of Simsort (our hybridization of verified
+    merge sort, verified insertion sort, and a modified subset of the
+    heuristics used in Timsort).
 
-    Timsort is a hybrid of insertion sort and mergesort, plus some heuristics
-    about memory management and other optimizations. Our ``simplified
-    timsort'' will omit these heuristics when possible.
 \end{itemize}
 
 \paragraph{Cool Extensions}
 \begin{itemize}
+  \item \textbf{Heaps.}
+    Priority queues of natural numbers.
+  \item \textbf{Heap Sort.}
+    Verified heap sort of heaps of natural numbers.
+    This will operate on lists of natural numbers, represented perhaps
+    as trees or priority queues.
+  \item \textbf{Augmenting Simsort with heapsort.}
+    Fully tested implementation of Simsort, with heapsort replacing
+    insertion sort, for a slight improvement in asymptotics.
+
   \item \textbf{Timsort.}
     Verified timsort; that is, simplified timsort plus heuristics.
     This version would have the same time asymptotics as python's
@@ -115,15 +100,8 @@ arrays (and references) in Coq.
     $\Theta(n \log n)$ worst case,
     where $n$ is the length of the list.
 
-  \item \textbf{Polymorphic timsort.}
-    A verified timsort that works on polymorphic lists. (Unlike in OCaml,
-    this seems actually to be a good bit of work in Coq, having to prove
-    things about each subtype of our ordered set type.)
-
-  \item \textbf{Export to OCaml.}
-    One of Coq's initial purposes is to export verified OCaml (or Haskell
-    or Scheme) code; for this cool extension, we can try to turn some or all
-    of our verified algorithm implementations into usable OCaml.
+  \item \todo{Everything until here in this section is correct;
+    will finish after class. ---mfount}
 
   \item \textbf{Python's timsort.}
     This final possible extension could be to modify our verified Timsort
