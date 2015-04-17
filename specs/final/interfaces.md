@@ -1,3 +1,5 @@
+TODOS: what will the implementation and proof of heaps look like?
+
 __INTERFACES__
 
 We implement and prove all the following elements. This document outlines the subprocedures and axioms that will be necessary for our sorts and data structures both in terms of their implementation and their proof.
