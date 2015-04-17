@@ -1,6 +1,16 @@
-Placeholder for proofs we will do later:
+TODO: what will the implementation and proof of heaps look like?
+
+__INTERFACES__
+
+We implement and prove all the following elements. This document outlines the subprocedures and axioms that will be necessary for our sorts and data structures both in terms of their implementation and their proof.
+
+Along the way, we use the following placeholder for proofs we will do later:
+
 `Admitted.`, which is defined with:
+
 `Definition admit {T: Type} : T.  Admitted.`
+
+__Data structures__
 
 booleans:
 - TODO: there is code for this in `chicken/coq/Basics.v`
@@ -21,6 +31,11 @@ polymorphic lists:
   defines natlists.
 - proofs of axioms are also included.
 
+heaps:
+
+
+__Sorts__
+
 `is_sorted_le` (and/ or more general `is_sorted` functions with passed-in comparison
 function:
 - checks if a list is sorted in ascending order.
@@ -40,16 +55,16 @@ _For an example, see_ `chicken/coq/InsertionSort.v`
 
 Insertion sort:
 - Procedure (`insert n t`): 
-	takes input an list t where the last n-1 elements are sorted
-	returns list t' where last n elts are sorted, by inserting 1st element 
+	takes input an list `t` where the last `n-1` elements are sorted
+	returns list `t'` where last `n` elts are sorted, by inserting 1st element 
 
 - Insertion sort:
-	takes input a list t_1
+	takes input a list `t_1`
 	run (`insert 0 t_{n-1}`), (`insert 1 t_{n-2}`), ..., (`insert {n-1} t_{0}`)
-	where t_i is the result of (`insertion (n-i) t_{i-1}`)
+	where `t_i` is the result of (`insertion (n-i) t_{i-1}`)
 	
-Proof: for the proof we prove insert and then InsertionSort on top of that.
-See `../../coq/InsertionSort.v`.
+Proof: for the proof we prove insert and then InsertionSort on top of that. We will need IsSorted, which we prove elsewhere.
+See `chicken/coq/InsertionSort.v`.
 
 Mergesort:
 - Procedure (`merge t s`): 
@@ -59,6 +74,8 @@ Mergesort:
 - Merge sort: 
 	takes input a list `t`
 	calls itself recursively on each half of the list, then calls `merge`.
+
+Proof: will take a similar form to `insertion_sort` proof. Prove `merge`, then prove `merge_sort` on top of that. We will need IsSorted, which we prove elsewhere.
 
 Heapsort:
 - Procedure (`heapify t`):
@@ -93,7 +110,5 @@ Simple timsort (`simsort`):
 	the runs are put on a stack, and then if X, Y, Z are the lengths of the top 3 runs, the algorithm merges the runs
 	until the invariant X > Y + Z, Y > Z is satisfied.
 	
-	stack can be done as a list or using dictionary type which is defined in Poly.v.
+	stack can be done as a list or using dictionary type which is defined in `chicken/coq/Poly.v`.
 
-	Note that to prove this we'll have to put some more careful thought into everything! So at this point I'm not sure how
-	it would work.
