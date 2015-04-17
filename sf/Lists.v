@@ -155,7 +155,7 @@ Notation "[ x ; .. ; y ]" := (cons x .. (cons y nil) ..).
     the next three declarations mean exactly the same thing: *)
 
 Definition mylist1 := 1 :: (2 :: (3 :: nil)).
-Definition mylist2 := 1 :: 2 :: 3 :: nil.
+Definition mylist2 := 1 :: 2 :: 3 :: [].
 Definition mylist3 := [1;2;3].
 
 (** The [at level 60] part tells Coq how to parenthesize
