@@ -95,5 +95,3 @@ Simple timsort (`simsort`):
 	
 	stack can be done as a list or using dictionary type which is defined in `chicken/coq/Poly.v`.
 
-	Note that to prove this we'll have to put some more careful thought into everything! So at this point I'm not sure how
-	it would work.
