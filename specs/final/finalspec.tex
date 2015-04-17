@@ -148,7 +148,7 @@ familiar binary operations, and proofs of them.
     structured as an ordered set, so we've verified (or made progress
     toawrd verifying) the order properties of the natural numbers
     as comparison methods, for example
-    \verb`ble_nat` (\verb`<=` for nats).
+    \verb`ble_nat` (\verb`<=` for nats) as well as \verb`blt_nat` (\verb`<` for nats).
 
   \item \textbf{Polymorphic lists.}
 We will be sorting objects of the type \verb`list nat` (informally,
@@ -162,7 +162,7 @@ and the latter defines, specifically, lists of nats.)
 
   \item \textbf{Stack.}
     We're going to implement this using polymorphic lists.
-    \todo{Methods will include\dots}
+    Methods will include \verb`push` (implemented as the familiar list \verb`Cons` construction) and \verb`pop` (implemented as \verb`hd_opt`). Proofs of consistency of these will be based on existing exercises in SF, which we have already done in working through the textbook. (see \verb`chicken/coq/Poly.v`).
 
   \item \textbf{Heap.}
     \todo{Pseudocode here!}
