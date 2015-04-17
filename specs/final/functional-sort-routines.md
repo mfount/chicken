@@ -40,13 +40,13 @@ _For an example, see_ `chicken/coq/InsertionSort.v`
 
 Insertion sort:
 - Procedure (`insert n t`): 
-	takes input an list t where the last n-1 elements are sorted
-	returns list t' where last n elts are sorted, by inserting 1st element 
+	takes input an list `t` where the last `n-1` elements are sorted
+	returns list `t'` where last `n` elts are sorted, by inserting 1st element 
 
 - Insertion sort:
-	takes input a list t_1
+	takes input a list `t_1`
 	run (`insert 0 t_{n-1}`), (`insert 1 t_{n-2}`), ..., (`insert {n-1} t_{0}`)
-	where t_i is the result of (`insertion (n-i) t_{i-1}`)
+	where `t_i` is the result of (`insertion (n-i) t_{i-1}`)
 	
 Proof: for the proof we prove insert and then InsertionSort on top of that.
 See `../../coq/InsertionSort.v`.
