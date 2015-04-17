@@ -49,7 +49,7 @@ Insertion sort:
 	where `t_i` is the result of (`insertion (n-i) t_{i-1}`)
 	
 Proof: for the proof we prove insert and then InsertionSort on top of that.
-See `../../coq/InsertionSort.v`.
+See `chicken/coq/InsertionSort.v`.
 
 Mergesort:
 - Procedure (`merge t s`): 
