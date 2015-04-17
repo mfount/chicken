@@ -48,7 +48,7 @@ Insertion sort:
 	run (`insert 0 t_{n-1}`), (`insert 1 t_{n-2}`), ..., (`insert {n-1} t_{0}`)
 	where `t_i` is the result of (`insertion (n-i) t_{i-1}`)
 	
-Proof: for the proof we prove insert and then InsertionSort on top of that.
+Proof: for the proof we prove insert and then InsertionSort on top of that. We will need IsSorted, which we prove elsewhere.
 See `chicken/coq/InsertionSort.v`.
 
 Mergesort:
@@ -59,6 +59,8 @@ Mergesort:
 - Merge sort: 
 	takes input a list `t`
 	calls itself recursively on each half of the list, then calls `merge`.
+
+Proof: will take a similar form to `insertion_sort` proof. Prove `merge`, then prove `merge_sort` on top of that. We will need IsSorted, which we prove elsewhere.
 
 Heapsort:
 - Procedure (`heapify t`):
