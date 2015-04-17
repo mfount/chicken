@@ -1,5 +1,6 @@
 \documentclass{article}
 \usepackage{chicken}
+\usepackage{verbatim}
 
 \DateAndTitle{17 April 2015}{Final Specification}
 
@@ -157,21 +158,119 @@ and the latter defines, specifically, lists of nats.)
 
   \item \textbf{Stack.}
     We're going to implement this using polymorphic lists.
-    Methods will include \verb`push` (implemented as the familiar list \verb`Cons` construction) and \verb`pop` (implemented as \verb`hd_opt`). Proofs of consistency of these will be based on existing exercises in SF, which we have already done in working through the textbook. (see \verb`chicken/coq/Poly.v`).
+    Methods will include \verb`push` (implemented as the familiar list
+\verb`Cons` construction) and \verb`pop` (implemented as \verb`hd_opt`). Proofs
+of consistency of these will be based on existing exercises in SF, which we
+have already done in working through the textbook. (See
+\verb`chicken/coq/Poly.v`.)
 
   \item \textbf{Heap.}
-    \todo{Pseudocode here!}
+    See \verb`chicken/coq/Heap.ml` for a standard priority queue interface.
+    We will transliterate this to Coq (technically, to Gallina, Coq's
+    functional language subset).
+    Also, we expect many proofs of the methods used within to resemble
+    the lemma and tactic structure of polymorphic lists.
 
 \end{itemize}
 
 \paragraph{Algorithms and proofs of them.}
+In this section, we outline the methods required by each algorithm and
+the necessary lemmas that we will need to implement to verify these
+methods. Additionally, we will need pre- and post-conditions for the
+algorithm as a whole, but what exactly will constitute these should become
+apparent as we make progress over this first week.
+
+
 \begin{itemize}
   \item \textbf{Fundamental methods and proofs relevant to all
                 sorting algorithms.}
   \item \textbf{Mergesort.}
+\begin{verbatim}
+Mergesort:
+- Procedure (`merge t s`): 
+	takes input lists `t`, `s` that are sorted
+	returns an array that is `s` and `t` merged together (and sorted)
+
+- Merge sort: 
+	takes input a list `t`
+	calls itself recursively on each half of the list, then calls `merge`.
+
+\end{verbatim}
+
   \item \textbf{Insertion sort.}
+\begin{verbatim}
+- Procedure (`insert n t`): 
+	takes input an list `t` where the last `n-1` elements are sorted
+	returns list `t'` where last `n` elts are sorted, by inserting 1st element 
+
+- Insertion sort:
+	takes input a list `t_1`
+	run (`insert 0 t_{n-1}`), (`insert 1 t_{n-2}`), ..., (`insert {n-1} t_{0}`)
+	where `t_i` is the result of (`insertion (n-i) t_{i-1}`)
+	
+Proof: for the proof we prove insert and then InsertionSort on top of that. We
+will need IsSorted, which we prove elsewhere.
+See `chicken/coq/InsertionSort.v`.
+- Procedure (`insert n t`): 
+  takes input an list `t` where the last `n-1` elements are sorted
+	returns list `t'` where last `n` elts are sorted, by inserting 1st element 
+
+- Insertion sort:
+	takes input a list `t_1`
+	run (`insert 0 t_{n-1}`), (`insert 1 t_{n-2}`), ..., (`insert {n-1} t_{0}`)
+	where `t_i` is the result of (`insertion (n-i) t_{i-1}`)
+	
+Proof: for the proof we prove insert and then InsertionSort on top of that. We
+will need IsSorted, which we prove elsewhere.
+See `chicken/coq/InsertionSort.v`.
+\end{verbatim}
+
   \item \textbf{Heap sort.}
+\begin{verbatim}
+Heapsort:
+- Procedure (`heapify t`):
+	takes input a list `t`
+	returns a heap data structure with elements the element of the list
+
+- Procedure (`heapsort_step h t`):
+	takes as input a heap (a min-heap) `h` and a list `t`
+	returns a new heap `h'` and new list `t'` where we moved the min element
+	from the heap `h` to the beginning of `t`.
+
+- Heap sort:
+	takes as input a list `t`
+	runs `heapify` on `t`
+	then runs `heapsort_step` until the heap is empty.
+
+
+
+\end{verbatim}
+
   \item \textbf{Simsort.}
+\begin{verbatim}
+Simple timsort (`simsort`):
+- Procedure (runs `t`):
+	takes as input a list `t`
+	returns: consider a permutation of `t` where consecutive runs have 
+        length at least 64 (or some other constant, we'll see)
+	then (runs `t`) returns a list of these runs
+
+	Uses either insertion sort (original timsort) or heapsort (our 
+	modification) to sort the runs when necessary
+
+- Procedure (`merge_runs T`)
+	takes as input a list of lists `T`, as the output of (`runs t`). 
+  returns a list of lists that represents the result of merging the runs
+following the timsort heuristic:
+  the runs are put on a stack, and then if X, Y, Z are the lengths of the top 3
+runs, the algorithm merges the runs
+	until the invariant X > Y + Z, Y > Z is satisfied.
+	
+  stack can be done as a list or using dictionary type which is defined in
+`chicken/coq/Poly.v`.
+
+\end{verbatim}
+
 \end{itemize}
 
 
