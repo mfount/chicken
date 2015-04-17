@@ -1,5 +1,7 @@
-Placeholder for proofs we will do later:
+Along the way, we use the following placeholder for proofs we will do later:
+
 `Admitted.`, which is defined with:
+
 `Definition admit {T: Type} : T.  Admitted.`
 
 booleans:
