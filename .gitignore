@@ -1,3 +1,4 @@
 *.swp
 *.fls
 .DS_Store
+*.gitignore.*
