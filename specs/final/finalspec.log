@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  17 APR 2015 13:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  17 APR 2015 14:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -327,48 +327,48 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 [1{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
-LaTeX Font Info:    Try loading font information for OT1+pplx on input line 98.
-
+LaTeX Font Info:    Try loading font information for OT1+pplx on input line 137
+.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/ot1pplx.fd
 File: ot1pplx.fd 2004/09/06 font definitions for OT1/pplx.
 )
-LaTeX Font Info:    Try loading font information for OML+zplm on input line 98.
-
+LaTeX Font Info:    Try loading font information for OML+zplm on input line 137
+.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/omlzplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
-LaTeX Font Info:    Try loading font information for OMS+zplm on input line 98.
-
+LaTeX Font Info:    Try loading font information for OMS+zplm on input line 137
+.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/omszplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
-LaTeX Font Info:    Try loading font information for OMX+zplm on input line 98.
-
+LaTeX Font Info:    Try loading font information for OMX+zplm on input line 137
+.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/omxzplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
-LaTeX Font Info:    Try loading font information for OT1+zplm on input line 98.
-
+LaTeX Font Info:    Try loading font information for OT1+zplm on input line 137
+.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 98.
+(Font)              scaled to size 10.42007pt on input line 137.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 98.
+(Font)              scaled to size 7.91925pt on input line 137.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 98.
+(Font)              scaled to size 6.25204pt on input line 137.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 98.
+(Font)              scaled to size 10.42007pt on input line 137.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 98.
+(Font)              scaled to size 7.91925pt on input line 137.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 98.
+(Font)              scaled to size 6.25204pt on input line 137.
 
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -409,16 +409,15 @@ exlive/2014/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/tex
 live/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texl
 ive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texliv
 e/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
-/2014/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/local/texlive/2014
-/texmf-dist/fonts/type1/public/cm-super/sfsx1000.pfb></usr/local/texlive/2014/t
-exmf-dist/fonts/type1/public/cm-super/sftt1000.pfb></usr/local/texlive/2014/tex
-mf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2014/texmf-dist
-/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/
-type1/urw/palatino/uplri8a.pfb>
-Output written on finalspec.pdf (4 pages, 146149 bytes).
+/2014/texmf-dist/fonts/type1/public/cm-super/sfsx1000.pfb></usr/local/texlive/2
+014/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb></usr/local/texlive/201
+4/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2014/texmf
+-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2014/texmf-dist/f
+onts/type1/urw/palatino/uplri8a.pfb>
+Output written on finalspec.pdf (4 pages, 142803 bytes).
 PDF statistics:
- 55 PDF objects out of 1000 (max. 8388607)
- 39 compressed objects within 1 object stream
+ 51 PDF objects out of 1000 (max. 8388607)
+ 36 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

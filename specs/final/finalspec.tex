@@ -65,7 +65,7 @@ be functional; in particular, we'll use persistent data structures.
 \paragraph{Core Features}
 \begin{itemize}
   \item \textbf{Fundamentals.}
-    Natural numbers (defined inductively), polymorphic lists,
+    Booleans, natural numbers (defined inductively), polymorphic lists,
     stacks (for very basic representations of memory needed within Timsort
     heuristics).
   \item \textbf{Verified insertion sort.}
@@ -76,6 +76,7 @@ be functional; in particular, we'll use persistent data structures.
     Fully tested implementation of Simsort (our hybridization of verified
     merge sort, verified insertion sort, and a modified subset of the
     heuristics used in Timsort).
+    \todo{talk about what the heuristics might be}
 
 \end{itemize}
 
@@ -90,26 +91,23 @@ be functional; in particular, we'll use persistent data structures.
   \item \textbf{Augmenting Simsort with heapsort.}
     Fully tested implementation of Simsort, with heapsort replacing
     insertion sort, for a slight improvement in asymptotics.
-
-  \item \textbf{Timsort.}
-    Verified timsort; that is, simplified timsort plus heuristics.
-    This version would have the same time asymptotics as python's
-    implementation of Timsort:
-    $\Theta(n)$ best case,
-    $\Theta(n \log n)$ average case,
-    $\Theta(n \log n)$ worst case,
-    where $n$ is the length of the list.
-
-  \item \todo{Everything until here in this section is correct;
-    will finish after class. ---mfount}
-
-  \item \textbf{Python's timsort.}
-    This final possible extension could be to modify our verified Timsort
-    algorithm to use exactly the heuristics found in the current Python 3.x
-    release, as opposed to the heuristics we end up using in our implemented
-    version of the full Timsort algorithm.
-    We could also attempt to use the same space complexity of
-    Timsort, $O(n)$.
+  \item \textbf{Verified Simsort.}
+    This is our main goal beyond core functionality.
+    We will improve the fully tested Simsort to
+    a rigorously verified Simsort (using Coq).
+  \item \textbf{Passing foreign tests.}
+    We have come across a few known to be broken implementations of Timsort
+    in certain languages (e.g., Java's clone of Timsort,
+    early versions of Python 2.x's Timsort).
+    For this cool extension, we would take some of the failing test cases for
+    those other implementations, adapt them to use the same heuristic
+    assumptions that we've used with Simsort, and show that our verified
+    Simsort passes those tests.
+  \item \textbf{Adding more heuristics.}
+    If we make it this far, we will add more heuristics to Simsort,
+    showing that each addition passes verification and doesn't break
+    invariants, working our way gradually to a verified, functional
+    Timsort in full.
 \end{itemize}
 
 
