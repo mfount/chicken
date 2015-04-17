@@ -583,7 +583,7 @@ Definition blt_nat (n m : nat) : bool :=
   match ble_nat n m, beq_nat n m with
     | true,false => true
     | _,_ => false
-               end.
+  end.
 
 Example test_blt_nat1:             (blt_nat 2 2) = false.
 Proof. reflexivity. Qed.
