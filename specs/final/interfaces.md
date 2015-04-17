@@ -1,10 +1,14 @@
+__Interfaces__
+
+We implement and prove all the following elements. This document outlines the subprocedures and axioms that will be necessary for our sorts and data structures both in terms of their implementation and their proof.
+
 Along the way, we use the following placeholder for proofs we will do later:
 
 `Admitted.`, which is defined with:
 
 `Definition admit {T: Type} : T.  Admitted.`
 
-__Data structures and sorts__
+__Data structures__
 
 booleans:
 - TODO: there is code for this in `chicken/coq/Basics.v`
@@ -24,6 +28,11 @@ polymorphic lists:
 - TODO: check for requirements/ dependencies from `chicken/coq/Lists.v`, which
   defines natlists.
 - proofs of axioms are also included.
+
+heaps:
+
+
+__Sorts__
 
 `is_sorted_le` (and/ or more general `is_sorted` functions with passed-in comparison
 function:
