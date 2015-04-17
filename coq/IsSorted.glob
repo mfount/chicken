@@ -1,0 +1,75 @@
+DIGEST 4ca2cca79858d01d020c8365e3f1067c
+FIsSorted
+R15:18 Poly <> <> lib
+mod 29:36 <> IsSorted
+def 49:60 IsSorted is_sorted_le
+R67:70 Poly <> list ind
+R72:74 Coq.Init.Datatypes <> nat ind
+R79:82 Basics <> bool ind
+R95:95 IsSorted <> l var
+R110:113 Poly <> ::x_'::'_x not
+R152:155 Poly <> ::x_'::'_x not
+R162:165 Basics <> andb def
+R184:195 IsSorted <> is_sorted_le def
+R168:174 Basics <> ble_nat def
+R211:212 Poly <> ::'['_']' not
+R217:220 Basics <> true constr
+R238:239 Poly <> ::'['_']' not
+R244:247 Basics <> true constr
+def 268:280 IsSorted nat_le_before
+R297:302 Poly <> hd_opt def
+R304:304 IsSorted <> l var
+R317:320 Poly <> Some constr
+R327:333 Basics <> ble_nat def
+R335:335 IsSorted <> n var
+R345:348 Poly <> None constr
+R353:356 Basics <> true constr
+prf 375:389 IsSorted is_sorted_part1
+R405:408 Poly <> list ind
+R410:412 Coq.Init.Datatypes <> nat ind
+R454:456 Coq.Init.Datatypes <> nat ind
+R623:625 Coq.Init.Logic <> :type_scope:x_'='_x not
+R602:613 IsSorted IsSorted is_sorted_le def
+R617:620 Poly <> ::x_'::'_x not
+R616:616 IsSorted <> n var
+R621:621 IsSorted <> l var
+R626:629 Basics <> true constr
+R561:563 Coq.Init.Logic <> :type_scope:x_'='_x not
+R547:558 IsSorted IsSorted is_sorted_le def
+R560:560 IsSorted <> l var
+R564:567 Basics <> true constr
+R506:508 Coq.Init.Logic <> :type_scope:x_'='_x not
+R489:501 IsSorted IsSorted nat_le_before def
+R505:505 IsSorted <> l var
+R503:503 IsSorted <> n var
+R509:512 Basics <> true constr
+prf 661:675 IsSorted is_sorted_part2
+R691:694 Poly <> list ind
+R696:698 Coq.Init.Datatypes <> nat ind
+R740:742 Coq.Init.Datatypes <> nat ind
+R854:856 Coq.Init.Logic <> :type_scope:x_'='_x not
+R833:844 IsSorted IsSorted is_sorted_le def
+R848:851 Poly <> ::x_'::'_x not
+R847:847 IsSorted <> n var
+R852:852 IsSorted <> l var
+R857:861 Basics <> false constr
+R792:794 Coq.Init.Logic <> :type_scope:x_'='_x not
+R775:787 IsSorted IsSorted nat_le_before def
+R791:791 IsSorted <> l var
+R789:789 IsSorted <> n var
+R795:799 Basics <> false constr
+prf 892:906 IsSorted is_sorted_part3
+R922:925 Poly <> list ind
+R927:929 Coq.Init.Datatypes <> nat ind
+R971:973 Coq.Init.Datatypes <> nat ind
+R1082:1084 Coq.Init.Logic <> :type_scope:x_'='_x not
+R1061:1072 IsSorted IsSorted is_sorted_le def
+R1076:1079 Poly <> ::x_'::'_x not
+R1075:1075 IsSorted <> n var
+R1080:1080 IsSorted <> l var
+R1085:1089 Basics <> false constr
+R1020:1022 Coq.Init.Logic <> :type_scope:x_'='_x not
+R1006:1017 IsSorted IsSorted is_sorted_le def
+R1019:1019 IsSorted <> l var
+R1023:1027 Basics <> false constr
+R1116:1123 IsSorted IsSorted <> mod
