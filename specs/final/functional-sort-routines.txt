@@ -1,0 +1,54 @@
+Insertion sort:
+- Procedure (insertion n t): 
+	takes input an array t where the first n-1 elements are sorted
+	returns array t' where first n elts are sorted, by inserting n-th element 
+
+Proof: we need to prove that 
+
+- Insertion sort:
+	takes input a list t_1
+	run (insertion 2 t_1), (insertion 3 t_2), ..., (insertion n t_{n-1})
+	where t_i is the result of (insertion i t_{i-1})
+
+Mergesort:
+- Procedure (merge t s): 
+	takes input arrays t, s that are sorted
+	returns an array that is s and t merged together (and sorted)
+
+- Merge sort: 
+	takes input a list t
+	calls itself recursively on each half of the list, then calls merge.
+
+Heapsort:
+- Procedure (heapify t):
+	takes input a list t
+	returns a heap data structure with elements the element of the list
+
+- Procedure (heapsort_step h t):
+	takes as input a heap (a min-heap) h and a list t
+	returns a new heap h' and new list t' where we moved the min element
+	from the heap h to the beginning of t.
+
+- Heap sort:
+	takes as input a list t
+	runs heapify on t
+	then runs heapsort_step until the heap is empty.
+
+
+
+Simple timsort:
+- Procedure (runs t):
+	takes as input a list t
+	returns: consider a permutation of t where consecutive runs have length at least 64 (or some other constant, we'll see)
+	then (runs t) returns a list of these runs
+
+	Uses either insertion sort (original timsort) or heapsort (our modification) to sort the runs when necessary
+
+- Procedure (merge_runs T)
+	takes as input a list of lists T, as the output of (runs t). 
+	returns a list of lists that represents the result of merging the runs following the timsort heuristic:
+	the runs are put on a stack, and then if X, Y, Z are the lengths of the top 3 runs, the algorithm merges the runs
+	until the invariant X > Y + Z, Y > Z is satisfied.
+
+	Note that to prove this we'll have to put some more careful thought into everything! So at this point I'm not sure how
+	it would work.
