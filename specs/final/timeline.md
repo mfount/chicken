@@ -14,4 +14,4 @@ __Week Two__
 - combine merge and insert into `sim_sort`.
 - export to ocaml and check on the list that breaks the java implementation.
 - combine merge and heap into `our_sim_sort`.
-- prove `sim_sort` itself
+- prove `sim_sort` itself.
