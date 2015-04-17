@@ -1,18 +1,18 @@
 Insertion sort:
-- Procedure (insertion n t): 
-	takes input an array t where the first n-1 elements are sorted
-	returns array t' where first n elts are sorted, by inserting n-th element 
+- Procedure (insert n t): 
+	takes input an list t where the last n-1 elements are sorted
+	returns list t' where last n elts are sorted, by inserting 1st element 
 
-Proof: we need to prove that 
+Proof: we need to prove that. We have the lemmas set up/ the proof split into steps.
 
 - Insertion sort:
 	takes input a list t_1
-	run (insertion 2 t_1), (insertion 3 t_2), ..., (insertion n t_{n-1})
-	where t_i is the result of (insertion i t_{i-1})
+	run (insert 0 t_{n-1}), (insert 1 t_{n-2}), ..., (insert {n-1} t_{0})
+	where t_i is the result of (insertion n - i t_{i-1})
 
 Mergesort:
 - Procedure (merge t s): 
-	takes input arrays t, s that are sorted
+	takes input lists t, s that are sorted
 	returns an array that is s and t merged together (and sorted)
 
 - Merge sort: 
@@ -49,6 +49,8 @@ Simple timsort:
 	returns a list of lists that represents the result of merging the runs following the timsort heuristic:
 	the runs are put on a stack, and then if X, Y, Z are the lengths of the top 3 runs, the algorithm merges the runs
 	until the invariant X > Y + Z, Y > Z is satisfied.
+	
+	stack can be done as a list or using dictionary type which is defined in Poly.v.
 
 	Note that to prove this we'll have to put some more careful thought into everything! So at this point I'm not sure how
 	it would work.
