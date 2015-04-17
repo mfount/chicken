@@ -131,7 +131,7 @@ Our code for bools so far is contained in \verb`chicken/coq/Basics.v`,
 a library provided with SF \cite{sf}, which we have filled out with solutions
 to the relevant exercises.
 This includes axioms and definitions pertaining to bools
-(e.g. \verb+not false = true+), proofs of simple lemmas (primarily done
+(e.g. \verb+negb false = true+), proofs of simple lemmas (primarily done
 using the \verb+destruct+ tactic to prove by case exhaustion)
 familiar binary operations, and proofs of them.
 
@@ -181,16 +181,29 @@ and the latter defines, specifically, lists of nats.)
 
 
 \section{Timeline}
-\paragraph{Remainder of this week.}
+As of Friday 17 April at 5pm, we have exactly two weeks to finish our project.
+
+\paragraph{Week One.}
 \begin{itemize}
   \item
-    foo
+Isolate axiom definitions from the first 4 chapters of Software Foundations that we will use. Get them working as a set of      libraries that can be \verb`Require`d.
+\item  As a group, do all of these exercises (proof of the consistency of the axiom definitions that we need). As individuals, learn   the contents of the first 5 chapters.
+\item  Complete proofs of \verb`is_sorted_le` in \verb`chicken/coq/IsSorted.v`. Complete proofs of \verb`insertion_sort` in 
+  \verb`chicken/coq/InsertSort.v`. (Both of these libraries are ours, not originating from SF, and already exist in part.)
+\item  Do the same for \verb`merge_sort`.
+\item Get an implementation of heaps working (in line with the pseudo-code signature given in the final spec) and prove half of the   operations.
 \end{itemize}
 
-\paragraph{Week of April 20.}
+\paragraph{Week Two.}
 \begin{itemize}
-  \item
-    foo
+\item Complete proof of the correctness of operations of heap.
+\item Implement \verb+heap_sort+ and prove it. Easy after the work we have done for heaps.
+\item combine merge and insert into \verb`simsort`.
+  Export \verb+simsort+ to OCaml and write test suite.
+\item Revise \verb`simsort` tom implement heaps; export to OCaml;
+  ensure that the test suite is still passed.
+\item Verify \verb`simsort`.
+\item Further tasks if possible. (See ``Cool Extensions'', as outlined above.)
 \end{itemize}
 
 \todo{flesh this out}
