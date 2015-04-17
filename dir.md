@@ -9,3 +9,7 @@
   * Contains project specs, including those submitted to cs51 staff.
 * latex
   * contains latex boilerplate (particularly the main style file)
+* coq
+  * contains coq code for the project
+* sf
+  * software foundations with solutions
