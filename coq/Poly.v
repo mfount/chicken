@@ -529,10 +529,7 @@ Proof. reflexivity.  Qed.
     passes the unit tests below. *)
 
 Definition hd_opt {X : Type} (l : list X)  : option X :=
-  match l with
-    | h::t => Some h
-    | [] => None
-    end.
+  (* FILL IN HERE *) admit.
 
 (** Once again, to force the implicit arguments to be explicit,
     we can use [@] before the name of the function. *)
@@ -1003,7 +1000,7 @@ Theorem unfold_example_bad : forall m n,
   plus3 n + 1 = m + 1.
 Proof.
   intros m n H.
-(* At this point, we'd like to do [rewrite -> H], since 
+(* At This point, we'd like to do [rewrite -> H], since 
      [plus3 n] is definitionally equal to [3 + n].  However, 
      Coq doesn't automatically expand [plus3 n] to its 
      definition. *)

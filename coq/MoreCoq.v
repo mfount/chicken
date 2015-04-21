@@ -117,7 +117,7 @@ Theorem rev_exercise1 : forall (l l' : list nat),
      l' = rev l.
 Proof.
   intros l l' H. assert (H1: rev (rev l') = l'). Case "Proof of assertion".
-  apply rev_involutive. rewrite <- H1. Abort.
+  apply rev_involutive. rewrite -> H. symmetry. apply H1. Qed.
   (* FILL IN HERE *)(* Admitted. *)
 (** [] *)
 
@@ -271,7 +271,7 @@ Example sillyex1 : forall (X : Type) (x y z : X) (l j : list X),
      y :: l = x :: j ->
      x = y.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros X x y z l j. intros H1 H2. inversion H2. reflexivity. Qed.
 (** [] *)
 
 Theorem silly6 : forall (n : nat),
@@ -384,8 +384,11 @@ Theorem plus_n_n_injective : forall n m,
      n = m.
 Proof.
   intros n. induction n as [| n'].
-    (* Hint: use the plus_n_Sm lemma *)
-    (* FILL IN HERE *) Admitted.
+  Case "n = 0". intros m H. simpl in H. induction m as [| m'].
+    SCase "m = 0". reflexivity. inversion H.
+    Case "n = S n'". intros m H. Admitted.
+  (* Hint: use the plus_n_Sm lemma *)
+    (* FILL IN HERE *) 
 (** [] *)
 
 (* ###################################################### *)
@@ -517,7 +520,7 @@ Proof.
          [m'] that we are talking about right now (this
          instantiation is performed automatically by
          [apply]), then [IHn'] gives us exactly what we
-         need to finish the proof. *)
+         need to finish the proof. *)(* inversion eq. *)
       apply IHn'. inversion eq. reflexivity. Qed.
 
 (** What this teaches us is that we need to be careful about using
@@ -531,6 +534,13 @@ Proof.
 Theorem beq_nat_true : forall n m,
     beq_nat n m = true -> n = m.
 Proof.
+  intros n. induction n as [ | n'].
+  Case "n = 0". intros m. intros eq. destruct m as [|m'].
+    SCase "m = 0". reflexivity.
+    SCase "m = S m'". inversion eq.
+  Case "n = S n'". intros m eq.
+  Admitted.  
+    
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
