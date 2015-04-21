@@ -160,7 +160,7 @@ Inductive mumble : Type :=
 Inductive grumble (X:Type) : Type :=
   | d : mumble -> grumble X
   | e : X -> grumble X.
-
+(* TODO BC *)
 (** Which of the following are well-typed elements of [grumble X] for
     some type [X]?
       - [d (b a 5)]
@@ -181,7 +181,7 @@ Inductive grumble (X:Type) : Type :=
 Inductive baz : Type :=
    | x : baz -> baz
    | y : baz -> bool -> baz.
-
+(* TODO AM *)
 (** How _many_ elements does the type [baz] have? 
 (* FILL IN HERE *)
 *)
@@ -372,31 +372,31 @@ Definition list123''' := [1; 2; 3].
 (** Here are a few simple exercises, just like ones in the [Lists]
     chapter, for practice with polymorphism.  Fill in the definitions
     and complete the proofs below. *)
-
+(* TODO BC *)
 Fixpoint repeat {X : Type} (n : X) (count : nat) : list X :=
   (* FILL IN HERE *) admit.
 
 Example test_repeat1:
   repeat true 2 = cons true (cons true nil).
  (* FILL IN HERE *) Admitted.
-
+(* TODO AM *)
 Theorem nil_app : forall X:Type, forall l:list X,
   app [] l = l.
 Proof.
   (* FILL IN HERE *) Admitted.
-
+(* TODO BC *)
 Theorem rev_snoc : forall X : Type,
                      forall v : X,
                      forall s : list X,
   rev (snoc s v) = v :: (rev s).
 Proof.
   (* FILL IN HERE *) Admitted.
-
+(* TODO AM *)
 Theorem rev_involutive : forall X : Type, forall l : list X,
   rev (rev l) = l.
 Proof.
 (* FILL IN HERE *) Admitted.
-
+(* TODO BC *)
 Theorem snoc_with_append : forall X : Type,
                          forall l1 l2 : list X,
                          forall v : X,
@@ -479,7 +479,7 @@ Fixpoint combine {X Y : Type} (lx : list X) (ly : list Y)
 
     Uncomment the material below and fill in the definition of
     [split].  Make sure it passes the given unit tests. *)
-
+(* TODO AM *)
 Fixpoint split
            {X Y : Type} (l : list (X*Y))
            : (list X) * (list Y) :=
@@ -627,7 +627,7 @@ Definition prod_curry {X Y Z : Type}
 
 (** As an exercise, define its inverse, [prod_uncurry].  Then prove
     the theorems below to show that the two are inverses. *)
-
+(* TODO BC *)
 Definition prod_uncurry {X Y Z : Type}
   (f : X -> Y -> Z) (p : X * Y) : Z :=
   (* FILL IN HERE *) admit.
@@ -637,12 +637,12 @@ Definition prod_uncurry {X Y Z : Type}
 
 Check @prod_curry.
 Check @prod_uncurry.
-
+(* TODO AM *)
 Theorem uncurry_curry : forall (X Y Z : Type) (f : X -> Y -> Z) x y,
   prod_curry (prod_uncurry f) x y = f x y.
 Proof.
   (* FILL IN HERE *) Admitted.
-
+(* TODO BC *)
 Theorem curry_uncurry : forall (X Y Z : Type)
                                (f : (X * Y) -> Z) (p : X * Y),
   prod_uncurry (prod_curry f) p = f p.
@@ -734,7 +734,7 @@ Proof. reflexivity.  Qed.
     [filter_even_gt7] that takes a list of natural numbers as input
     and returns a list of just those that are even and greater than
     7. *)
-
+(* TODO BC *)
 Definition filter_even_gt7 (l : list nat) : list nat :=
   (* FILL IN HERE *) admit.
 
@@ -759,7 +759,7 @@ Example test_filter_even_gt7_2 :
    two sublists should be the same as their order in the original
    list.
 *)
-
+(* TODO AM *)
 Definition partition {X : Type} (test : X -> bool) (l : list X)
                      : list X * list X :=
 (* FILL IN HERE *) admit.
@@ -814,7 +814,7 @@ Proof. reflexivity.  Qed.
 (** Show that [map] and [rev] commute.  You may need to define an
     auxiliary lemma. *)
 
-
+(* TODO BC *)
 Theorem map_rev : forall (X Y : Type) (f : X -> Y) (l : list X),
   map f (rev l) = rev (map f l).
 Proof.
@@ -830,7 +830,7 @@ Proof.
         flat_map (fun n => [n;n+1;n+2]) [1;5;10]
       = [1; 2; 3; 5; 6; 7; 10; 11; 12].
 *)
-
+(* TODO AM *)
 Fixpoint flat_map {X Y:Type} (f:X -> list Y) (l:list X)
                    : (list Y) :=
   (* FILL IN HERE *) admit.
@@ -968,7 +968,7 @@ Proof. reflexivity. Qed.
 (** Before starting to work on the following proof, make sure you
     understand exactly what the theorem is saying and can paraphrase
     it in your own words.  The proof itself is straightforward. *)
-
+(* TODO BC *)
 Theorem override_example : forall (b:bool),
   (override (constfun b) 3 true) 2 = b.
 Proof.
@@ -1032,7 +1032,7 @@ Proof.
 
 (** This proof was straightforward, but note that it requires
     [unfold] to expand the definition of [override]. *)
-
+(* TODO AM *)
 (** **** Exercise: 2 stars (override_neq)  *)
 Theorem override_neq : forall (X:Type) x1 x2 k1 k2 (f : nat->X),
   f k1 = x1 ->
@@ -1060,7 +1060,7 @@ Example test_fold_length1 : fold_length [4;7;0] = 3.
 Proof. reflexivity. Qed.
 
 (** Prove the correctness of [fold_length]. *)
-
+(* TODO BC *)
 Theorem fold_length_correct : forall X (l : list X),
   fold_length l = length l.
 (* FILL IN HERE *) Admitted.
@@ -1069,7 +1069,7 @@ Theorem fold_length_correct : forall X (l : list X),
 (** **** Exercise: 3 stars (fold_map)  *)
 (** We can also define [map] in terms of [fold].  Finish [fold_map]
     below. *)
-
+(* TODO AM *)
 Definition fold_map {X Y:Type} (f : X -> Y) (l : list X) : list Y :=
 (* FILL IN HERE *) admit.
 
@@ -1133,7 +1133,7 @@ Definition three : nat := @doit3times.
     [reflexivity]. *)    
 
 (** Successor of a natural number *)
-
+(* TODO BC *)
 Definition succ (n : nat) : nat :=
   (* FILL IN HERE *) admit.
 
@@ -1147,7 +1147,7 @@ Example succ_3 : succ two = three.
 Proof. (* FILL IN HERE *) Admitted.
 
 (** Addition of two natural numbers *)
-
+(* TODO AM *)
 Definition plus (n m : nat) : nat :=
   (* FILL IN HERE *) admit.
 
@@ -1162,7 +1162,7 @@ Example plus_3 :
 Proof. (* FILL IN HERE *) Admitted.
 
 (** Multiplication *)
-
+(* TODO BC *)
 Definition mult (n m : nat) : nat := 
   (* FILL IN HERE *) admit.
 
@@ -1181,7 +1181,7 @@ Proof. (* FILL IN HERE *) Admitted.
     the right type to iterate over can be tricky. If you hit a
     "Universe inconsistency" error, try iterating over a different
     type: [nat] itself is usually problematic. *)
-
+(* TODO AM *)
 Definition exp (n m : nat) : nat :=
   (* FILL IN HERE *) admit.
 

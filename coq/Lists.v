@@ -255,22 +255,22 @@ Proof. reflexivity.  Qed.
 (** Complete the definitions of [nonzeros], [oddmembers] and
     [countoddmembers] below. Have a look at the tests to understand
     what these functions should do. *)
-
+(* TODO AM *)
 Fixpoint nonzeros (l:natlist) : natlist :=
   (* FILL IN HERE *) admit.
-
+(* TODO AM *)
 Example test_nonzeros:            nonzeros [0;1;0;2;3;0;0] = [1;2;3].
  (* FILL IN HERE *) Admitted.
-
+(* TODO BC *)
 Fixpoint oddmembers (l:natlist) : natlist :=
   (* FILL IN HERE *) admit.
-
+(* TODO BC *)
 Example test_oddmembers:            oddmembers [0;1;0;2;3;0;0] = [1;3].
  (* FILL IN HERE *) Admitted.
-
+(* TODO AM *)
 Fixpoint countoddmembers (l:natlist) : nat :=
   (* FILL IN HERE *) admit.
-
+(* TODO AM *)
 Example test_countoddmembers1:    countoddmembers [1;0;3;1;4;5] = 4.
  (* FILL IN HERE *) Admitted.
 Example test_countoddmembers2:    countoddmembers [0;2;4] = 0.
@@ -320,12 +320,12 @@ Definition bag := natlist.
 (** **** Exercise: 3 stars (bag_functions)  *)
 (** Complete the following definitions for the functions
     [count], [sum], [add], and [member] for bags. *)
-
+(* TODO AM *)
 Fixpoint count (v:nat) (s:bag) : nat := 
   (* FILL IN HERE *) admit.
 
 (** All these proofs can be done just by [reflexivity]. *)
-
+(* TODO AM *)
 Example test_count1:              count 1 [1;2;3;1;4;1] = 3.
  (* FILL IN HERE *) Admitted.
 Example test_count2:              count 6 [1;2;3;1;4;1] = 0.
@@ -342,13 +342,13 @@ Example test_count2:              count 6 [1;2;3;1;4;1] = 0.
     The point of stating the question this way is to encourage you to
     think about whether [sum] can be implemented in another way --
     perhaps by using functions that have already been defined.  *)
-
+(* TODO BC *)
 Definition sum : bag -> bag -> bag := 
   (* FILL IN HERE *) admit.
 
 Example test_sum1:              count 1 (sum [1;2;3] [1;4;1]) = 3.
  (* FILL IN HERE *) Admitted.
-
+(* TODO AM *)
 Definition add (v:nat) (s:bag) : bag := 
   (* FILL IN HERE *) admit.
 
@@ -356,7 +356,7 @@ Example test_add1:                count 1 (add 1 [1;4;1]) = 3.
  (* FILL IN HERE *) Admitted.
 Example test_add2:                count 5 (add 1 [1;4;1]) = 0.
  (* FILL IN HERE *) Admitted.
-
+(* TODO BC *)
 Definition member (v:nat) (s:bag) : bool := 
   (* FILL IN HERE *) admit.
 
@@ -411,7 +411,7 @@ Example test_subset2:              subset [1;2;2] [2;1;4;1] = false.
     with a theorem which is true, but whose proof requires techniques
     you haven't learned yet.  Feel free to ask for help if you get
     stuck! *)
-
+(* TODO AM *)
 (* FILL IN HERE *)
 (** [] *)
 
@@ -741,36 +741,34 @@ Proof.
     SCase "proof of assertion". intros m l. simpl. reflexivity.
   rewrite -> L.  rewrite -> IHl'. reflexivity. Qed.
 
-
+(* TODO AM *)
 Theorem rev_involutive : forall l : natlist,
   rev (rev l) = l.
 Proof.
-  intros l. induction l as [|n l'].
-  Case "l = []". reflexivity.
-  Case "l = n :: l'". Abort.
+  Admitted.
 
 (** There is a short solution to the next exercise.  If you find
     yourself getting tangled up, step back and try to look for a
     simpler way. *)
-
+(* TODO BC *)
 Theorem app_assoc4 : forall l1 l2 l3 l4 : natlist,
   l1 ++ (l2 ++ (l3 ++ l4)) = ((l1 ++ l2) ++ l3) ++ l4.
 Proof.
   (* FILL IN HERE *) Admitted.
-
+(* TODO AM *)
 Theorem snoc_append : forall (l:natlist) (n:nat),
   snoc l n = l ++ [n].
 Proof.
   (* FILL IN HERE *) Admitted.
 
-
+(* TODO BC *)
 Theorem distr_rev : forall l1 l2 : natlist,
   rev (l1 ++ l2) = (rev l2) ++ (rev l1).
 Proof.
   (* FILL IN HERE *) Admitted.
 
 (** An exercise about your implementation of [nonzeros]: *)
-
+(* TODO AM *)
 Lemma nonzeros_app : forall l1 l2 : natlist,
   nonzeros (l1 ++ l2) = (nonzeros l1) ++ (nonzeros l2).
 Proof.
@@ -781,7 +779,7 @@ Proof.
 (** Fill in the definition of [beq_natlist], which compares
     lists of numbers for equality.  Prove that [beq_natlist l l]
     yields [true] for every list [l]. *)
-
+(* TODO BC *)
 Fixpoint beq_natlist (l1 l2 : natlist) : bool :=
   (* FILL IN HERE *) admit.
 
@@ -791,7 +789,7 @@ Example test_beq_natlist2 :   beq_natlist [1;2;3] [1;2;3] = true.
  (* FILL IN HERE *) Admitted.
 Example test_beq_natlist3 :   beq_natlist [1;2;3] [1;2;4] = false.
  (* FILL IN HERE *) Admitted.
-
+(* TODO AM *)
 Theorem beq_natlist_refl : forall l:natlist,
   true = beq_natlist l l.
 Proof.
@@ -806,7 +804,7 @@ Proof.
      - Write down a non-trivial theorem [cons_snoc_app]
        involving [cons] ([::]), [snoc], and [app] ([++]).  
      - Prove it. *) 
-
+(* TODO BC *)
 (* FILL IN HERE *)
 (** [] *)
 
@@ -933,7 +931,7 @@ Definition option_elim (d : nat) (o : natoption) : nat :=
 (** **** Exercise: 2 stars (hd_opt)  *)
 (** Using the same idea, fix the [hd] function from earlier so we don't
    have to pass a default element for the [nil] case.  *)
-
+(* TODO BC *)
 Definition hd_opt (l : natlist) : natoption :=
   (* FILL IN HERE *) admit.
 
@@ -998,7 +996,7 @@ Fixpoint find (key : nat) (d : dictionary) : natoption :=
 
 (** **** Exercise: 1 star (dictionary_invariant1)  *)
 (** Complete the following proof. *)
-
+(* TODO AM *)
 Theorem dictionary_invariant1' : forall (d : dictionary) (k v: nat),
   (find k (insert k v d)) = Some v.
 Proof.
@@ -1007,7 +1005,7 @@ Proof.
 
 (** **** Exercise: 1 star (dictionary_invariant2)  *)
 (** Complete the following proof. *)
-
+(* TODO BC *)
 Theorem dictionary_invariant2' : forall (d : dictionary) (m n o: nat),
   beq_nat m n = false -> find m d = find m (insert n o d).
 Proof.

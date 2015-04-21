@@ -111,7 +111,7 @@ Proof.
 (** Hint: you can use [apply] with previously defined lemmas, not
     just hypotheses in the context.  Remember that [SearchAbout] is
     your friend. *)
-
+(* DONE BC *)
 Theorem rev_exercise1 : forall (l l' : list nat),
      l = rev l' ->
      l' = rev l.
@@ -285,7 +285,7 @@ Theorem silly7 : forall (n m : nat),
      [n] = [m].
 Proof.
   intros n m contra. inversion contra.  Qed.
-
+(* TODO AM *)
 (** **** Exercise: 1 star (sillyex2)  *)
 Example sillyex2 : forall (X : Type) (x y z : X) (l j : list X),
      x :: y :: l = [] ->
@@ -378,15 +378,15 @@ Proof.
 
 (** **** Exercise: 3 stars (plus_n_n_injective)  *)
 (** Practice using "in" variants in this exercise. *)
-
+(* TODO AM *)
 Theorem plus_n_n_injective : forall n m,
      n + n = m + m ->
      n = m.
 Proof.
   intros n. induction n as [| n'].
-  Case "n = 0". intros m H. simpl in H. induction m as [| m'].
+  (* Case "n = 0". intros m H. simpl in H. induction m as [| m'].
     SCase "m = 0". reflexivity. inversion H.
-    Case "n = S n'". intros m H. Admitted.
+    Case "n = S n'". intros m H. *) Admitted.
   (* Hint: use the plus_n_Sm lemma *)
     (* FILL IN HERE *) 
 (** [] *)
@@ -529,19 +529,19 @@ Proof.
     leave [m] generic. *)
 
 (** The proof of this theorem (left as an exercise) has to be treated similarly: *)
-
+(* TODO BC *)
 (** **** Exercise: 2 stars (beq_nat_true)  *)
 Theorem beq_nat_true : forall n m,
     beq_nat n m = true -> n = m.
 Proof.
-  intros n. induction n as [ | n'].
+ (* intros n. induction n as [ | n'].
   Case "n = 0". intros m. intros eq. destruct m as [|m'].
     SCase "m = 0". reflexivity.
     SCase "m = S m'". inversion eq.
-  Case "n = S n'". intros m eq.
+  Case "n = S n'". intros m eq. *)
   Admitted.  
     
-  (* FILL IN HERE *) Admitted.
+  (* FILL IN HERE *)
 (** [] *)
 
 (** **** Exercise: 2 stars, advanced (beq_nat_true_informal)  *)
@@ -709,7 +709,7 @@ Proof.
 
 (** **** Exercise: 3 stars (gen_dep_practice)  *)
 (** Prove this by induction on [l]. *)
-
+(* TODO AM *)
 Theorem index_after_last: forall (n : nat) (X : Type) (l : list X),
      length l = n ->
      index n l = None.
@@ -815,7 +815,7 @@ Proof.
     are replaced by [c].
 
 *)
-
+(* TODO BC *)
 (** **** Exercise: 1 star (override_shadow)  *)
 Theorem override_shadow : forall (X:Type) x1 x2 k1 k2 (f : nat->X),
   (override (override f k1 x2) k1 x1) k2 = (override f k1 x1) k2.
@@ -895,6 +895,7 @@ Proof.
 
 
 (** **** Exercise: 2 stars (destruct_eqn_practice)  *)
+(* TODO BC *)
 Theorem bool_fn_applied_thrice : 
   forall (f : bool -> bool) (b : bool), 
   f (f (f b)) = f b.
@@ -903,6 +904,7 @@ Proof.
 (** [] *)
 
 (** **** Exercise: 2 stars (override_same)  *)
+(* TODO AM *)
 Theorem override_same : forall (X:Type) x1 k1 k2 (f : nat->X),
   f k1 = x1 -> 
   (override f k1 x1) k2 = f k2.
@@ -989,6 +991,7 @@ Proof.
 (** * Additional Exercises *)
 
 (** **** Exercise: 3 stars (beq_nat_sym)  *)
+(* TODO BC *)
 Theorem beq_nat_sym : forall (n m : nat),
   beq_nat n m = beq_nat m n.
 Proof.
@@ -1026,7 +1029,7 @@ Proof.
     your induction hypothesis general by not doing [intros] on more
     things than necessary.  Hint: what property do you need of [l1]
     and [l2] for [split] [combine l1 l2 = (l1,l2)] to be true?)  *)
-
+(* TODO AM *)
 Definition split_combine_statement : Prop :=
 (* FILL IN HERE *) admit.
 
@@ -1039,6 +1042,7 @@ Proof.
 (** [] *)
 
 (** **** Exercise: 3 stars (override_permute)  *)
+(* TODO BC *)
 Theorem override_permute : forall (X:Type) x1 x2 k1 k2 k3 (f : nat->X),
   beq_nat k2 k1 = false ->
   (override (override f k2 x2) k1 x1) k3 = (override (override f k1 x1) k2 x2) k3.
@@ -1048,7 +1052,7 @@ Proof.
 
 (** **** Exercise: 3 stars, advanced (filter_exercise)  *)
 (** This one is a bit challenging.  Pay attention to the form of your IH. *)
-
+(* TODO AM *)
 Theorem filter_exercise : forall (X : Type) (test : X -> bool)
                              (x : X) (l lf : list X),
      filter test l = x :: lf ->
@@ -1058,6 +1062,7 @@ Proof.
 (** [] *)
 
 (** **** Exercise: 4 stars, advanced (forall_exists_challenge)  *)
+(* TODO EVERYONE *)
 (** Define two recursive [Fixpoints], [forallb] and [existsb].  The
     first checks whether every element in a list satisfies a given
     predicate:
