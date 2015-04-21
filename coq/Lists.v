@@ -744,10 +744,10 @@ Proof.
 
 Theorem rev_involutive : forall l : natlist,
   rev (rev l) = l.
-Proof. (*
+Proof.
   intros l. induction l as [|n l'].
   Case "l = []". reflexivity.
-  Case "l = n :: l'". Abort. *) Admitted.
+  Case "l = n :: l'". Abort.
 
 (** There is a short solution to the next exercise.  If you find
     yourself getting tangled up, step back and try to look for a
