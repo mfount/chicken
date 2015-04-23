@@ -262,11 +262,19 @@ Fixpoint nonzeros (l:natlist) : natlist :=
 Example test_nonzeros:            nonzeros [0;1;0;2;3;0;0] = [1;2;3].
  (* FILL IN HERE *) Admitted.
 (* TODO BC *)
+
 Fixpoint oddmembers (l:natlist) : natlist :=
-  (* FILL IN HERE *) admit.
+  match l with
+    | h::t => match oddb h with
+                | true => h::(oddmembers t)
+                | false => oddmembers t
+              end
+    | [] => []
+  end. 
+                              
 (* TODO BC *)
 Example test_oddmembers:            oddmembers [0;1;0;2;3;0;0] = [1;3].
- (* FILL IN HERE *) Admitted.
+  Proof. reflexivity. Qed.
 (* TODO AM *)
 Fixpoint countoddmembers (l:natlist) : nat :=
   (* FILL IN HERE *) admit.
@@ -754,7 +762,7 @@ Proof.
 Theorem app_assoc4 : forall l1 l2 l3 l4 : natlist,
   l1 ++ (l2 ++ (l3 ++ l4)) = ((l1 ++ l2) ++ l3) ++ l4.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros l1 l2 l3 l4. rewrite -> app_assoc. rewrite -> app_assoc. reflexivity. Qed.
 (* TODO AM *)
 Theorem snoc_append : forall (l:natlist) (n:nat),
   snoc l n = l ++ [n].
@@ -765,8 +773,11 @@ Proof.
 Theorem distr_rev : forall l1 l2 : natlist,
   rev (l1 ++ l2) = (rev l2) ++ (rev l1).
 Proof.
-  (* FILL IN HERE *) Admitted.
-
+  intros l1 l2. induction l1 as [ | h t].
+  Case "l1 = 0". rewrite -> nil_app. simpl. rewrite -> app_nil_end. reflexivity.
+  Case "l1 = h::t".  simpl. rewrite -> IHt.
+  rewrite -> snoc_append. rewrite -> snoc_append.
+  rewrite <- app_assoc. reflexivity. Qed.
 (** An exercise about your implementation of [nonzeros]: *)
 (* TODO AM *)
 Lemma nonzeros_app : forall l1 l2 : natlist,
@@ -781,14 +792,22 @@ Proof.
     yields [true] for every list [l]. *)
 (* TODO BC *)
 Fixpoint beq_natlist (l1 l2 : natlist) : bool :=
-  (* FILL IN HERE *) admit.
+  match l1,l2 with
+    | h1::t1,h2::t2 =>
+      match beq_nat h1 h2 with
+        | true => beq_natlist t1 t2
+        | false => false
+      end
+    | [],[] => true
+    | _,_ => false
+  end.
 
 Example test_beq_natlist1 :   (beq_natlist nil nil = true).
- (* FILL IN HERE *) Admitted.
+ Proof. reflexivity. Qed.
 Example test_beq_natlist2 :   beq_natlist [1;2;3] [1;2;3] = true.
- (* FILL IN HERE *) Admitted.
+ Proof. reflexivity. Qed.
 Example test_beq_natlist3 :   beq_natlist [1;2;3] [1;2;4] = false.
- (* FILL IN HERE *) Admitted.
+ Proof. reflexivity. Qed.
 (* TODO AM *)
 Theorem beq_natlist_refl : forall l:natlist,
   true = beq_natlist l l.
@@ -847,9 +866,22 @@ Proof.
     forall (l1 l2 : natlist), rev l1 = rev l2 -> l1 = l2.
 
 There is a hard way and an easy way to solve this exercise.
-*)
-
-(* FILL IN HERE *)
+ *)
+Theorem rev_injective : forall (l1 l2 : natlist),
+                          rev l1 = rev l2 -> l1 = l2.
+Proof.
+  intros l1 l2 H. destruct l1 as [ | h1 t1].
+  Case "l1 = []". simpl in H. destruct l2 as [ | h2 t2].
+    SCase "l2 = []". reflexivity.
+    SCase "l2 = h2 :: t2". rewrite <- rev_involutive. assert (H2: [] = rev []).
+      SSCase "Proof of assertion". reflexivity.
+      rewrite -> H2. rewrite <- H. reflexivity.
+ Case "l1 = h1::t1". destruct l2 as [ | h2 t2].
+   SCase "l2 = []". symmetry. rewrite <- rev_involutive. rewrite -> H.
+   rewrite -> rev_involutive. reflexivity.
+   SCase "l2 = h2::t2". rewrite <- rev_involutive. rewrite <- H.
+   rewrite -> rev_involutive. reflexivity. Qed.
+      (* FILL IN HERE *)
 (** [] *)
 
 
