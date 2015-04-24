@@ -788,15 +788,15 @@ Proof. reflexivity. Qed.
    two sublists should be the same as their order in the original
    list.
 *)
-(* TODO AM *)
+(* Chan *)
 Definition partition {X : Type} (test : X -> bool) (l : list X)
                      : list X * list X :=
-(* FILL IN HERE *) admit.
+  ((filter test l), (filter (fun x => negb (test x)) l)).
 
 Example test_partition1: partition oddb [1;2;3;4;5] = ([1;3;5], [2;4]).
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 Example test_partition2: partition (fun x => false) [5;9;0] = ([], [5;9;0]).
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 (** [] *)
 
 (* ###################################################### *)
@@ -843,25 +843,24 @@ Proof. reflexivity.  Qed.
 (** Show that [map] and [rev] commute.  You may need to define an
     auxiliary lemma. *)
 
-Theorem snoc_map_rev : forall (X Y : Type) (f : X -> Y) (h : X) (t : list X),
-                         map f (snoc (rev t) h) = rev (map f (h::t)).
-Proof.
-  intros X Y f h t. simpl. Admitted.
-
 (* TODO BC *)
+
+Lemma map_snoc : forall (X Y : Type) (f: X -> Y) (l : list X) (x : X),
+  map f (snoc l x) = snoc (map f l) (f x).
+Proof.
+  intros. induction l as [| h l'].
+  Case "l = []". reflexivity.
+  Case "l = h :: t". simpl. rewrite -> IHl'. reflexivity.
+Qed.
+
 Theorem map_rev : forall (X Y : Type) (f : X -> Y) (l : list X),
   map f (rev l) = rev (map f l).
 Proof.
-  intros X Y f l. induction l as [ | h t].
+  intros. induction l as [| h t]. 
   Case "l = []". reflexivity.
-  Case "l = h::t". assert (H: map f (h :: t) = (f h)::(map f t)).
-  SCase "proof of assertion". reflexivity.
-  assert (smr:  map f (snoc (rev t) h) = rev (map f (h::t))).
-  rewrite -> H. rewrite <- rev_involutive. simpl. rewrite -> rev_snoc. rewrite <- IHt.
-  simpl. rewrite -> rev_involutive. rewrite -> IHt. 
-  rewrite <- IHt. simpl. Admitted. (*
-  rewrite -> H. simpl. rewrite <- IHt. rewrite -> snoc_map_rev. rewrite -> H. simpl.
-  rewrite <- IHt. reflexivity. Qed. *)
+  Case "l = h :: t". simpl. rewrite -> map_snoc. rewrite -> IHt. reflexivity.
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 2 stars (flat_map)  *)
