@@ -3,7 +3,7 @@
 (** In this chapter we continue our development of basic 
     concepts of functional programming.  The critical new ideas are
     _polymorphism_ (abstracting functions over the types of the data
-    they manipulate) and _higher-order functions_ (treating functions
+    they manipulate) and _higher-order functiofns_ (treating functions
     as data).
 *)
 
@@ -140,6 +140,7 @@ Fixpoint rev (X:Type) (l:list X) : list X :=
 
 
 
+
 Example test_rev1 :
     rev nat (cons nat 1 (cons nat 2 (nil nat)))
   = (cons nat 2 (cons nat 1 (nil nat))).
@@ -160,7 +161,7 @@ Inductive mumble : Type :=
 Inductive grumble (X:Type) : Type :=
   | d : mumble -> grumble X
   | e : X -> grumble X.
-(* TODO BC *)
+(* Chan *)
 (** Which of the following are well-typed elements of [grumble X] for
     some type [X]?
       - [d (b a 5)]
@@ -170,8 +171,11 @@ Inductive grumble (X:Type) : Type :=
       - [e mumble (b c 0)]
       - [e bool (b c 0)]
       - [c] 
-(* FILL IN HERE *)
+  
 *)
+(*  Eval compute in (d (b a 5)). *)
+Eval compute in (d mumble (b a 5)).
+Eval compute in c.
 (** [] *)
 
 
@@ -382,11 +386,12 @@ Fixpoint repeat {X : Type} (n : X) (count : nat) : list X :=
 Example test_repeat1:
   repeat true 2 = cons true (cons true nil).
  Proof. reflexivity. Qed.
-(* TODO AM *)
+(* BC *)
 Theorem nil_app : forall X:Type, forall l:list X,
   app [] l = l.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. reflexivity.
+Qed.
 (* TODO BC *)
 Theorem rev_snoc : forall X : Type,
                      forall v : X,
@@ -401,7 +406,10 @@ Proof.
 Theorem rev_involutive : forall X : Type, forall l : list X,
   rev (rev l) = l.
 Proof.
-(* FILL IN HERE *) Admitted.
+  intros. induction l as [| h t].
+  Case "l = []". reflexivity.
+  Case "l = h :: t ". simpl. rewrite -> rev_snoc. rewrite -> IHt. reflexivity.
+Qed.
 (* TODO BC *)
 Theorem snoc_with_append : forall X : Type,
                          forall l1 l2 : list X,
