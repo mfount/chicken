@@ -954,6 +954,10 @@ Proof. reflexivity. Qed.
     situation where it would be useful for [X] and [Y] to be
     different? *)
 
+(*   Maybe counting the number of occurrences of a certain string in a list? Like
+counting how many times the string "test" appears in the given list. Then
+X would be of type string while Y would be an integer. *)
+
 (* ###################################################### *)
 (** ** Functions For Constructing Functions *)
 
