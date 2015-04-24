@@ -1152,5 +1152,5 @@ R36106:36112 Basics <> beq_nat def
 R36116:36116 Lists <> n var
 R36114:36114 Lists <> m var
 R36120:36124 Basics <> false constr
-R36245:36254 Lists NatList.Dictionary <> mod
-R36262:36268 Lists NatList <> mod
+R36245:36254 Lists Dictionary <> mod
+R36262:36268 Lists <> <> mod
