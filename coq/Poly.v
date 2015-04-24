@@ -3,11 +3,11 @@
 (** In this chapter we continue our development of basic 
     concepts of functional programming.  The critical new ideas are
     _polymorphism_ (abstracting functions over the types of the data
-    they manipulate) and _higher-order functions_ (treating functions
+    they manipulate) and _higher-order functiofns_ (treating functions
     as data).
 *)
 
-Require Export Lists.   
+Require Export Lists.
 
 (* ###################################################### *)
 (** * Polymorphism *)
@@ -140,6 +140,7 @@ Fixpoint rev (X:Type) (l:list X) : list X :=
 
 
 
+
 Example test_rev1 :
     rev nat (cons nat 1 (cons nat 2 (nil nat)))
   = (cons nat 2 (cons nat 1 (nil nat))).
@@ -160,7 +161,7 @@ Inductive mumble : Type :=
 Inductive grumble (X:Type) : Type :=
   | d : mumble -> grumble X
   | e : X -> grumble X.
-(* TODO BC *)
+(* Chan *)
 (** Which of the following are well-typed elements of [grumble X] for
     some type [X]?
       - [d (b a 5)]
@@ -170,8 +171,11 @@ Inductive grumble (X:Type) : Type :=
       - [e mumble (b c 0)]
       - [e bool (b c 0)]
       - [c] 
-(* FILL IN HERE *)
+  
 *)
+(*  Eval compute in (d (b a 5)). *)
+Eval compute in (d mumble (b a 5)).
+Eval compute in c.
 (** [] *)
 
 
@@ -382,11 +386,12 @@ Fixpoint repeat {X : Type} (n : X) (count : nat) : list X :=
 Example test_repeat1:
   repeat true 2 = cons true (cons true nil).
  Proof. reflexivity. Qed.
-(* TODO AM *)
+(* BC *)
 Theorem nil_app : forall X:Type, forall l:list X,
   app [] l = l.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. reflexivity.
+Qed.
 (* TODO BC *)
 Theorem rev_snoc : forall X : Type,
                      forall v : X,
@@ -401,7 +406,10 @@ Proof.
 Theorem rev_involutive : forall X : Type, forall l : list X,
   rev (rev l) = l.
 Proof.
-(* FILL IN HERE *) Admitted.
+  intros. induction l as [| h t].
+  Case "l = []". reflexivity.
+  Case "l = h :: t ". simpl. rewrite -> rev_snoc. rewrite -> IHt. reflexivity.
+Qed.
 (* TODO BC *)
 Theorem snoc_with_append : forall X : Type,
                          forall l1 l2 : list X,
@@ -475,10 +483,13 @@ Fixpoint combine {X Y : Type} (lx : list X) (ly : list Y)
     checking your answers in coq:
     - What is the type of [combine] (i.e., what does [Check
       @combine] print?)
+      it prints out list (X*Y)
     - What does
         Eval compute in (combine [1;2] [false;false;true;true]).
-      print?   []
+      print?   [(1, false); (2, false)]
 *)
+
+Eval compute in (combine [1;2] [false; false; true; true]).
 
 (** **** Exercise: 2 stars (split)  *)
 (** The function [split] is the right inverse of combine: it takes a
@@ -487,16 +498,20 @@ Fixpoint combine {X Y : Type} (lx : list X) (ly : list Y)
 
     Uncomment the material below and fill in the definition of
     [split].  Make sure it passes the given unit tests. *)
-(* TODO AM *)
+(* BC *)
 Fixpoint split
            {X Y : Type} (l : list (X*Y))
            : (list X) * (list Y) :=
-(* FILL IN HERE *) admit.
+  match l with
+  | [] => ([], [])
+  | h :: t => match h with (hx, hy) => match (split t) with (tx, ty) =>
+            ((hx :: tx), (hy :: ty)) end end
+  end.
 
 Example test_split:
   split [(1,false);(2,false)] = ([1;2],[false;false]).
 Proof.
-(* FILL IN HERE *) Admitted.
+simpl. reflexivity. Qed.
 (** [] *)
 
 (* ###################################################### *)
@@ -537,7 +552,8 @@ Proof. reflexivity.  Qed.
     passes the unit tests below. *)
 
 Definition hd_opt {X : Type} (l : list X)  : option X :=
-  (* FILL IN HERE *) admit.
+  index 0 l.
+  
 
 (** Once again, to force the implicit arguments to be explicit,
     we can use [@] before the name of the function. *)
@@ -545,9 +561,9 @@ Definition hd_opt {X : Type} (l : list X)  : option X :=
 Check @hd_opt.
 
 Example test_hd_opt1 :  hd_opt [1;2] = Some 1.
- (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 Example test_hd_opt2 :   hd_opt  [[1];[2]]  = Some [1].
- (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 (** [] *)
 
 (* ###################################################### *)
@@ -645,11 +661,15 @@ Definition prod_uncurry {X Y Z : Type}
 
 Check @prod_curry.
 Check @prod_uncurry.
-(* TODO AM *)
+
+
+(* Chan *)
 Theorem uncurry_curry : forall (X Y Z : Type) (f : X -> Y -> Z) x y,
   prod_curry (prod_uncurry f) x y = f x y.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  reflexivity.
+Qed.
+
 (* TODO BC *)
 Theorem curry_uncurry : forall (X Y Z : Type)
                                (f : (X * Y) -> Z) (p : X * Y),
@@ -743,16 +763,17 @@ Proof. reflexivity.  Qed.
     and returns a list of just those that are even and greater than
     7. *)
 (* TODO BC *)
+
 Definition filter_even_gt7 (l : list nat) : list nat :=
-  (* FILL IN HERE *) admit.
+  filter (fun x => andb (evenb x) (ble_nat 7 x)) l.
 
 Example test_filter_even_gt7_1 :
   filter_even_gt7 [1;2;6;9;10;3;12;8] = [10;12;8].
- (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 
 Example test_filter_even_gt7_2 :
   filter_even_gt7 [5;2;6;19;129] = [].
- (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars (partition)  *)
@@ -767,15 +788,15 @@ Example test_filter_even_gt7_2 :
    two sublists should be the same as their order in the original
    list.
 *)
-(* TODO AM *)
+(* Chan *)
 Definition partition {X : Type} (test : X -> bool) (l : list X)
                      : list X * list X :=
-(* FILL IN HERE *) admit.
+  ((filter test l), (filter (fun x => negb (test x)) l)).
 
 Example test_partition1: partition oddb [1;2;3;4;5] = ([1;3;5], [2;4]).
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 Example test_partition2: partition (fun x => false) [5;9;0] = ([], [5;9;0]).
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 (** [] *)
 
 (* ###################################################### *)
@@ -822,25 +843,24 @@ Proof. reflexivity.  Qed.
 (** Show that [map] and [rev] commute.  You may need to define an
     auxiliary lemma. *)
 
-Theorem snoc_map_rev : forall (X Y : Type) (f : X -> Y) (h : X) (t : list X),
-                         map f (snoc (rev t) h) = rev (map f (h::t)).
-Proof.
-  intros X Y f h t. simpl. Admitted.
-
 (* TODO BC *)
+
+Lemma map_snoc : forall (X Y : Type) (f: X -> Y) (l : list X) (x : X),
+  map f (snoc l x) = snoc (map f l) (f x).
+Proof.
+  intros. induction l as [| h l'].
+  Case "l = []". reflexivity.
+  Case "l = h :: t". simpl. rewrite -> IHl'. reflexivity.
+Qed.
+
 Theorem map_rev : forall (X Y : Type) (f : X -> Y) (l : list X),
   map f (rev l) = rev (map f l).
 Proof.
-  intros X Y f l. induction l as [ | h t].
+  intros. induction l as [| h t]. 
   Case "l = []". reflexivity.
-  Case "l = h::t". assert (H: map f (h :: t) = (f h)::(map f t)).
-  SCase "proof of assertion". reflexivity.
-  assert (smr:  map f (snoc (rev t) h) = rev (map f (h::t))).
-  rewrite -> H. rewrite <- rev_involutive. simpl. rewrite -> rev_snoc. rewrite <- IHt.
-  simpl. rewrite -> rev_involutive. rewrite -> IHt. 
-  rewrite <- IHt. simpl. Admitted. (*
-  rewrite -> H. simpl. rewrite <- IHt. rewrite -> snoc_map_rev. rewrite -> H. simpl.
-  rewrite <- IHt. reflexivity. Qed. *)
+  Case "l = h :: t". simpl. rewrite -> map_snoc. rewrite -> IHt. reflexivity.
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 2 stars (flat_map)  *)
@@ -855,12 +875,15 @@ Proof.
 (* TODO AM *)
 Fixpoint flat_map {X Y:Type} (f:X -> list Y) (l:list X)
                    : (list Y) :=
-  (* FILL IN HERE *) admit.
+  match l with
+  | [] => []
+  | h :: t => app (f h) (flat_map f t)
+  end.
 
 Example test_flat_map1:
   flat_map (fun n => [n;n;n]) [1;5;4]
   = [1; 1; 1; 5; 5; 5; 4; 4; 4].
- (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 (** [] *)
 
 (** Lists are not the only inductive type that we can write a
@@ -930,6 +953,10 @@ Proof. reflexivity. Qed.
     that takes an [X] and a [Y] and returns a [Y].  Can you think of a
     situation where it would be useful for [X] and [Y] to be
     different? *)
+
+(*   Maybe counting the number of occurrences of a certain string in a list? Like
+counting how many times the string "test" appears in the given list. Then
+X would be of type string while Y would be an integer. *)
 
 (* ###################################################### *)
 (** ** Functions For Constructing Functions *)

@@ -499,7 +499,7 @@ Fixpoint factorial (n:nat) : nat :=
   match n with
     | O => S O
     | S m => mult n (factorial m)
-                  end.
+  end.
 
 Example test_factorial1:          (factorial 3) = 6.
 Proof. reflexivity. Qed.
@@ -583,7 +583,7 @@ Definition blt_nat (n m : nat) : bool :=
   match ble_nat n m, beq_nat n m with
     | true,false => true
     | _,_ => false
-               end.
+  end.
 
 Example test_blt_nat1:             (blt_nat 2 2) = false.
 Proof. reflexivity. Qed.
@@ -955,6 +955,7 @@ Proof.
       - twice a binary number, or
       - one more than twice a binary number.
 
+TODO AM
     (a) First, write an inductive definition of the type [bin]
         corresponding to this description of binary numbers. 
 
@@ -971,9 +972,11 @@ Proof.
     it is the functions you will write next that will give it
     mathematical meaning.)
 
+TODO BC
     (b) Next, write an increment function [incr] for binary numbers, 
         and a function [bin_to_nat] to convert binary numbers to unary numbers.
 
+TODO AM
     (c) Write five unit tests [test_bin_incr1], [test_bin_incr2], etc.
         for your increment and binary-to-unary functions. Notice that 
         incrementing a binary number and then converting it to unary 
