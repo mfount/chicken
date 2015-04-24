@@ -297,7 +297,8 @@ Proof.
 (** Briefly explain the difference between the tactics
     [destruct] and [induction].  
 
-(* FILL IN HERE *)
+  [Destruct] is just casework going backward the pattern matching while [Induction]
+  introduces the hypothesis and allows us to use the hypothesis.
 
 *)
 (** [] *)
