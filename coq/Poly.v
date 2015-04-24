@@ -483,10 +483,13 @@ Fixpoint combine {X Y : Type} (lx : list X) (ly : list Y)
     checking your answers in coq:
     - What is the type of [combine] (i.e., what does [Check
       @combine] print?)
+      it prints out list (X*Y)
     - What does
         Eval compute in (combine [1;2] [false;false;true;true]).
-      print?   []
+      print?   [(1, false); (2, false)]
 *)
+
+Eval compute in (combine [1;2] [false; false; true; true]).
 
 (** **** Exercise: 2 stars (split)  *)
 (** The function [split] is the right inverse of combine: it takes a
@@ -495,16 +498,20 @@ Fixpoint combine {X Y : Type} (lx : list X) (ly : list Y)
 
     Uncomment the material below and fill in the definition of
     [split].  Make sure it passes the given unit tests. *)
-(* TODO AM *)
+(* BC *)
 Fixpoint split
            {X Y : Type} (l : list (X*Y))
            : (list X) * (list Y) :=
-(* FILL IN HERE *) admit.
+  match l with
+  | [] => ([], [])
+  | h :: t => match h with (hx, hy) => match (split t) with (tx, ty) =>
+            ((hx :: tx), (hy :: ty)) end end
+  end.
 
 Example test_split:
   split [(1,false);(2,false)] = ([1;2],[false;false]).
 Proof.
-(* FILL IN HERE *) Admitted.
+simpl. reflexivity. Qed.
 (** [] *)
 
 (* ###################################################### *)
