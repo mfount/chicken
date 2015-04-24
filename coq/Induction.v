@@ -397,7 +397,7 @@ Proof.
     need to define and prove a separate subsidiary theorem to be used
     in the proof of this one.)  You may find that [plus_swap] comes in
     handy. *)
-
+(* TODO AM *)
 Theorem mult_comm : forall m n : nat,
  m * n = n * m.
 Proof.
@@ -412,8 +412,7 @@ Proof.
 Theorem evenb_n__oddb_Sn : forall n : nat,
   evenb n = negb (evenb (S n)).
 Proof.
-  induction n as [|n']. simpl. reflexivity.
-  simpl. Abort.
+  Admitted.
 (** [] *)
 
 (* ###################################################################### *)

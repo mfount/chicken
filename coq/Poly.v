@@ -374,11 +374,14 @@ Definition list123''' := [1; 2; 3].
     and complete the proofs below. *)
 (* TODO BC *)
 Fixpoint repeat {X : Type} (n : X) (count : nat) : list X :=
-  (* FILL IN HERE *) admit.
+  match count with
+    | O => []
+    | S count' => n::(repeat n count')
+                   end.
 
 Example test_repeat1:
   repeat true 2 = cons true (cons true nil).
- (* FILL IN HERE *) Admitted.
+ Proof. reflexivity. Qed.
 (* TODO AM *)
 Theorem nil_app : forall X:Type, forall l:list X,
   app [] l = l.
@@ -390,7 +393,10 @@ Theorem rev_snoc : forall X : Type,
                      forall s : list X,
   rev (snoc s v) = v :: (rev s).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros X v s. induction s as [| h t].
+  Case "s = []". reflexivity.
+  Case "s = h::t". simpl. rewrite -> IHt. simpl. reflexivity. Qed.
+
 (* TODO AM *)
 Theorem rev_involutive : forall X : Type, forall l : list X,
   rev (rev l) = l.
@@ -402,7 +408,9 @@ Theorem snoc_with_append : forall X : Type,
                          forall v : X,
   snoc (l1 ++ l2) v = l1 ++ (snoc l2 v).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros X l1 l2 v. induction l1 as [ | h t].
+  Case "l1 = []". reflexivity.
+  Case "l1 = h::t". simpl. rewrite -> IHt. reflexivity. Qed.
 (** [] *)
 
 (* ###################################################### *)
@@ -630,7 +638,7 @@ Definition prod_curry {X Y Z : Type}
 (* TODO BC *)
 Definition prod_uncurry {X Y Z : Type}
   (f : X -> Y -> Z) (p : X * Y) : Z :=
-  (* FILL IN HERE *) admit.
+  f (fst p) (snd p).
 
 (** (Thought exercise: before running these commands, can you
     calculate the types of [prod_curry] and [prod_uncurry]?) *)
@@ -647,7 +655,7 @@ Theorem curry_uncurry : forall (X Y Z : Type)
                                (f : (X * Y) -> Z) (p : X * Y),
   prod_uncurry (prod_curry f) p = f p.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros X Y Z f p. destruct p as []. reflexivity. Qed.
 (** [] *)
 
 (* ###################################################### *)
@@ -814,11 +822,25 @@ Proof. reflexivity.  Qed.
 (** Show that [map] and [rev] commute.  You may need to define an
     auxiliary lemma. *)
 
+Theorem snoc_map_rev : forall (X Y : Type) (f : X -> Y) (h : X) (t : list X),
+                         map f (snoc (rev t) h) = rev (map f (h::t)).
+Proof.
+  intros X Y f h t. simpl. Admitted.
+
 (* TODO BC *)
 Theorem map_rev : forall (X Y : Type) (f : X -> Y) (l : list X),
   map f (rev l) = rev (map f l).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros X Y f l. induction l as [ | h t].
+  Case "l = []". reflexivity.
+  Case "l = h::t". assert (H: map f (h :: t) = (f h)::(map f t)).
+  SCase "proof of assertion". reflexivity.
+  assert (smr:  map f (snoc (rev t) h) = rev (map f (h::t))).
+  rewrite -> H. rewrite <- rev_involutive. simpl. rewrite -> rev_snoc. rewrite <- IHt.
+  simpl. rewrite -> rev_involutive. rewrite -> IHt. 
+  rewrite <- IHt. simpl. Admitted. (*
+  rewrite -> H. simpl. rewrite <- IHt. rewrite -> snoc_map_rev. rewrite -> H. simpl.
+  rewrite <- IHt. reflexivity. Qed. *)
 (** [] *)
 
 (** **** Exercise: 2 stars (flat_map)  *)
@@ -1063,7 +1085,9 @@ Proof. reflexivity. Qed.
 (* TODO BC *)
 Theorem fold_length_correct : forall X (l : list X),
   fold_length l = length l.
-(* FILL IN HERE *) Admitted.
+Proof.
+  intros X l. induction l as [ | h t].
+  reflexivity. simpl. rewrite <- IHt. reflexivity. Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars (fold_map)  *)
