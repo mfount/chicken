@@ -534,12 +534,14 @@ Proof.
 Theorem beq_nat_true : forall n m,
     beq_nat n m = true -> n = m.
 Proof.
- (* intros n. induction n as [ | n'].
+ intros n. induction n as [ | n'].
   Case "n = 0". intros m. intros eq. destruct m as [|m'].
     SCase "m = 0". reflexivity.
     SCase "m = S m'". inversion eq.
-  Case "n = S n'". intros m eq. *)
-  Admitted.  
+  Case "n = S n'". intros m eq. destruct m as [|m'].
+    SCase "m = 0". inversion eq.
+    SCase "m = S m'". apply f_equal. apply IHn'. inversion eq. reflexivity. Qed.
+
     
   (* FILL IN HERE *)
 (** [] *)
@@ -820,7 +822,8 @@ Proof.
 Theorem override_shadow : forall (X:Type) x1 x2 k1 k2 (f : nat->X),
   (override (override f k1 x2) k1 x1) k2 = (override f k1 x1) k2.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros X x1 x2 k1 k2 f. unfold override. destruct (beq_nat k1 k2).
+  reflexivity. reflexivity. Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars, optional (combine_split)  *)
@@ -900,7 +903,17 @@ Theorem bool_fn_applied_thrice :
   forall (f : bool -> bool) (b : bool), 
   f (f (f b)) = f b.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros f b. destruct b.
+  Case "b = true".
+  destruct (f true) eqn:ftrue. rewrite -> ftrue. rewrite -> ftrue. reflexivity.
+  destruct (f false) eqn:ffalse. rewrite -> ftrue. reflexivity.
+  rewrite -> ffalse. reflexivity.
+  Case "b = false".
+  destruct (f false) eqn:ffalse. destruct (f true) eqn:ftrue. rewrite -> ftrue.
+  reflexivity.
+  rewrite -> ffalse. reflexivity.
+  rewrite -> ffalse. rewrite -> ffalse. reflexivity. Qed.
+  
 (** [] *)
 
 (** **** Exercise: 2 stars (override_same)  *)
@@ -995,7 +1008,11 @@ Proof.
 Theorem beq_nat_sym : forall (n m : nat),
   beq_nat n m = beq_nat m n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros n. 
+  induction n as [|n']. destruct m as [|m'] eqn:M. reflexivity.
+  unfold beq_nat. reflexivity.
+  destruct m as [|m'] eqn:M. unfold beq_nat. reflexivity.
+  rewrite <- M. Admitted. (* destruct (beq_nat n' m) eqn:bnm. unfold beq_nat. rewrite <- bnm. rewrite -> IHn'. reflexivity. rewrite <- f_equal in IHn'. IHn'. symmetry in H0. inversion H0. unfold beq_nat. *) 
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced, optional (beq_nat_sym_informal)  *)
