@@ -111,14 +111,13 @@ Proof.
 (** Hint: you can use [apply] with previously defined lemmas, not
     just hypotheses in the context.  Remember that [SearchAbout] is
     your friend. *)
-(* DONE BC *)
+
 Theorem rev_exercise1 : forall (l l' : list nat),
      l = rev l' ->
      l' = rev l.
 Proof.
   intros l l' H. assert (H1: rev (rev l') = l'). Case "Proof of assertion".
   apply rev_involutive. rewrite -> H. symmetry. apply H1. Qed.
-  (* FILL IN HERE *)(* Admitted. *)
 (** [] *)
 
 (** **** Exercise: 1 star, optional (apply_rewrite)  *)
@@ -384,9 +383,15 @@ Theorem plus_n_n_injective : forall n m,
      n = m.
 Proof.
   intros n. induction n as [| n'].
-  (* Case "n = 0". intros m H. simpl in H. induction m as [| m'].
+  Case "n = 0". intros m H. simpl in H. induction m as [| m'].
     SCase "m = 0". reflexivity. inversion H.
-    Case "n = S n'". intros m H. *) Admitted.
+    Case "n = S n'". intros m H. rewrite <- plus_n_Sm in H.
+    rewrite <- plus_comm in H. rewrite <- plus_n_Sm in H.
+    induction m as [|m']. inversion H. rewrite <- plus_n_Sm in H. symmetry in H.
+    rewrite <- plus_comm in H. rewrite <- plus_n_Sm in H. inversion H.
+    assert (H2: n' = m'). SCase "Proof of assertion".
+    rewrite <- IHn'. reflexivity.
+    rewrite -> H1. reflexivity. inversion H2. reflexivity. Qed.
   (* Hint: use the plus_n_Sm lemma *)
     (* FILL IN HERE *) 
 (** [] *)
