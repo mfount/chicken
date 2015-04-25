@@ -1152,7 +1152,9 @@ Qed.
      end.
    Write an informal proof of the following theorem:
    forall X n l, length l = n -> @index X n l = None.
-(* FILL IN HERE *)
+  essentially we will run out of the elements to pattern match
+  and the first case of the pattern match gets returned
+  as a result.
 *)
 (** [] *)
 
@@ -1198,17 +1200,20 @@ Definition three : nat := @doit3times.
 
 (** Successor of a natural number *)
 (* TODO BC *)
+
+(* idk how to do this Ben *)
+
 Definition succ (n : nat) : nat :=
-  (* FILL IN HERE *) admit.
+  admit.
 
 Example succ_1 : succ zero = one.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. Admitted.
 
 Example succ_2 : succ one = two.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. Admitted.
 
 Example succ_3 : succ two = three.
-Proof. (* FILL IN HERE *) Admitted.
+Proof. Admitted.
 
 (** Addition of two natural numbers *)
 (* TODO AM *)
