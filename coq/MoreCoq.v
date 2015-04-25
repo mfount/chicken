@@ -185,7 +185,9 @@ Example trans_eq_exercise : forall (n m o p : nat),
      (n + p) = m ->
      (n + p) = (minustwo o). 
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. apply trans_eq with (m:= m).
+  apply H0. apply H.
+Qed.
 (** [] *)
 
 
