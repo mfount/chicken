@@ -1107,7 +1107,7 @@ Qed.
     things than necessary.  Hint: what property do you need of [l1]
     and [l2] for [split] [combine l1 l2 = (l1,l2)] to be true?)  *)
 
-(* Chan *)
+(* TODO AM *)
 SearchAbout split.
 Check split.
 Eval compute in (split [(1, false); (2, false)]).
