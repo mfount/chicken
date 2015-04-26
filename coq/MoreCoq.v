@@ -390,7 +390,7 @@ Proof.
 
 (** **** Exercise: 3 stars (plus_n_n_injective)  *)
 (** Practice using "in" variants in this exercise. *)
-(* TODO AM *)
+(* BC *)
 Theorem plus_n_n_injective : forall n m,
      n + n = m + m ->
      n = m.
@@ -405,8 +405,6 @@ Proof.
     assert (H2: n' = m'). SCase "Proof of assertion".
     rewrite <- IHn'. reflexivity.
     rewrite -> H1. reflexivity. inversion H2. reflexivity. Qed.
-  (* Hint: use the plus_n_Sm lemma *)
-    (* FILL IN HERE *) 
 (** [] *)
 
 (* ###################################################### *)
@@ -567,6 +565,7 @@ Proof.
 (** **** Exercise: 2 stars, advanced (beq_nat_true_informal)  *)
 (** Give a careful informal proof of [beq_nat_true], being as explicit
     as possible about quantifiers. *)
+(* forall n, m that are equal to each other, n = m... (well, that sounded strange) *)
 
 (* FILL IN HERE *)
 (** [] *)
@@ -729,12 +728,12 @@ Proof.
 
 (** **** Exercise: 3 stars (gen_dep_practice)  *)
 (** Prove this by induction on [l]. *)
-(* TODO AM *)
+(* Chan *)
 Theorem index_after_last: forall (n : nat) (X : Type) (l : list X),
      length l = n ->
      index n l = None.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. 
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced, optional (index_after_last_informal)  *)

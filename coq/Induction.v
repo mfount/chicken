@@ -398,13 +398,34 @@ Proof.
     need to define and prove a separate subsidiary theorem to be used
     in the proof of this one.)  You may find that [plus_swap] comes in
     handy. *)
-(* TODO AM *)
+(* Chan *)
+
+Lemma mult_m_Sn : forall m n : nat,
+  n * S m = n + n * m.
+Proof.
+  intros m n.
+  induction n as [|n'].
+  Case "n = 0".
+    reflexivity.
+  Case "n = S n'".
+    simpl. rewrite -> IHn'. rewrite -> plus_swap. reflexivity.
+Qed.
+
 Theorem mult_comm : forall m n : nat,
  m * n = n * m.
 Proof.
-  Admitted.
-    
-(** [] *)
+  intros m n.
+  induction n as [|n'].
+  Case "n = 0".
+    simpl.
+    rewrite -> mult_0_r.
+    reflexivity.
+  Case "n = S n'".
+    simpl.
+    rewrite -> mult_m_Sn.
+    rewrite -> IHn'.
+    reflexivity.
+ Qed.
 
 (** **** Exercise: 2 stars, optional (evenb_n__oddb_Sn)  *)
 
