@@ -1144,13 +1144,31 @@ Qed.
 
 (** **** Exercise: 3 stars, advanced (filter_exercise)  *)
 (** This one is a bit challenging.  Pay attention to the form of your IH. *)
-(* TODO AM *)
+(* Chan *)
 Theorem filter_exercise : forall (X : Type) (test : X -> bool)
                              (x : X) (l lf : list X),
      filter test l = x :: lf ->
      test x = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  generalize dependent lf.
+  generalize dependent x.
+  induction l as [ | h t ].
+  Case "l = []".
+    intros.
+    inversion H.
+  Case "l = h :: t".
+    simpl.
+    intros.
+    destruct (test h) eqn : eq.
+    SCase "test h = true".
+      inversion H.
+      rewrite <- H1. apply eq.
+    SCase "test h = false".
+      apply IHt in H. rewrite -> H. reflexivity.
+Qed.
+
+    
 (** [] *)
 
 (** **** Exercise: 4 stars, advanced (forall_exists_challenge)  *)
