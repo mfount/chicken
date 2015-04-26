@@ -1106,9 +1106,20 @@ Qed.
     your induction hypothesis general by not doing [intros] on more
     things than necessary.  Hint: what property do you need of [l1]
     and [l2] for [split] [combine l1 l2 = (l1,l2)] to be true?)  *)
-(* TODO AM *)
+
+(* Chan *)
+SearchAbout split.
+Check split.
+Eval compute in (split [(1, false); (2, false)]).
+SearchAbout combine.
+Eval compute in (combine [3;4;5] [6;7;8;9;10]).
+SearchAbout length.
+Check length.
+
 Definition split_combine_statement : Prop :=
-(* FILL IN HERE *) admit.
+(*   forall l1 l2 (X Y: Type), length X l1 = length l2 -> split (combine l1 l2) = (l1, l2). *)
+admit.
+  
 
 Theorem split_combine : split_combine_statement.
 Proof.
@@ -1124,7 +1135,11 @@ Theorem override_permute : forall (X:Type) x1 x2 k1 k2 k3 (f : nat->X),
   beq_nat k2 k1 = false ->
   (override (override f k2 x2) k1 x1) k3 = (override (override f k1 x1) k2 x2) k3.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. unfold override. destruct (beq_nat k1 k3) eqn: eq1.
+  apply beq_nat_true in eq1. rewrite <- eq1. rewrite -> H. reflexivity.
+  destruct (beq_nat k2 k3) eqn: eq2. reflexivity. reflexivity.
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (filter_exercise)  *)
