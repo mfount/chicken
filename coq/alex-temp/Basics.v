@@ -924,11 +924,7 @@ Theorem andb_eq_orb :
   (andb b c = orb b c) ->
   b = c.
 Proof.
-  intros b c.
-  destruct b.
-  intros H.
-  Admitted. (* ok im too lazy to write that now *).
-  
+  Admitted.
 
   
 (** [] *)
