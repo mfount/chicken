@@ -812,8 +812,6 @@ Proof.
       apply f_equal. inversion H.
       apply IHt1. reflexivity.
 Qed.
-                              
-(** [] *)
 
 (** **** Exercise: 4 stars, optional (app_length_twice)  *)
 (** Prove this by induction on [l], without using app_length. *)
@@ -822,8 +820,18 @@ Theorem app_length_twice : forall (X:Type) (n:nat) (l:list X),
      length l = n ->
      length (l ++ l) = n + n.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros. generalize dependent n.
+  induction l as [ | h t ].
+  Case "l = []".
+    intros. rewrite <- H. reflexivity.
+  Case "l = h :: t".
+    intros. rewrite <- H. simpl.
+    rewrite <- plus_n_Sm.
+    rewrite <- IHt.
+    assert (H0 : S (length (t ++ t)) = length (t ++ h :: t)).
+      apply app_length_cons with h. reflexivity.
+    rewrite <- H0. reflexivity. reflexivity.
+Qed.
 
 
 (** **** Exercise: 3 stars, optional (double_induction)  *)
