@@ -152,11 +152,7 @@ R6160:6162 Poly <> baz ind
 R6195:6197 Poly <> baz ind
 R6187:6190 Basics <> bool ind
 R6180:6182 Poly <> baz ind
-<<<<<<< HEAD
 R6302:6310 Poly MumbleBaz <> mod
-=======
-R6302:6310 Poly <> <> mod
->>>>>>> 620a160f29fe3ae46d3b549d1fded7af93211d2d
 def 6573:6576 <> app'
 R6588:6591 Poly <> list ind
 R6593:6593 Poly <> X var
@@ -1403,8 +1399,4 @@ R42310:42312 Poly Church exp def
 R42320:42323 Poly Church zero def
 R42314:42318 Poly Church three def
 R42327:42329 Poly Church one def
-<<<<<<< HEAD
 R42373:42378 Poly Church <> mod
-=======
-R42373:42378 Poly <> <> mod
->>>>>>> 620a160f29fe3ae46d3b549d1fded7af93211d2d
