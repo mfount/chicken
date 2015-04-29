@@ -2,3 +2,5 @@
 *.fls
 .DS_Store
 *.gitignore.*
+*.crashcoqide
+\#*
