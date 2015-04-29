@@ -259,7 +259,6 @@ Proof. reflexivity.  Qed.
     [countoddmembers] below. Have a look at the tests to understand
     what these functions should do. *)
 
-(* Chan *)
 Fixpoint nonzeros (l:natlist) : natlist :=
   match l with
   | nil => nil
@@ -294,7 +293,6 @@ Example test_countoddmembers2:    countoddmembers [0;2;4] = 0.
  Proof. reflexivity. Qed.
 Example test_countoddmembers3:    countoddmembers nil = 0.
  Proof. reflexivity. Qed.
-(** [] *)
 
 (** **** Exercise: 3 stars, advanced (alternate)  *)
 (** Complete the definition of [alternate], which "zips up" two lists
@@ -340,16 +338,18 @@ Definition bag := natlist.
 (** **** Exercise: 3 stars (bag_functions)  *)
 (** Complete the following definitions for the functions
     [count], [sum], [add], and [member] for bags. *)
-(* TODO AM *)
-Fixpoint count (v:nat) (s:bag) : nat := 
-  (* FILL IN HERE *) admit.
+
+Fixpoint count (v:nat) (s:bag) : nat :=
+  match s with
+  | nil => 0
+  | h :: t => (if beq_nat h v then 1 else 0) + count v t
+  end.
 
 (** All these proofs can be done just by [reflexivity]. *)
-(* TODO AM *)
 Example test_count1:              count 1 [1;2;3;1;4;1] = 3.
- (* FILL IN HERE *) Admitted.
+  Proof. reflexivity. Qed.
 Example test_count2:              count 6 [1;2;3;1;4;1] = 0.
- (* FILL IN HERE *) Admitted.
+  Proof. reflexivity. Qed.
 
 (** Multiset [sum] is similar to set [union]: [sum a b] contains
     all the elements of [a] and of [b].  (Mathematicians usually
@@ -362,9 +362,9 @@ Example test_count2:              count 6 [1;2;3;1;4;1] = 0.
     The point of stating the question this way is to encourage you to
     think about whether [sum] can be implemented in another way --
     perhaps by using functions that have already been defined.  *)
-(* TODO BC *)
+
 Definition sum : bag -> bag -> bag := 
-  (* FILL IN HERE *) admit.
+  app.
 
 Example test_sum1:              count 1 (sum [1;2;3] [1;4;1]) = 3.
  (* FILL IN HERE *) Admitted.
