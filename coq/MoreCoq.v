@@ -844,8 +844,20 @@ Theorem double_induction: forall (P : nat -> nat -> Prop),
   (forall m n, P m n -> P (S m) (S n)) ->
   forall m n, P m n.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros. generalize dependent n. induction m as [ | m' ].
+  Case "m = O".
+    induction n as [ | n'].
+    SCase "n = O".
+      apply H.
+    SCase "n = S n'".
+      apply H1. apply IHn'.
+  Case "m = S m'".
+    induction n as [ | n'].
+    SCase "n = O".
+      apply H0. apply IHm'.
+    SCase "n = S n'".
+      apply H2. apply IHm'.
+Qed.
 
 
 (* ###################################################### *)
@@ -886,14 +898,13 @@ Proof.
     are replaced by [c].
 
 *)
-(* TODO BC *)
+
 (** **** Exercise: 1 star (override_shadow)  *)
 Theorem override_shadow : forall (X:Type) x1 x2 k1 k2 (f : nat->X),
   (override (override f k1 x2) k1 x1) k2 = (override f k1 x1) k2.
 Proof.
   intros X x1 x2 k1 k2 f. unfold override. destruct (beq_nat k1 k2).
   reflexivity. reflexivity. Qed.
-(** [] *)
 
 (** **** Exercise: 3 stars, optional (combine_split)  *)
 (** Complete the proof below *)
@@ -903,7 +914,6 @@ Theorem combine_split : forall X Y (l : list (X * Y)) l1 l2,
   combine l1 l2 = l.
 Proof.
   (* FILL IN HERE *) Admitted.
-(** [] *)
 
 (** Sometimes, doing a [destruct] on a compound expression (a
     non-variable) will erase information we need to complete a proof. *)
