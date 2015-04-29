@@ -1274,6 +1274,57 @@ Proof.
   unfold is_permutation.
   reflexivity. Qed.
 
+Theorem is_permutation_symmetric : forall (l l' : natlist),
+  is_permutation l l' -> is_permutation l' l.
+Proof.
+  intros l l'.
+  intros H.
+  unfold is_permutation in H. symmetry in H.
+  unfold is_permutation. apply H. Qed.
+
+Theorem trans_eq : forall (n m o : nat),
+  n = m -> m = o -> n = o.
+Proof.
+  intros n m o eq1 eq2. rewrite -> eq1. rewrite -> eq2. 
+  reflexivity.  Qed.
+
+
+Theorem is_permutation_transitive : forall (l l' l'' : natlist),
+  is_permutation l l' -> is_permutation l' l'' -> is_permutation l l''.
+Proof.
+  intros l l' l''.
+  intros H1.
+  intros H2.
+  unfold is_permutation in H1, H2.
+  unfold is_permutation.
+  intros v.
+  assert (Z : count v l = count v l').
+    apply H1.
+  assert (Y : count v l' = count v l'').
+    apply H2.
+  apply trans_eq with (m := count v l').
+    rewrite Z. reflexivity.
+    rewrite Y. reflexivity. Qed.
+
+Theorem is_permutation_swap_first : forall (l : natlist) (v h : nat),
+  is_permutation (v :: h :: l) (h :: v :: l).
+Proof. Admitted.
+  
+Theorem insert_is_permutation : forall (v : nat) (l : natlist),
+  is_permutation (v :: l) (insert v l).
+Proof.
+  intros v l.
+  induction l as [ | h t].
+  Case "l = []".
+    simpl. apply is_permutation_reflexive.
+  Case "l = h :: t".
+  destruct (ble_nat v h) eqn:whaa.
+    SCase "v <= h".
+      simpl. rewrite -> whaa. apply is_permutation_reflexive.
+    SCase "v > h".
+      simpl. rewrite -> whaa.
+  
+
 (* Theorem is_permutation_symmetric *)
 
 Lemma sorted_unfold : forall (l : natlist) (v1 v2 : nat),
