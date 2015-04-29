@@ -297,7 +297,8 @@ Proof.
 (** Briefly explain the difference between the tactics
     [destruct] and [induction].  
 
-(* FILL IN HERE *)
+  [Destruct] is just casework going backward the pattern matching while [Induction]
+  introduces the hypothesis and allows us to use the hypothesis.
 
 *)
 (** [] *)
@@ -397,13 +398,34 @@ Proof.
     need to define and prove a separate subsidiary theorem to be used
     in the proof of this one.)  You may find that [plus_swap] comes in
     handy. *)
+(* Chan *)
+
+Lemma mult_m_Sn : forall m n : nat,
+  n * S m = n + n * m.
+Proof.
+  intros m n.
+  induction n as [|n'].
+  Case "n = 0".
+    reflexivity.
+  Case "n = S n'".
+    simpl. rewrite -> IHn'. rewrite -> plus_swap. reflexivity.
+Qed.
 
 Theorem mult_comm : forall m n : nat,
  m * n = n * m.
 Proof.
-  Admitted.
-    
-(** [] *)
+  intros m n.
+  induction n as [|n'].
+  Case "n = 0".
+    simpl.
+    rewrite -> mult_0_r.
+    reflexivity.
+  Case "n = S n'".
+    simpl.
+    rewrite -> mult_m_Sn.
+    rewrite -> IHn'.
+    reflexivity.
+ Qed.
 
 (** **** Exercise: 2 stars, optional (evenb_n__oddb_Sn)  *)
 
@@ -412,8 +434,20 @@ Proof.
 Theorem evenb_n__oddb_Sn : forall n : nat,
   evenb n = negb (evenb (S n)).
 Proof.
-  induction n as [|n']. simpl. reflexivity.
-  simpl. Abort.
+  intros n.
+  induction n as [|n'].
+  Case "n = 0".
+    reflexivity.
+  Case "n = S n'".
+    simpl.
+    destruct n' as [|n''].
+    SCase "n' = 0".
+      reflexivity.
+    SCase "n' = S n''".
+      rewrite -> IHn'.
+      rewrite -> negb_involutive.
+      reflexivity.
+Qed.
 (** [] *)
 
 (* ###################################################################### *)
@@ -431,31 +465,63 @@ Proof.
 Theorem ble_nat_refl : forall n:nat,
   true = ble_nat n n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction n as [ | n' ].
+  Case "n = 0".
+    reflexivity.
+  Case "n = S n'".
+    simpl.
+    rewrite -> IHn'.
+    reflexivity.
+Qed.
 
 Theorem zero_nbeq_S : forall n:nat,
   beq_nat 0 (S n) = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  reflexivity.
+Qed.
 
 Theorem andb_false_r : forall b : bool,
   andb b false = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  destruct b.
+  reflexivity.
+  reflexivity.
+Qed.
 
 Theorem plus_ble_compat_l : forall n m p : nat, 
   ble_nat n m = true -> ble_nat (p + n) (p + m) = true.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. induction p as [ | p'].
+  Case "p = 0".
+    simpl.
+    rewrite -> H.
+    reflexivity.
+  Case "p = S p'".
+    simpl.
+    rewrite -> IHp'.
+    reflexivity.
+Qed.
 
 Theorem S_nbeq_0 : forall n:nat,
   beq_nat (S n) 0 = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. reflexivity.
+Qed.
 
 Theorem mult_1_l : forall n:nat, 1 * n = n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  induction n as [ | n'].
+  Case "n = 0".
+    reflexivity.
+  Case "n = S n'".
+    simpl.
+    rewrite <- IHn'.
+    rewrite -> plus_0_r.
+    reflexivity.
+Qed.
+
 
 Theorem all3_spec : forall b c : bool,
     orb
