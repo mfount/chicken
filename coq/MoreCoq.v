@@ -795,12 +795,24 @@ Proof.
 (** Prove this by induction on [l1], without using [app_length]
     from [Lists]. *)
 
+
 Theorem app_length_cons : forall (X : Type) (l1 l2 : list X) 
                                   (x : X) (n : nat),
      length (l1 ++ (x :: l2)) = n ->
      S (length (l1 ++ l2)) = n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. generalize dependent n.
+  induction l1 as [ | h1 t1 ].
+  Case "l1 = []".
+    simpl. intros. apply H.
+  Case "l1 = h1 :: t1".
+    simpl. intros. destruct n as [ | n' ].
+    SCase "n = O". inversion H.
+    SCase "n = S n'". 
+      apply f_equal. inversion H.
+      apply IHt1. reflexivity.
+Qed.
+                              
 (** [] *)
 
 (** **** Exercise: 4 stars, optional (app_length_twice)  *)
@@ -951,7 +963,7 @@ Proof.
 Theorem bool_fn_applied_thrice : 
   forall (f : bool -> bool) (b : bool), 
   f (f (f b)) = f b.
-Proof.
+Proof.xr
   intros f b. destruct b.
   Case "b = true".
   destruct (f true) eqn:ftrue. rewrite -> ftrue. rewrite -> ftrue. reflexivity.
@@ -966,7 +978,6 @@ Proof.
 (** [] *)
 
 (** **** Exercise: 2 stars (override_same)  *)
-(* Chan *)
 Theorem override_same : forall (X:Type) x1 k1 k2 (f : nat->X),
   f k1 = x1 -> 
   (override f k1 x1) k2 = f k2.
@@ -984,10 +995,7 @@ Proof.
     reflexivity.
 
 Qed.
-    
-    
- 
-(** [] *)
+
 
 (* ################################################################## *)
 (** * Review *)
@@ -1068,7 +1076,7 @@ Qed.
 (** * Additional Exercises *)
 
 (** **** Exercise: 3 stars (beq_nat_sym)  *)
-(* TODO BC *)
+
 Theorem beq_nat_sym : forall (n m : nat),
   beq_nat n m = beq_nat m n.
 Proof.
