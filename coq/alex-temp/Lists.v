@@ -1264,6 +1264,17 @@ Fixpoint insertion_sort (l : natlist) : natlist :=
   | h :: t => insert h (insertion_sort t)
   end.
 
+Definition is_permutation (l l' : natlist) : Prop :=
+  forall (v : nat), (count v l) = (count v l').
+
+Theorem is_permutation_reflexive : forall (l : natlist),
+  is_permutation l l.
+Proof.
+  intros l.
+  unfold is_permutation.
+  reflexivity. Qed.
+
+(* Theorem is_permutation_symmetric *)
 
 Lemma sorted_unfold : forall (l : natlist) (v1 v2 : nat),
   is_sorted (v1 :: v2 :: l) = (andb (ble_nat v1 v2) (is_sorted (v2 :: l))).
@@ -1271,6 +1282,18 @@ Proof.
   intros l v1 v2.
   simpl.
   reflexivity. Qed.
+
+Lemma sorted_from_tail : forall (l : natlist) (v h : nat),
+  andb (ble_nat v h) (is_sorted (h :: l)) = true -> is_sorted (v :: h :: l) = true.
+Proof.
+  intros l v h.
+  intros H.
+  simpl in H.
+  simpl.
+  rewrite -> H.
+  reflexivity. Qed.
+
+
 
 Lemma sorted_implies_subsorted : forall (l : natlist) (v : nat),
   is_sorted (v :: l) = true -> is_sorted l = true.
@@ -1287,7 +1310,32 @@ Proof.
     apply andb_true_elim2 in H.
     rewrite H.
     reflexivity. Qed.
-    
+
+Lemma orb_x_negx_true : forall (b : bool),
+  orb b (negb b) = true.
+Proof.
+  intros b.
+  destruct b.
+  reflexivity.
+  reflexivity. Qed.
+
+Lemma ble_nat_anticomm : forall (u v : nat),
+  (ble_nat u v) = false -> (ble_nat v u) = true.
+Proof.
+  intros u v.
+  intros H.
+  induction u as [ | u'].
+  Case "u = 0".
+  simpl. simpl in H.
+  destruct (ble_nat v 0).
+  reflexivity.
+  rewrite H. reflexivity. 
+  induction v as [ | v'].
+  simpl. reflexivity.
+  simpl. simpl in IHu'.
+  Admitted.
+     
+
 
 Theorem insert_preserves_sortedness : forall (v : nat) (l : natlist),
   is_sorted l = true -> is_sorted (insert v l) = true.
@@ -1295,20 +1343,48 @@ Proof.
   intros v l.
   intros H.
   induction l as [ | h t].
-  Case "l = []".
-    simpl.
-    reflexivity.
-  Case "l = h t".
-    assert (M : (is_sorted (h :: t) = true)).
-      rewrite H. reflexivity.
-    apply sorted_implies_subsorted in H.
-    assert (L : is_sorted (insert v t) = true).
-    SCase "Proof of proposition".
-      apply IHt.
-      rewrite H.
-      reflexivity.
-    simpl. Admitted.
+  simpl. reflexivity.
+  simpl.
+
+  assert (Lemma1: andb (ble_nat v h) (is_sorted (h :: t)) = true  -> is_sorted (v :: h :: t) = true).
+    apply sorted_from_tail.
+
+  assert (Lemma2 : is_sorted (h :: t) = true).
+    rewrite H. reflexivity.
+
+  assert (Lemma3: is_sorted t = true).
+    apply sorted_implies_subsorted in Lemma2. rewrite -> Lemma2. reflexivity.
+
+  assert (Lemma4: is_sorted (insert v t) = true).
+    rewrite Lemma3 in IHt. apply IHt. reflexivity.
+
+  destruct (insert v t) as [ | h' t'].
+    Case "insert v t = []".
+      destruct (ble_nat v h). rewrite H in Lemma1. apply Lemma1. simpl. reflexivity.
+      simpl. reflexivity.
+    Case "insert v t = h' :: t'".
+      assert (Lemma5: (ble_nat v h = false) -> ble_nat h h' = true).
+        admit.
+      destruct (ble_nat v h).
+      rewrite H in Lemma1. apply Lemma1. simpl. reflexivity.
+      apply sorted_from_tail. rewrite Lemma5. rewrite Lemma4. simpl. reflexivity.
+      reflexivity. Qed.
     
+
+
+
+(*
+    SCase "Proof of proposition 3".
+      destruct (ble_nat v h).
+    rewrite -> M in K.
+    replace (andb true true) with (true) in K.
+    assert (T: is_sorted (v :: h :: t) = true).
+      apply K. reflexivity.
+      rewrite T. reflexivity.
+    simpl. reflexivity.
+    assert (W : (ble_nat v h) = false).
+      simpl.
+ *)   
     
       
 
