@@ -982,21 +982,24 @@ Proof.
 
 
 (** **** Exercise: 2 stars (destruct_eqn_practice)  *)
-(* TODO BC *)
+
 Theorem bool_fn_applied_thrice : 
   forall (f : bool -> bool) (b : bool), 
   f (f (f b)) = f b.
 Proof.
   intros f b. destruct b.
+
   Case "b = true".
-  destruct (f true) eqn:ftrue. rewrite -> ftrue. rewrite -> ftrue. reflexivity.
-  destruct (f false) eqn:ffalse. rewrite -> ftrue. reflexivity.
-  rewrite -> ffalse. reflexivity.
+    destruct (f true) eqn:ftrue. rewrite -> ftrue. rewrite -> ftrue. reflexivity.
+    destruct (f false) eqn:ffalse. rewrite -> ftrue. reflexivity.
+    rewrite -> ffalse. reflexivity.
+
   Case "b = false".
-  destruct (f false) eqn:ffalse. destruct (f true) eqn:ftrue. rewrite -> ftrue.
-  reflexivity.
-  rewrite -> ffalse. reflexivity.
-  rewrite -> ffalse. rewrite -> ffalse. reflexivity. Qed.
+    destruct (f false) eqn:ffalse. destruct (f true) eqn:ftrue. rewrite -> ftrue.
+    reflexivity.
+    rewrite -> ffalse. reflexivity.
+    rewrite -> ffalse. rewrite -> ffalse. reflexivity. 
+Qed.
   
 (** [] *)
 
