@@ -1424,6 +1424,21 @@ Fixpoint leq_than_all (v : nat) (l : natlist) : bool :=
   | h :: t => andb (ble_nat v h) (leq_than_all v t)
   end.
 
+Theorem ble_nat_transitive : forall (u v w : nat),
+  ble_nat u v = true -> ble_nat v w = true -> ble_nat u w = true.
+Proof.
+  intros u v w.
+  intros H.
+  intros H'.
+  induction u as [ | u'].
+  Case "u = 0".
+    simpl. reflexivity.
+  Case "u = S u'".
+    destruct v as [ | v'].
+    simpl in H. 
+    Admitted.
+  
+
 Theorem leq_than_all_alternative_def : forall (v : nat) (l : natlist),
   (leq_than_all v l) = true -> (forall (n : nat), (ble_nat v n) = false -> count n l = 0).
 Proof. 
@@ -1431,7 +1446,33 @@ Proof.
   intros H.
   intros n.
   intros H'.
-  Admitted.
+  induction l as [ | h t].
+  Case "l = []".
+    simpl.
+    reflexivity.
+  Case "l = h :: t".
+    simpl.
+  assert (Helper1 : leq_than_all v (h :: t) = true).
+  SCase "Proof of Helper 1".
+    rewrite H. reflexivity.
+  assert (Helper2 : leq_than_all v (h :: t) = true).
+  SCase "Proof of Helper 1".
+    rewrite H. reflexivity.
+  assert (Lemma1: leq_than_all v t = true).
+  SCase "Proof of Lemma 1".
+    simpl in Helper1.
+    apply andb_true_elim2 in Helper1.
+    apply Helper1.
+  rewrite Lemma1 in IHt.
+  rewrite IHt.
+  assert (Lemma2: ble_nat v h = true).
+  SCase "Proof of Lemma 2".
+    simpl in Helper2.
+    apply andb_true_elim1 in Helper2.
+    apply Helper2.
+    Admitted.
+  
+    
 
 Theorem less_than_all_invariant_permutation : forall (v : nat) (l l' : natlist),
   is_permutation l l' -> (leq_than_all v l) = true -> (leq_than_all v l') = true.
