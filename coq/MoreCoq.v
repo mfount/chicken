@@ -1132,7 +1132,6 @@ Proof.
   rewrite -> H0.
   reflexivity.
 Qed.
-(** [] *)
 
 (** **** Exercise: 3 stars, advanced (split_combine)  *)
 (** We have just proven that for all lists of pairs, [combine] is the
@@ -1146,23 +1145,21 @@ Qed.
     things than necessary.  Hint: what property do you need of [l1]
     and [l2] for [split] [combine l1 l2 = (l1,l2)] to be true?)  *)
 
-(* TODO AM *)
-SearchAbout split.
-Check split.
-Eval compute in (split [(1, false); (2, false)]).
-SearchAbout combine.
-Eval compute in (combine [3;4;5] [6;7;8;9;10]).
-SearchAbout length.
-Check length.
-
 Definition split_combine_statement : Prop :=
-(*   forall l1 l2 (X Y: Type), length X l1 = length l2 -> split (combine l1 l2) = (l1, l2). *)
-admit.
-  
+  forall (X : Type) (l1 l2 : list X), length l1 = length l2 -> split (combine l1 l2) = (l1, l2).
 
 Theorem split_combine : split_combine_statement.
 Proof.
-(* FILL IN HERE *) Admitted.
+  unfold split_combine_statement. 
+  intros X l1. induction l1 as [ | h1 t1 ].
+    intros l2. destruct l2 as [ | h2 t2 ].
+      reflexivity.
+      intros contra. inversion contra.
+  intros l2. destruct l2 as [ | h2 t2 ].
+    intros contra. inversion contra.
+    intros H. inversion H. simpl. apply IHt1 in H1. rewrite -> H1.
+    reflexivity.
+Qed.
 
 
 
