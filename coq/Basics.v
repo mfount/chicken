@@ -121,7 +121,8 @@ Eval compute in (next_weekday (next_weekday saturday)).
     result. *)
 
 (** The keyword [compute] tells Coq precisely how to
-    evaluate the expression we give it.  For the moment, [compute] is
+    evaluate the expression we give it *)
+(*.  For the moment, [compute] is
     the only one we'll need; later on we'll see some alternatives that
     are sometimes useful. *)
 
@@ -235,10 +236,8 @@ Proof. reflexivity.  Qed.
     its inputs are [false]. *)
 
 Definition nandb (b1:bool) (b2:bool) : bool :=
-  match b1,b2 with
-    | true,true => false
-    | _,_ => true
-    end.
+  (negb (andb b1 b2)).
+
 
 (** Remove "[Admitted.]" and fill in each proof with 
     "[Proof. reflexivity. Qed.]" *)
@@ -259,10 +258,7 @@ Proof. reflexivity. Qed.
     otherwise. *)
 
 Definition andb3 (b1:bool) (b2:bool) (b3:bool) : bool :=
-                      match b1,b2,b3 with
-                      | true,true,true => true
-                      | _,_,_ => false
-                      end.
+  (andb b1 (andb b2 b3)).
 
 Example test_andb31:                 (andb3 true true true) = true.
 Proof. reflexivity. Qed.
@@ -389,7 +385,7 @@ Eval compute in (minustwo 4).
 (** The constructor [S] has the type [nat -> nat], just like the
     functions [minustwo] and [pred]: *)
 
-Check S.
+Check S. 
 Check pred.
 Check minustwo.
 
@@ -580,10 +576,7 @@ Proof. reflexivity.  Qed.
     this one, define it in terms of a previously defined function. *)
 
 Definition blt_nat (n m : nat) : bool :=
-  match ble_nat n m, beq_nat n m with
-    | true,false => true
-    | _,_ => false
-  end.
+  (andb (ble_nat n m) (negb (beq_nat m n))).
 
 Example test_blt_nat1:             (blt_nat 2 2) = false.
 Proof. reflexivity. Qed.
@@ -643,7 +636,7 @@ Proof.
 
     Secondly, we've added the quantifier [forall n:nat], so that our
     theorem talks about _all_ natural numbers [n].  In order to prove
-    theorems of this form, we need to to be able to reason by
+    theorems of this form, we need to be able to reason by
     _assuming_ the existence of an arbitrary natural number [n].  This
     is achieved in the proof by [intros n], which moves the quantifier
     from the goal to a "context" of current assumptions. In effect, we
@@ -669,8 +662,12 @@ Abort.
 (** (Can you explain why this happens?  Step through both proofs with
     Coq and notice how the goal and context change.) *)
 
+(* This happens because in plus we're reducing on the first argument, so 
+  when we try to prove 0 + n = n, 0 + n immediately gives us n and we're done.
+  But when we try n + 0 = n, the left side simplifies to S( (n-1) + 0). *)
+
 Theorem plus_1_l : forall n:nat, 1 + n = S n. 
-Proof. 
+Proof.
   intros n. reflexivity.  Qed.
 
 Theorem mult_0_l : forall n:nat, 0 * n = 0.
@@ -710,7 +707,7 @@ Theorem plus_id_example : forall n m:nat,
 Proof.
   intros n m.   (* move both quantifiers into the context *)
   intros H.     (* move the hypothesis into the context *)
-  rewrite -> H. (* Rewrite the goal using the hypothesis *)
+  rewrite <- H. (* Rewrite the goal using the hypothesis *)
   reflexivity.  Qed.
 
 (** The first line of the proof moves the universally quantified
@@ -734,11 +731,11 @@ Theorem plus_id_exercise : forall n m o : nat,
 Proof.
   intros n m o.
   intros H.
-  intros I.
+  intros H'.
+  rewrite <- H'.
   rewrite -> H.
-  rewrite -> I.
   reflexivity. Qed.
-  (** [] *)
+(** [] *)
 
 (** As we've seen in earlier examples, the [Admitted] command
     tells Coq that we want to skip trying to prove this theorem and
@@ -768,8 +765,8 @@ Theorem mult_S_1 : forall n m : nat,
   m * (1 + n) = m * m.
 Proof.
   intros n m.
-  rewrite <- plus_1_l.
   intros H.
+  rewrite -> plus_1_l.
   rewrite <- H.
   reflexivity. Qed.
 (** [] *)
@@ -856,9 +853,11 @@ Proof.
 Theorem zero_nbeq_plus_1 : forall n : nat,
   beq_nat 0 (n + 1) = false.
 Proof.
-  intros n. destruct n as [| n'].
+  intros n.
+  destruct n as [ | n'].
   reflexivity.
   reflexivity. Qed.
+
 (** [] *)
 
 (* ###################################################################### *)
@@ -867,7 +866,7 @@ Proof.
 (** **** Exercise: 2 stars (boolean_functions)  *)
 (** Use the tactics you have learned so far to prove the following 
     theorem about boolean functions. *)
-                                   
+
 Theorem identity_fn_applied_twice : 
   forall (f : bool -> bool), 
   (forall (x : bool), f x = x) ->
@@ -892,38 +891,20 @@ Proof.
   rewrite -> H.
   rewrite -> negb_involutive.
   reflexivity. Qed.
-  (** [] *)
+(** [] *)
 
 (** **** Exercise: 2 stars (andb_eq_orb)  *)
 (** Prove the following theorem.  (You may want to first prove a
     subsidiary lemma or two. Alternatively, remember that you do
     not have to introduce all hypotheses at the same time.) *)
-Lemma andb_eq_arg :
-  forall (b : bool),
-         (andb b true = b).
-Proof.
-  intros b.
-  destruct b.
-  simpl.
-  reflexivity.
-  simpl.
-  reflexivity.
-  Qed.
 
-Lemma andb_eq_orb1 :
-  forall (b c : bool),
-    andb b c = negb (orb (negb b) (negb c)).
-Proof.
-  intros b c.
-  destruct b.
-  destruct c.
-  simpl.
-  reflexivity.
-  simpl.
-  reflexivity.
-  simpl.
-  reflexivity.
-  Qed.  
+Lemma andb_true_eq_arg :
+  forall (b : bool), andb true b = b.
+Proof. destruct b. reflexivity. reflexivity. Qed.
+
+Lemma orb_true :
+  forall (b : bool), orb true b = true.
+Proof. destruct b. reflexivity. reflexivity. Qed.
 
 Theorem andb_eq_orb : 
   forall (b c : bool),
@@ -955,7 +936,6 @@ Proof.
       - twice a binary number, or
       - one more than twice a binary number.
 
-TODO AM
     (a) First, write an inductive definition of the type [bin]
         corresponding to this description of binary numbers. 
 
@@ -972,11 +952,9 @@ TODO AM
     it is the functions you will write next that will give it
     mathematical meaning.)
 
-TODO BC
     (b) Next, write an increment function [incr] for binary numbers, 
         and a function [bin_to_nat] to convert binary numbers to unary numbers.
 
-TODO AM
     (c) Write five unit tests [test_bin_incr1], [test_bin_incr2], etc.
         for your increment and binary-to-unary functions. Notice that 
         incrementing a binary number and then converting it to unary 
