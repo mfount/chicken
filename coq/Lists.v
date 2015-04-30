@@ -1362,6 +1362,17 @@ Proof.
     rewrite Casev.
     rewrite Caseh.
     reflexivity.
+  destruct (beq_nat v0 h) eqn:Caseh.
+  Case "v0 != v, v0 = h".
+    simpl.
+    rewrite Casev.
+    rewrite Caseh.
+    reflexivity.
+  Case "v0 != v, v0 != h".
+    simpl.
+    rewrite Casev.
+    rewrite Caseh.
+    reflexivity. Qed.
   
   
 
@@ -1370,14 +1381,21 @@ Theorem is_permutation_swap_first : forall (l : natlist) (v h : nat),
 Proof.
   intros l v h.
   assert (Lemma1 : is_permutation (v :: [h]) (h :: [v])).
-    Case "Proof of Lemma 1".
+  Case "Proof of Lemma 1".
+    apply is_permutation_transposition.
+  apply is_permutation_append with (x := (v :: [h])) (x' := l) (y := (h :: [v])) (y' := l).
+  apply is_permutation_transposition.
+  apply is_permutation_reflexive. Qed.
+    
 
-Theorem is_permutation_append : forall (v : nat) (l l' : natlist),
+Theorem is_permutation_same_head : forall (v : nat) (l l' : natlist),
   is_permutation l l' -> is_permutation (v :: l) (v :: l').
 Proof.
   intros v l l'.
   intros H.
-  SearchAbout count.
+  apply is_permutation_append with (x := [v]) (x' := l) (y := [v]) (y' := l').
+  apply is_permutation_reflexive.
+  apply H. Qed.
 
   
 Theorem insert_is_permutation : forall (v : nat) (l : natlist),
@@ -1397,10 +1415,34 @@ Proof.
         apply is_permutation_swap_first.
       apply is_permutation_transitive with (l' := (h :: v :: t)).
         apply Lemma1.
+        apply is_permutation_same_head with (v := h) (l := (v :: t)) (l' := (insert v t)).
+        apply IHt. Qed.
+
+Fixpoint leq_than_all (v : nat) (l : natlist) : bool :=
+  match l with
+  | [] => true
+  | h :: t => andb (ble_nat v h) (leq_than_all v t)
+  end.
+
+Theorem leq_than_all_alternative_def : forall (v : nat) (l : natlist),
+  (leq_than_all v l) = true -> (forall (n : nat), (ble_nat v n) = false -> count n l = 0).
+Proof. 
+  intros v l.
+  intros H.
+  intros n.
+  intros H'.
+  Admitted.
+
+Theorem less_than_all_invariant_permutation : forall (v : nat) (l l' : natlist),
+  is_permutation l l' -> (leq_than_all v l) = true -> (leq_than_all v l') = true.
+Proof. 
+  intros v l l'.
+  intros H.
+  intros H'.
+  unfold is_permutation in H.
+  Admitted.
      
-  
-Theorem 
-(* Theorem is_permutation_symmetric *)
+
 
 Lemma sorted_unfold : forall (l : natlist) (v1 v2 : nat),
   is_sorted (v1 :: v2 :: l) = (andb (ble_nat v1 v2) (is_sorted (v2 :: l))).
@@ -1461,7 +1503,6 @@ Proof.
   simpl. simpl in IHu'.
   Admitted.
      
-
 
 Theorem insert_preserves_sortedness : forall (v : nat) (l : natlist),
   is_sorted l = true -> is_sorted (insert v l) = true.
