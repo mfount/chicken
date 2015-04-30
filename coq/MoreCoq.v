@@ -844,8 +844,20 @@ Theorem double_induction: forall (P : nat -> nat -> Prop),
   (forall m n, P m n -> P (S m) (S n)) ->
   forall m n, P m n.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros. generalize dependent n. induction m as [ | m' ].
+  Case "m = O".
+    induction n as [ | n'].
+    SCase "n = O".
+      apply H.
+    SCase "n = S n'".
+      apply H1. apply IHn'.
+  Case "m = S m'".
+    induction n as [ | n'].
+    SCase "n = O".
+      apply H0. apply IHm'.
+    SCase "n = S n'".
+      apply H2. apply IHm'.
+Qed.
 
 
 (* ###################################################### *)
@@ -886,14 +898,13 @@ Proof.
     are replaced by [c].
 
 *)
-(* TODO BC *)
+
 (** **** Exercise: 1 star (override_shadow)  *)
 Theorem override_shadow : forall (X:Type) x1 x2 k1 k2 (f : nat->X),
   (override (override f k1 x2) k1 x1) k2 = (override f k1 x1) k2.
 Proof.
   intros X x1 x2 k1 k2 f. unfold override. destruct (beq_nat k1 k2).
   reflexivity. reflexivity. Qed.
-(** [] *)
 
 (** **** Exercise: 3 stars, optional (combine_split)  *)
 (** Complete the proof below *)
@@ -902,8 +913,12 @@ Theorem combine_split : forall X Y (l : list (X * Y)) l1 l2,
   split l = (l1, l2) ->
   combine l1 l2 = l.
 Proof.
-  (* FILL IN HERE *) Admitted.
-(** [] *)
+  intros. generalize dependent l1. generalize dependent l2. induction l. 
+  Case "l = []". intros. unfold combine. destruct l1.
+    SCase "l1 = []". reflexivity.
+    SCase "l1 = h1 :: t1". destruct l2.
+      SSCase "l2 = []". reflexivity.
+      SSCase "l2 = h1 :: t2". fold @combine.
 
 (** Sometimes, doing a [destruct] on a compound expression (a
     non-variable) will erase information we need to complete a proof. *)
@@ -971,7 +986,7 @@ Proof.
 Theorem bool_fn_applied_thrice : 
   forall (f : bool -> bool) (b : bool), 
   f (f (f b)) = f b.
-Proof.xr
+Proof.
   intros f b. destruct b.
   Case "b = true".
   destruct (f true) eqn:ftrue. rewrite -> ftrue. rewrite -> ftrue. reflexivity.
@@ -1088,12 +1103,11 @@ Qed.
 Theorem beq_nat_sym : forall (n m : nat),
   beq_nat n m = beq_nat m n.
 Proof.
-  intros n. 
-  induction n as [|n']. destruct m as [|m'] eqn:M. reflexivity.
-  unfold beq_nat. reflexivity.
-  destruct m as [|m'] eqn:M. unfold beq_nat. reflexivity.
-  rewrite <- M. Admitted. (* destruct (beq_nat n' m) eqn:bnm. unfold beq_nat. rewrite <- bnm. rewrite -> IHn'. reflexivity. rewrite <- f_equal in IHn'. IHn'. symmetry in H0. inversion H0. unfold beq_nat. *) 
-(** [] *)
+  intros n. induction n as [ | n'].
+    intros. destruct m. reflexivity. reflexivity.
+    intros. destruct m. reflexivity. simpl. apply IHn'.
+Qed.
+
 
 (** **** Exercise: 3 stars, advanced, optional (beq_nat_sym_informal)  *)
 (** Give an informal proof of this lemma that corresponds to your
@@ -1118,7 +1132,6 @@ Proof.
   rewrite -> H0.
   reflexivity.
 Qed.
-(** [] *)
 
 (** **** Exercise: 3 stars, advanced (split_combine)  *)
 (** We have just proven that for all lists of pairs, [combine] is the
@@ -1132,23 +1145,21 @@ Qed.
     things than necessary.  Hint: what property do you need of [l1]
     and [l2] for [split] [combine l1 l2 = (l1,l2)] to be true?)  *)
 
-(* TODO AM *)
-SearchAbout split.
-Check split.
-Eval compute in (split [(1, false); (2, false)]).
-SearchAbout combine.
-Eval compute in (combine [3;4;5] [6;7;8;9;10]).
-SearchAbout length.
-Check length.
-
 Definition split_combine_statement : Prop :=
-(*   forall l1 l2 (X Y: Type), length X l1 = length l2 -> split (combine l1 l2) = (l1, l2). *)
-admit.
-  
+  forall (X : Type) (l1 l2 : list X), length l1 = length l2 -> split (combine l1 l2) = (l1, l2).
 
 Theorem split_combine : split_combine_statement.
 Proof.
-(* FILL IN HERE *) Admitted.
+  unfold split_combine_statement. 
+  intros X l1. induction l1 as [ | h1 t1 ].
+    intros l2. destruct l2 as [ | h2 t2 ].
+      reflexivity.
+      intros contra. inversion contra.
+  intros l2. destruct l2 as [ | h2 t2 ].
+    intros contra. inversion contra.
+    intros H. inversion H. simpl. apply IHt1 in H1. rewrite -> H1.
+    reflexivity.
+Qed.
 
 
 
