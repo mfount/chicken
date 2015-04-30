@@ -327,7 +327,7 @@ Theorem beq_nat_0_r : forall n,
    beq_nat n 0 = true -> n = 0.
 Proof.
   intros. induction n as [| n'].
-  Case "n=0". reflexivity.
+  Case "n = 0". reflexivity.
   Case "n = S n'". inversion H.
 Qed.
 
