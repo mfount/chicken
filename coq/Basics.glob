@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 DIGEST 257fb2f9ae50a39c7d68804639c94fbb
+=======
+<<<<<<< HEAD
+DIGEST 257fb2f9ae50a39c7d68804639c94fbb
+=======
+DIGEST 1f851942b9f547dc02ff7676c76e410d
+>>>>>>> fe0a31ad3b8de67fd028c961f310417006c8d76d
+>>>>>>> 7789c334e09e3b56dbc417e5cd48a79fe7bcd93c
 FBasics
 def 361:365 <> admit
 R379:379 Basics <> T var
@@ -202,7 +210,15 @@ R14183:14183 Basics <> n var
 R14196:14196 Basics Playground1 O constr
 R14201:14201 Basics Playground1 O constr
 R14209:14209 Basics Playground1 S constr
+<<<<<<< HEAD
 R14338:14348 Basics Playground1 <> mod
+=======
+<<<<<<< HEAD
+R14338:14348 Basics Playground1 <> mod
+=======
+R14338:14348 Basics <> <> mod
+>>>>>>> fe0a31ad3b8de67fd028c961f310417006c8d76d
+>>>>>>> 7789c334e09e3b56dbc417e5cd48a79fe7bcd93c
 def 14363:14370 <> minustwo
 R14377:14379 Coq.Init.Datatypes <> nat ind
 R14384:14386 Coq.Init.Datatypes <> nat ind
@@ -306,7 +322,15 @@ R17620:17620 Basics <> n var
 R17626:17626 Coq.Init.Datatypes <> S constr
 R17632:17632 Coq.Init.Datatypes <> S constr
 R17640:17644 Basics <> minus def
+<<<<<<< HEAD
 R17895:17905 Basics Playground2 <> mod
+=======
+<<<<<<< HEAD
+R17895:17905 Basics Playground2 <> mod
+=======
+R17895:17905 Basics <> <> mod
+>>>>>>> fe0a31ad3b8de67fd028c961f310417006c8d76d
+>>>>>>> 7789c334e09e3b56dbc417e5cd48a79fe7bcd93c
 def 17918:17920 <> exp
 R17936:17938 Coq.Init.Datatypes <> nat ind
 R17943:17945 Coq.Init.Datatypes <> nat ind
@@ -583,3 +607,24 @@ R33805:33805 Basics <> b var
 R33811:33813 Basics <> orb def
 R33817:33817 Basics <> c var
 R33815:33815 Basics <> b var
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+R36078:36081 Coq.Init.Peano <> plus def
+not 36066 <> :nat_scope:x_'+'_x
+R36205:36208 Coq.Init.Peano <> mult def
+not 36193 <> :nat_scope:x_'*'_x
+def 37622:37626 <> plus'
+R37633:37635 Coq.Init.Datatypes <> nat ind
+R37643:37645 Coq.Init.Datatypes <> nat ind
+R37650:37652 Coq.Init.Datatypes <> nat ind
+R37665:37665 Basics <> n var
+R37678:37678 Coq.Init.Datatypes <> O constr
+R37683:37683 Basics <> m var
+R37691:37691 Coq.Init.Datatypes <> S constr
+R37699:37699 Coq.Init.Datatypes <> S constr
+R37702:37706 Basics <> plus' def
+R37711:37711 Basics <> m var
+>>>>>>> fe0a31ad3b8de67fd028c961f310417006c8d76d
+>>>>>>> 7789c334e09e3b56dbc417e5cd48a79fe7bcd93c
