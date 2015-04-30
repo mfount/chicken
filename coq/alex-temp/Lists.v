@@ -1306,9 +1306,53 @@ Proof.
     rewrite Z. reflexivity.
     rewrite Y. reflexivity. Qed.
 
+Theorem append_add_counts : forall (x y : natlist) (v : nat),
+  count v (x ++ y) = count v x + count v y.
+Proof.
+  intros x y v.
+  induction x as [ | h t].
+  Case "y = []".
+    simpl. 
+    reflexivity.
+  Case "y = h :: t".
+    destruct (beq_nat v h) eqn:Casev.
+      SCase "v = h".
+        simpl. 
+        rewrite Casev.
+        rewrite IHt.
+        simpl.
+        reflexivity.
+      
+  
+  
+
+Theorem is_permutation_append : forall (x x' y y' : natlist),
+  is_permutation x y -> is_permutation x' y' -> is_permutation (x ++ x') (y ++ y').
+Proof.
+  intros x x' y y'.
+  intros H.
+  intros H'.
+  unfold is_permutation.
+  intros v.
+  rewrite append_add_counts.
+  rewrite append_add_counts.
+  unfold is_permutation in H, H'.
+  rewrite H.
+  rewrite H'.
+  reflexivity. Qed.
+  
+
 Theorem is_permutation_swap_first : forall (l : natlist) (v h : nat),
   is_permutation (v :: h :: l) (h :: v :: l).
 Proof. Admitted.
+
+Theorem is_permutation_append : forall (v : nat) (l l' : natlist),
+  is_permutation l l' -> is_permutation (v :: l) (v :: l').
+Proof.
+  intros v l l'.
+  intros H.
+  SearchAbout count.
+
   
 Theorem insert_is_permutation : forall (v : nat) (l : natlist),
   is_permutation (v :: l) (insert v l).
@@ -1318,13 +1362,18 @@ Proof.
   Case "l = []".
     simpl. apply is_permutation_reflexive.
   Case "l = h :: t".
-  destruct (ble_nat v h) eqn:whaa.
+  destruct (ble_nat v h) eqn:Case1.
     SCase "v <= h".
-      simpl. rewrite -> whaa. apply is_permutation_reflexive.
+      simpl. rewrite -> Case1. apply is_permutation_reflexive.
     SCase "v > h".
-      simpl. rewrite -> whaa.
+      simpl. rewrite -> Case1.
+      assert (Lemma1 : is_permutation (v :: h :: t) (h :: v :: t)).
+        apply is_permutation_swap_first.
+      apply is_permutation_transitive with (l' := (h :: v :: t)).
+        apply Lemma1.
+     
   
-
+Theorem 
 (* Theorem is_permutation_symmetric *)
 
 Lemma sorted_unfold : forall (l : natlist) (v1 v2 : nat),
