@@ -4,3 +4,7 @@
 *.gitignore.*
 *.crashcoqide
 \#*
+
+*.html
+*.glob
+*.vo
