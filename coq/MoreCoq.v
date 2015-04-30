@@ -188,7 +188,7 @@ Proof.
   intros. apply trans_eq with (m:= m).
   apply H0. apply H.
 Qed.
-(** [] *)
+
 
 
 (* ###################################################### *)
@@ -288,8 +288,6 @@ Theorem silly7 : forall (n m : nat),
 Proof.
   intros n m contra. inversion contra.  Qed.
 
-
-(* Chan *)
 (** **** Exercise: 1 star (sillyex2)  *)
 Example sillyex2 : forall (X : Type) (x y z : X) (l j : list X),
      x :: y :: l = [] ->
@@ -390,7 +388,6 @@ Proof.
 
 (** **** Exercise: 3 stars (plus_n_n_injective)  *)
 (** Practice using "in" variants in this exercise. *)
-(* BC *)
 Theorem plus_n_n_injective : forall n m,
      n + n = m + m ->
      n = m.
@@ -545,7 +542,6 @@ Proof.
     leave [m] generic. *)
 
 (** The proof of this theorem (left as an exercise) has to be treated similarly: *)
-(* TODO BC *)
 (** **** Exercise: 2 stars (beq_nat_true)  *)
 Theorem beq_nat_true : forall n m,
     beq_nat n m = true -> n = m.
@@ -728,7 +724,6 @@ Proof.
 
 (** **** Exercise: 3 stars (gen_dep_practice)  *)
 (** Prove this by induction on [l]. *)
-(* Chan *)
 Theorem index_after_last: forall (n : nat) (X : Type) (l : list X),
      length l = n ->
      index n l = None.
@@ -789,7 +784,10 @@ Proof.
     SCase "n = O".
       inversion H.
     SCase "n = S n'".
-      inversion H. apply f_equal. rewrite -> H1. apply IHt. 
+      inversion H. apply f_equal. rewrite -> H1. apply IHt.
+      rewrite H1.
+      reflexivity.
+Qed.
 
 (** **** Exercise: 3 stars, optional (app_length_cons)  *)
 (** Prove this by induction on [l1], without using [app_length]
@@ -913,12 +911,14 @@ Theorem combine_split : forall X Y (l : list (X * Y)) l1 l2,
   split l = (l1, l2) ->
   combine l1 l2 = l.
 Proof.
-  intros. generalize dependent l1. generalize dependent l2. induction l. 
-  Case "l = []". intros. unfold combine. destruct l1.
-    SCase "l1 = []". reflexivity.
-    SCase "l1 = h1 :: t1". destruct l2.
-      SSCase "l2 = []". reflexivity.
-      SSCase "l2 = h1 :: t2". fold @combine.
+  intros. generalize dependent l1. generalize dependent l2.
+  induction l as [ | [x y] t ].
+  Case "l = []".
+    intros. inversion H. reflexivity.
+  Case "l = (x, y) :: t".
+    intros.
+Admitted.
+
 
 (** Sometimes, doing a [destruct] on a compound expression (a
     non-variable) will erase information we need to complete a proof. *)
@@ -982,21 +982,24 @@ Proof.
 
 
 (** **** Exercise: 2 stars (destruct_eqn_practice)  *)
-(* TODO BC *)
+
 Theorem bool_fn_applied_thrice : 
   forall (f : bool -> bool) (b : bool), 
   f (f (f b)) = f b.
 Proof.
   intros f b. destruct b.
+
   Case "b = true".
-  destruct (f true) eqn:ftrue. rewrite -> ftrue. rewrite -> ftrue. reflexivity.
-  destruct (f false) eqn:ffalse. rewrite -> ftrue. reflexivity.
-  rewrite -> ffalse. reflexivity.
+    destruct (f true) eqn:ftrue. rewrite -> ftrue. rewrite -> ftrue. reflexivity.
+    destruct (f false) eqn:ffalse. rewrite -> ftrue. reflexivity.
+    rewrite -> ffalse. reflexivity.
+
   Case "b = false".
-  destruct (f false) eqn:ffalse. destruct (f true) eqn:ftrue. rewrite -> ftrue.
-  reflexivity.
-  rewrite -> ffalse. reflexivity.
-  rewrite -> ffalse. rewrite -> ffalse. reflexivity. Qed.
+    destruct (f false) eqn:ffalse. destruct (f true) eqn:ftrue. rewrite -> ftrue.
+    reflexivity.
+    rewrite -> ffalse. reflexivity.
+    rewrite -> ffalse. rewrite -> ffalse. reflexivity. 
+Qed.
   
 (** [] *)
 
@@ -1161,12 +1164,7 @@ Proof.
     reflexivity.
 Qed.
 
-
-
-(** [] *)
-
 (** **** Exercise: 3 stars (override_permute)  *)
-(* TODO BC *)
 Theorem override_permute : forall (X:Type) x1 x2 k1 k2 k3 (f : nat->X),
   beq_nat k2 k1 = false ->
   (override (override f k2 x2) k1 x1) k3 = (override (override f k1 x1) k2 x2) k3.
@@ -1176,11 +1174,8 @@ Proof.
   destruct (beq_nat k2 k3) eqn: eq2. reflexivity. reflexivity.
 Qed.
 
-(** [] *)
-
 (** **** Exercise: 3 stars, advanced (filter_exercise)  *)
 (** This one is a bit challenging.  Pay attention to the form of your IH. *)
-(* Chan *)
 Theorem filter_exercise : forall (X : Type) (test : X -> bool)
                              (x : X) (l lf : list X),
      filter test l = x :: lf ->
@@ -1204,14 +1199,11 @@ Proof.
       apply IHt in H. rewrite -> H. reflexivity.
 Qed.
 
-    
-(** [] *)
-
 (** **** Exercise: 4 stars, advanced (forall_exists_challenge)  *)
-(* TODO EVERYONE *)
 (** Define two recursive [Fixpoints], [forallb] and [existsb].  The
     first checks whether every element in a list satisfies a given
     predicate:
+
       forallb oddb [1;3;5;7;9] = true
 
       forallb negb [false;false] = true
@@ -1235,8 +1227,19 @@ Qed.
     the same behavior.
 *)
 
-(* FILL IN HERE *)
-(** [] *)
+Fixpoint forallb {X : Type} (f : X -> bool) (l : list X) : bool :=
+  match l with
+    | [] => false
+    | h :: t => andb (f h) (forallb f t)
+  end.
+
+Fixpoint existsb {X : Type} (f: X -> bool) (l: list X) : bool :=
+  match l with
+    | [] => false
+    | h :: t => orb (f h) (existsb f t)
+  end.
+
+
 
 (** $Date: 2014-12-31 16:01:37 -0500 (Wed, 31 Dec 2014) $ *)
 

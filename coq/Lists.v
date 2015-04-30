@@ -1322,10 +1322,13 @@ Proof.
         rewrite IHt.
         simpl.
         reflexivity.
+      SCase "v != h".
+        simpl.
+        rewrite Casev.
+        rewrite IHt.
+        reflexivity. Qed.
       
   
-  
-
 Theorem is_permutation_append : forall (x x' y y' : natlist),
   is_permutation x y -> is_permutation x' y' -> is_permutation (x ++ x') (y ++ y').
 Proof.
@@ -1341,10 +1344,33 @@ Proof.
   rewrite H'.
   reflexivity. Qed.
   
+Theorem is_permutation_transposition : forall (v h : nat),
+  is_permutation (v :: [h]) (h :: [v]).
+Proof.
+  intros v h.
+  unfold is_permutation.
+  intros v0.
+  destruct (beq_nat v0 v) eqn:Casev.
+  destruct (beq_nat v0 h) eqn:Caseh.
+  Case "v0 = v, v0 = h".
+    simpl. 
+    rewrite Casev.
+    rewrite Caseh.
+    reflexivity.
+  Case "v0 = v, v0 != h".
+    simpl.
+    rewrite Casev.
+    rewrite Caseh.
+    reflexivity.
+  
+  
 
 Theorem is_permutation_swap_first : forall (l : natlist) (v h : nat),
   is_permutation (v :: h :: l) (h :: v :: l).
-Proof. Admitted.
+Proof.
+  intros l v h.
+  assert (Lemma1 : is_permutation (v :: [h]) (h :: [v])).
+    Case "Proof of Lemma 1".
 
 Theorem is_permutation_append : forall (v : nat) (l l' : natlist),
   is_permutation l l' -> is_permutation (v :: l) (v :: l').
