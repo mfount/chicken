@@ -185,7 +185,7 @@ Eval compute in c.
 Inductive baz : Type :=
    | x : baz -> baz
    | y : baz -> bool -> baz.
-(* TODO AM *)
+
 (** How _many_ elements does the type [baz] have? 
 (* FILL IN HERE *)
 *)

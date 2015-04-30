@@ -907,18 +907,20 @@ Proof.
 (** **** Exercise: 3 stars, optional (combine_split)  *)
 (** Complete the proof below *)
 
+
 Theorem combine_split : forall X Y (l : list (X * Y)) l1 l2,
   split l = (l1, l2) ->
   combine l1 l2 = l.
 Proof.
   intros. generalize dependent l1. generalize dependent l2.
-  induction l as [ | [x y] t ].
+  induction l as [ | (x, y) t ].
   Case "l = []".
     intros. inversion H. reflexivity.
   Case "l = (x, y) :: t".
-    intros.
-Admitted.
-
+    simpl. destruct (split t) as [l1' l2'].
+    intros. inversion H.
+    simpl. apply f_equal. apply IHt. reflexivity.
+Qed.
 
 (** Sometimes, doing a [destruct] on a compound expression (a
     non-variable) will erase information we need to complete a proof. *)
@@ -1229,7 +1231,7 @@ Qed.
 
 Fixpoint forallb {X : Type} (f : X -> bool) (l : list X) : bool :=
   match l with
-    | [] => false
+    | [] => true
     | h :: t => andb (f h) (forallb f t)
   end.
 
@@ -1239,7 +1241,10 @@ Fixpoint existsb {X : Type} (f: X -> bool) (l: list X) : bool :=
     | h :: t => orb (f h) (existsb f t)
   end.
 
-
+Eval compute in forallb oddb [1;3;5;7;9].
+Eval compute in forallb negb [false; false].
+Eval compute in forallb evenb [0;2;4;5].
+Eval compute in forallb (beq_nat 5) []. 
 
 (** $Date: 2014-12-31 16:01:37 -0500 (Wed, 31 Dec 2014) $ *)
 
