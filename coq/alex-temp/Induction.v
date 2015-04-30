@@ -107,8 +107,7 @@ Qed.
 Theorem andb_true_elim2 : forall b c : bool,
   andb b c = true -> c = true.
 Proof.
-  intros b c.
-  intros H.
+  intros b c H.
   destruct c.
   Case "c = true".
     reflexivity.
@@ -313,8 +312,8 @@ Proof.
 (** Briefly explain the difference between the tactics
     [destruct] and [induction].  
 
-Destruct simply unpacks a type definition into cases, while induction also
-assumes something about the smaller cases.
+  [Destruct] is just casework going backward the pattern matching while [Induction]
+  introduces the hypothesis and allows us to use the hypothesis.
 
 *)
 (** [] *)
@@ -459,16 +458,14 @@ Theorem evenb_n__oddb_Sn : forall n : nat,
   evenb n = negb (evenb (S n)).
 Proof.
   intros n.
-  induction n as [ | n'].
-    Case "n = 0".
+  induction n as [|n'].
+  Case "n = 0".
     reflexivity.
-    Case "n = S n'".
+  Case "n = S n'".
     simpl.
     rewrite -> IHn'.
     rewrite -> negb_involutive.
     reflexivity. Qed.
-  
-  
 (** [] *)
 
 (* ###################################################################### *)
@@ -498,24 +495,21 @@ Proof.
 Theorem zero_nbeq_S : forall n:nat,
   beq_nat 0 (S n) = false.
 Proof.
-  intros n.
-  simpl.
-  reflexivity. Qed.
+  reflexivity.
+Qed.
 
 Theorem andb_false_r : forall b : bool,
   andb b false = false.
 Proof.
-  intros b.
   destruct b.
   reflexivity.
-  reflexivity. Qed.
+  reflexivity.
+Qed.
 
 Theorem plus_ble_compat_l : forall n m p : nat, 
   ble_nat n m = true -> ble_nat (p + n) (p + m) = true.
 Proof.
-  intros n m p.
-  intros H.
-  induction p as [ | p'].
+  intros. induction p as [ | p'].
   Case "p = 0".
     simpl.
     rewrite -> H.
@@ -523,14 +517,14 @@ Proof.
   Case "p = S p'".
     simpl.
     rewrite -> IHp'.
-    reflexivity. Qed.
+    reflexivity.
+Qed.
 
 Theorem S_nbeq_0 : forall n:nat,
   beq_nat (S n) 0 = false.
 Proof.
-  intros n.
-  simpl.
-  reflexivity. Qed.
+  intros. reflexivity.
+Qed.
 
 Theorem mult_1_l : forall n:nat, 1 * n = n.
 Proof.
