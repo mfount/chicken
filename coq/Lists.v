@@ -1424,20 +1424,34 @@ Fixpoint leq_than_all (v : nat) (l : natlist) : bool :=
   | h :: t => andb (ble_nat v h) (leq_than_all v t)
   end.
 
+Lemma ble_nat_helper : forall (u v : nat),
+  ble_nat (S u) v = true -> ble_nat u v = true.
+Proof.
+  intros u v.
+  intros H.
+  Admitted.
+
 Theorem ble_nat_transitive : forall (u v w : nat),
   ble_nat u v = true -> ble_nat v w = true -> ble_nat u w = true.
 Proof.
   intros u v w.
   intros H.
   intros H'.
+  induction v as [ | v'].
+  destruct u as [ | u'].
+  reflexivity.
+  simpl in H.
+  inversion H.
+  Admitted.
+(*
   induction u as [ | u'].
   Case "u = 0".
     simpl. reflexivity.
   Case "u = S u'".
     destruct v as [ | v'].
     simpl in H. 
-    Admitted.
-  
+    inversion H.
+  *)
 
 Theorem leq_than_all_alternative_def : forall (v : nat) (l : natlist),
   (leq_than_all v l) = true -> (forall (n : nat), (ble_nat v n) = false -> count n l = 0).
