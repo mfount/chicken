@@ -919,7 +919,6 @@ Proof.
   intros H.
   rewrite -> H.
   reflexivity.
-  rewrite -> andb_eq_orb1.
   simpl.
   intros H.
   rewrite -> H.

@@ -13,3 +13,6 @@
   * contains coq code for the project
 * sf
   * software foundations with solutions
+* final-submission
+  * contains all files related to the final submission.
+    (See `handouts/task-5*`.)
