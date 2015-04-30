@@ -913,7 +913,12 @@ Theorem combine_split : forall X Y (l : list (X * Y)) l1 l2,
   split l = (l1, l2) ->
   combine l1 l2 = l.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. generalize dependent l1. generalize dependent l2. induction l. 
+  Case "l = []". intros. unfold combine. destruct l1.
+    SCase "l1 = []". reflexivity.
+    SCase "l1 = h1 :: t1". destruct l2.
+      SSCase "l2 = []". reflexivity.
+      SSCase "l2 = h1 :: t2". fold @combine.
 
 (** Sometimes, doing a [destruct] on a compound expression (a
     non-variable) will erase information we need to complete a proof. *)
@@ -981,7 +986,7 @@ Proof.
 Theorem bool_fn_applied_thrice : 
   forall (f : bool -> bool) (b : bool), 
   f (f (f b)) = f b.
-Proof.xr
+Proof.
   intros f b. destruct b.
   Case "b = true".
   destruct (f true) eqn:ftrue. rewrite -> ftrue. rewrite -> ftrue. reflexivity.
@@ -1098,12 +1103,11 @@ Qed.
 Theorem beq_nat_sym : forall (n m : nat),
   beq_nat n m = beq_nat m n.
 Proof.
-  intros n. 
-  induction n as [|n']. destruct m as [|m'] eqn:M. reflexivity.
-  unfold beq_nat. reflexivity.
-  destruct m as [|m'] eqn:M. unfold beq_nat. reflexivity.
-  rewrite <- M. Admitted. (* destruct (beq_nat n' m) eqn:bnm. unfold beq_nat. rewrite <- bnm. rewrite -> IHn'. reflexivity. rewrite <- f_equal in IHn'. IHn'. symmetry in H0. inversion H0. unfold beq_nat. *) 
-(** [] *)
+  intros n. induction n as [ | n'].
+    intros. destruct m. reflexivity. reflexivity.
+    intros. destruct m. reflexivity. simpl. apply IHn'.
+Qed.
+
 
 (** **** Exercise: 3 stars, advanced, optional (beq_nat_sym_informal)  *)
 (** Give an informal proof of this lemma that corresponds to your
