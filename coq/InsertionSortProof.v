@@ -46,8 +46,45 @@ Proof.
     Here we assume some basic properties of the less than 
     or equal relation.*)
 
+Theorem minus_help : forall (x y : nat),
+  ble_nat x y = true -> x + (minus y x) = y.
+Proof.
+  intros x y. intros H.
+  induction x as [ | x'].
+  simpl. admit.
+  simpl. admit. Qed.
 
+Theorem ble_nat3 : forall (x y : nat),
+  ble_nat x (x + y) = true.
+Proof.
+  intros x y.
+  induction x as [ | x'].
+  simpl. reflexivity.
+  simpl. apply IHx'. Qed.
 
+Theorem ble_nat_alt1 : forall (x y : nat),
+  (exists (z : nat), x + z = y) -> ble_nat x y = true.
+Proof.
+  intros x y H.
+  destruct H as [z G].
+  assert (Lemma1 : ble_nat x (x + z) = true).
+    apply ble_nat3.
+  rewrite G in Lemma1.
+  apply Lemma1. Qed.
+  
+Theorem ble_nat_alt2 : forall (x y : nat),
+  ble_nat x y = true -> exists (z : nat), x + z = y.
+Proof.
+  intros x y.
+  intros H.
+  assert (Lemma1 : x + (minus y x) = y).
+    apply minus_help. apply H.
+  exists (minus y x). apply Lemma1. Qed.
+
+Definition ble_nat_alt (x y : nat) : Prop :=
+  exists (z : nat), x + z = y.
+
+(*
 Lemma ble_nat_helper : forall (u v : nat),
   ble_nat (S u) v = true -> ble_nat u v = true.
 Proof.
@@ -57,7 +94,7 @@ Proof.
   simpl in H.
   inversion H.
   simpl in H.
-  Admitted.
+  Admitted. *)
 
 Theorem ble_nat_transitive : forall (u v w : nat),
   ble_nat u v = true -> ble_nat v w = true -> ble_nat u w = true.
@@ -65,34 +102,34 @@ Proof.
   intros u v w.
   intros H.
   intros H'.
-  induction v as [ | v'].
-  destruct u as [ | u'].
-  reflexivity.
-  simpl in H.
-  inversion H.
-  Admitted.
+  apply ble_nat_alt2 in H.
+  apply ble_nat_alt2 in H'.
+  apply ble_nat_alt1.
+  destruct H as [z H].
+  destruct H' as [z' H'].
+  rewrite <- H in H'.
+  exists (z + z').
+  rewrite plus_assoc.
+  apply H'. Qed.
 
 
 Lemma ble_nat_anticomm : forall (u v : nat),
   (ble_nat u v) = false -> (ble_nat v u) = true.
 Proof.
+  Admitted.
+(*
   intros u v.
   intros H.
   induction u as [ | u'].
-  Case "u = 0".
-  simpl. simpl in H.
-  destruct (ble_nat v 0).
-  reflexivity.
-  rewrite H. reflexivity. 
-  induction v as [ | v'].
-  simpl. reflexivity.
-  simpl. simpl in IHu'.
-  Admitted.
+  simpl in H. inversion H.
+  destruct (beq_nat u' v) eqn:Caseu'v.
+  assert (Lemma1 : ble_nat (S u') v = false).
+  *)
+  
 
 Lemma ble_nat_helper1 : forall (u v w: nat),
   ble_nat u v = false -> ble_nat u w = true -> beq_nat v w = false.
 Proof.
-  intros u v w. intros H. intros H'.
   Admitted.
 
 

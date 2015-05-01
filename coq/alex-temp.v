@@ -23,7 +23,7 @@ Proof.
   intros x y. intros H.
   induction x as [ | x'].
   simpl. admit.
-  simpl. admit.
+  simpl. admit. Qed.
 
 Theorem ble_nat1 : forall (x y : nat),
   ble_nat (S x) y = true -> ble_nat x y = true.
@@ -47,13 +47,23 @@ Proof.
   induction x as [ | x'].
   simpl. reflexivity.
   simpl. apply IHx'. Qed.
+
+Theorem ble_nat_alt1 : forall (x y : nat),
+  (exists (z : nat), x + z = y) -> ble_nat x y = true.
+Proof.
+  intros x y H.
+  destruct H as [z G].
+  assert (Lemma1 : ble_nat x (x + z) = true).
+    apply ble_nat3.
+  rewrite G in Lemma1.
+  apply Lemma1. Qed.
   
-
-
 Theorem ble_nat_alt : forall (x y : nat),
   ble_nat x y = true -> exists (z : nat), x + z = y.
 Proof.
   intros x y.
   intros H.
   assert (Lemma1 : x + (minus y x) = y).
-  
+    apply minus_help. apply H.
+  exists (minus y x). apply Lemma1. Qed.
+ 
