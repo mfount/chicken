@@ -16,12 +16,25 @@
 #  Building chicken  #
 ######################
 
-After much wrestling with the code
+After much wrestling with the code, we managed to get it down to one
+makefile.
+
+Within the code directory, just run make.
+
+The compiler will create a bunch of files used by coq, along with some OCaml translations
+of the sorting algorithm. 
 
 ###############################
 #  Stepping through the code  #
 ###############################
 
-#####################################################
-#  Exporting to OCaml and using the verified sorter #
-#####################################################
+Opening some of the .v files in proof general will allow you to step through
+our definitions and theorems. You may need to add to your .emacs file
+the following line (where /path/to... is replaced by the absolute path to
+the chicken folder):
+(custom-set-variables
+  '(coq-prog-args '("-I" "/path/to/chicken/folder"))
+  '(coq-prog-args '("-R" "." "Chicken"))
+)
+so that it knows where to find everything.
+
