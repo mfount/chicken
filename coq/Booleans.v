@@ -1,4 +1,4 @@
-Require Export Sf.
+Require Import Basics.
 
 (** Disjunction of opposites is always true *)
 Lemma orb_x_negx_true : forall (b : bool),
