@@ -1565,49 +1565,35 @@ Proof.
     assert (Lemma4: is_sorted (insert v t) = true).
       SCase "Proof of Lemma 4". rewrite Lemma3 in IHt. apply IHt. reflexivity.
   destruct (insert v t) as [ | h' t'] eqn:Caseinsert.
-    Case "insert v t = []".
-      destruct (ble_nat v h) eqn:Casevh. 
-      rewrite H in Lemma1. apply Lemma1. simpl. reflexivity.
-      simpl. reflexivity.
-    Case "insert v t = h' :: t'".
-      destruct (ble_nat v h) eqn:Casevh.
-      SCase "v <= h".
-        rewrite H in Lemma1. apply Lemma1. simpl. reflexivity.
-      SCase "v > h".
+    SCase "insert v t = []". destruct (ble_nat v h) eqn:Casevh. 
+      rewrite H in Lemma1. apply Lemma1. simpl. reflexivity. simpl. reflexivity.
+    SCase "insert v t = h' :: t'". destruct (ble_nat v h) eqn:Casevh.
+      SSCase "v <= h". rewrite H in Lemma1. apply Lemma1. simpl. reflexivity.
+      SSCase "v > h".
         assert (Lemma5 : ble_nat h v = true).
-          apply ble_nat_anticomm. 
-          apply Casevh.
+          SSSCase "Proof of Lemma 5". apply ble_nat_anticomm. apply Casevh.
         assert (Lemma6 : leq_than_all h t = true).
-          apply sorted_implies_head_leq_than_all.
-          apply H.
+          SSSCase "Proof of Lemma 6".
+            apply sorted_implies_head_leq_than_all. apply H.
         assert (Lemma7 : leq_than_all h (insert v t) = true).
-          apply insertion_helper.
-          apply Lemma6.
-          apply Lemma5.
+          SSSCase "Proof of Lemma 7". 
+            apply insertion_helper. apply Lemma6. apply Lemma5.
         assert (Lemma8 : ble_nat h h' = true).
-          rewrite Caseinsert in Lemma7.
-          simpl in Lemma7.
-          apply andb_true_elim1 in Lemma7.
-          apply Lemma7.
+          SSSCase "Proof of Lemma 8".
+            rewrite Caseinsert in Lemma7. simpl in Lemma7. 
+            apply andb_true_elim1 in Lemma7. apply Lemma7.
       apply sorted_from_tail. rewrite Lemma8. rewrite Lemma4. simpl. reflexivity. Qed.
       
 
 Theorem insertion_sort_correct : forall (l : natlist),
   is_sorted (insertion_sort l) = true.
 Proof.
-  intros l.
-  induction l as [ | h t].
-  Case "l = []".
-    simpl.
-    reflexivity.
-  Case "l = h :: t".
-    simpl.
+  intros l. induction l as [ | h t].
+  Case "l = []". simpl. reflexivity.
+  Case "l = h :: t". simpl.
     apply insert_preserves_sortedness with (v:=h) in IHt.
-    rewrite IHt.
-    reflexivity. Qed.
+    rewrite IHt. reflexivity. Qed.
   
-
-
 End NatList.
 
 
