@@ -1,3 +1,4 @@
+Require Export Sf.
 
 (** Equality is transitive *)
 Theorem trans_eq : forall (n m o : nat),

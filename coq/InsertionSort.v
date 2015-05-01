@@ -1,3 +1,5 @@
+Require Export Sf.
+
 (** Insertion sort : algorithm.
     Here we define the implementation of insertion sort
     we'll be using. *)

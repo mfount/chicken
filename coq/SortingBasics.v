@@ -1,3 +1,5 @@
+Require Export Sf.
+Require Export Booleans.
 
 (** Sorting basics: 
     Here we introduce predicates that test whether a list

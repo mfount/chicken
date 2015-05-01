@@ -1,3 +1,4 @@
+Require Export Sf.
 
 (** Count distributes over append as addition *)
 Theorem append_add_counts : forall (x y : natlist) (v : nat),
