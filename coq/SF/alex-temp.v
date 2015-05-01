@@ -32,7 +32,7 @@ Proof.
   induction y as [ | y'].
   inversion H.
 
-Theorem 
+Theorem ble_nat2 : 
 
 
 Theorem ble_nat_alt : forall (x y : nat),
