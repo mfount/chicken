@@ -1,4 +1,8 @@
-Require Export Sf.
+Require Export Basics.
+Require Export Lists.
+Require Export Induction.
+Require Export MoreCoq.
+Require Export Poly.
 
 (** Insertion sort : algorithm.
     Here we define the implementation of insertion sort
