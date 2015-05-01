@@ -7,7 +7,7 @@ coq: Makefile.coq
 	$(MAKE) -f Makefile.coq
 
 Makefile.coq: Makefile $(VS)
-	coq_makefile -R SF Sf -R . Chicken $(VS) -o Makefile.coq
+	coq_makefile -R . Chicken -R ./SF Sf $(VS) -o Makefile.coq
 
 clean:: Makefile.coq
 	$(MAKE) -f Makefile.coq clean
