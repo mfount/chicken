@@ -1,4 +1,4 @@
-MODULES := Basics Induction Lists Poly MoreCoq Logic InsertionSortProof InsertionSortAlgorithm ExportToML
+MODULES := Basics Induction Lists Poly MoreCoq Logic InsertionSortProof InsertionSortAlgorithm ExportToML Prop
 VS := $(MODULES:%=%.v)
 
 .PHONY: coq clean
