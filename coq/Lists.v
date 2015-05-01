@@ -1542,7 +1542,13 @@ Proof.
   Case "l = h :: t".
   simpl.
   assert (Lemma1 : is_permutation (insert h (insertion_sort t)) (h :: (insertion_sort t))).
-  Admitted.
+  SCase "Proof of Lemma 1". apply is_permutation_symmetric. apply insert_is_permutation.
+  assert (Lemma2 : is_permutation (h :: t) (h :: (insertion_sort t))).
+  SCase "Proof of Lemma 2". apply is_permutation_same_head. apply IHt.
+  apply is_permutation_symmetric in Lemma1.
+  apply is_permutation_transitive with (l' := (h :: insertion_sort t)).
+  apply Lemma2.
+  apply Lemma1. Qed.
   
 
 (* Sortedness correctness *)
