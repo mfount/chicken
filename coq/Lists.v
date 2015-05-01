@@ -1544,24 +1544,28 @@ Proof.
     intros n.
     apply count_helper.
   assert (Lemma2 : forall n : nat, ble_nat v n = false -> count n t = 0).
-  intros n H'.
-  apply Lemma1. 
-  apply H.
-  apply H'.
-  Admitted.
-
-(*
-  assert (Lemma1 : forall (n : nat), count n (h :: t) = 0 -> count n t = 0).
-  SCase "Proof of Lemma 1".
-    intros n.
-    apply count_helper.
-  assert (Lemma2 : forall n : nat, ble_nat v n = false -> count n t = 0).
   SCase "Proof of Lemma 2".
-  intros n. 
-  intros m in Lemma1.
-  *)
+    intros n H'.
+    apply Lemma1. 
+    apply H.
+    apply H'.
+  assert (Lemma3 : leq_than_all v t = true).
+  SCase "Proof of Lemma 3".
+    apply IHt.
+    apply Lemma2.
+  rewrite Lemma3.
+  destruct (ble_nat v h) eqn:Casevh.
+  SCase "v <= h".
+    simpl.
+    reflexivity.
+  SCase "v > h".
+  assert (Lemma4 : count h (h :: t) = 0).
+  SSCase "Proof of Lemma 4".
+    apply H. apply Casevh.
+  simpl in Lemma4. rewrite <- beq_nat_refl in Lemma4.
+  inversion Lemma4. Qed.
 
-Theorem less_than_all_invariant_permutation : forall (v : nat) (l l' : natlist),
+Theorem leq_than_all_invariant_permutation : forall (v : nat) (l l' : natlist),
   is_permutation l l' -> (leq_than_all v l) = true -> (leq_than_all v l') = true.
 Proof. 
   intros v l l'.
@@ -1577,29 +1581,13 @@ Proof.
     rewrite <- Lemma21.
     apply Lemma1.
   apply leq_than_all_alternative_def1. apply Lemma2. Qed.
-    
-      
-     
-
-
+  
 Lemma sorted_unfold : forall (l : natlist) (v1 v2 : nat),
   is_sorted (v1 :: v2 :: l) = (andb (ble_nat v1 v2) (is_sorted (v2 :: l))).
 Proof.
   intros l v1 v2.
   simpl.
   reflexivity. Qed.
-
-Lemma sorted_from_tail : forall (l : natlist) (v h : nat),
-  andb (ble_nat v h) (is_sorted (h :: l)) = true -> is_sorted (v :: h :: l) = true.
-Proof.
-  intros l v h.
-  intros H.
-  simpl in H.
-  simpl.
-  rewrite -> H.
-  reflexivity. Qed.
-
-
 
 Lemma sorted_implies_subsorted : forall (l : natlist) (v : nat),
   is_sorted (v :: l) = true -> is_sorted l = true.
@@ -1615,7 +1603,86 @@ Proof.
     rewrite -> sorted_unfold in H.
     apply andb_true_elim2 in H.
     rewrite H.
-    reflexivity. Qed.
+    reflexivity. Qed.  
+
+Lemma sorted_from_tail : forall (l : natlist) (v h : nat),
+  andb (ble_nat v h) (is_sorted (h :: l)) = true -> is_sorted (v :: h :: l) = true.
+Proof.
+  intros l v h.
+  intros H.
+  simpl in H.
+  simpl.
+  rewrite -> H.
+  reflexivity. Qed.
+      
+Lemma sorted_implies_head_leq_than_all : forall (v : nat) (l : natlist),
+  is_sorted (v :: l) = true -> leq_than_all v l = true.
+Proof.
+  intros v l.
+  intros H.
+  induction l as [ | h t].
+  Case "l = []".
+  simpl.
+  reflexivity.
+  Case "l = h :: t".
+  simpl.
+  assert (Lemma1 : is_sorted (v :: h :: t) = true).
+  SCase "Proof of Lemma 1".
+    apply H.
+  assert (Lemma2 : ble_nat v h = true).
+  SCase "Proof of Lemma 2".
+    simpl in Lemma1.
+    apply andb_true_elim1 in Lemma1.
+    apply Lemma1.
+  rewrite Lemma2.
+  assert (Lemma3 : is_sorted t = true).
+  SCase "Proof of Lemma 3".
+    apply sorted_implies_subsorted in H.
+    apply sorted_implies_subsorted in H.
+    apply H.
+  destruct t as [ | h' t'].
+  SCase "t = []".
+    simpl. reflexivity.
+  SCase "t = h' :: t'".
+  apply sorted_implies_subsorted in H.
+  simpl in H.
+  apply andb_true_elim1 in H.
+  assert (Lemma4 : ble_nat v h' = true).
+  SSCase "Proof of Lemma 4".
+    apply ble_nat_transitive with (v := h).
+    apply Lemma2.
+    apply H.
+  assert (Lemma5 : is_sorted (v :: h' :: t') = true).
+    apply sorted_from_tail.
+    rewrite Lemma4.
+    rewrite Lemma3.
+    simpl. reflexivity.
+  assert (Lemma6 : leq_than_all v (h' :: t') = true).
+    apply IHt.
+    apply Lemma5.
+  rewrite Lemma6.
+  simpl. reflexivity. Qed.
+ 
+
+Theorem insertion_helper : forall (l : natlist) (v h: nat),
+  leq_than_all v l = true -> ble_nat v h = true -> leq_than_all v (insert h l) = true.
+Proof.
+  intros l v h.
+  intros H.
+  intros H'.
+  assert (Lemma1 : leq_than_all v (h :: l) = true).
+  Case "Proof of Lemma 1".
+    simpl.
+    rewrite H.
+    rewrite H'.
+    simpl. reflexivity.
+  assert (Lemma2 : is_permutation (h :: l) (insert h l)).
+  Case "Proof of Lemma 2".
+    apply insert_is_permutation.
+  apply leq_than_all_invariant_permutation with (l := (h :: l)).
+  apply Lemma2.
+  apply Lemma1. Qed.
+
 
 Lemma orb_x_negx_true : forall (b : bool),
   orb b (negb b) = true.
@@ -1653,29 +1720,33 @@ Proof.
       rewrite H in Lemma1. apply Lemma1. simpl. reflexivity.
       simpl. reflexivity.
     Case "insert v t = h' :: t'".
+
+    (*
+      assert (Lemma5: ble_nat h v = true).
+        apply ble_nat_anticomm.
       assert (Lemma5: (ble_nat v h = false) -> ble_nat h h' = true).
-        admit.
+        *)
+
       destruct (ble_nat v h) eqn:Casevh.
-      rewrite H in Lemma1. apply Lemma1. simpl. reflexivity.
-      apply sorted_from_tail. rewrite Lemma5. rewrite Lemma4. simpl. reflexivity.
-      reflexivity. Qed.
-    
-
-
-
-(*
-    SCase "Proof of proposition 3".
-      destruct (ble_nat v h).
-    rewrite -> M in K.
-    replace (andb true true) with (true) in K.
-    assert (T: is_sorted (v :: h :: t) = true).
-      apply K. reflexivity.
-      rewrite T. reflexivity.
-    simpl. reflexivity.
-    assert (W : (ble_nat v h) = false).
-      simpl.
- *)   
-    
+      SCase "v <= h".
+        rewrite H in Lemma1. apply Lemma1. simpl. reflexivity.
+      SCase "v > h".
+        assert (Lemma5 : ble_nat h v = true).
+          apply ble_nat_anticomm. 
+          apply Casevh.
+        assert (Lemma6 : leq_than_all h t = true).
+          apply sorted_implies_head_leq_than_all.
+          apply H.
+        assert (Lemma7 : leq_than_all h (insert v t) = true).
+          apply insertion_helper.
+          apply Lemma6.
+          apply Lemma5.
+        assert (Lemma8 : ble_nat h h' = true).
+          rewrite Caseinsert in Lemma7.
+          simpl in Lemma7.
+          apply andb_true_elim1 in Lemma7.
+          apply Lemma7.
+      apply sorted_from_tail. rewrite Lemma8. rewrite Lemma4. simpl. reflexivity. Qed.
       
 
 Theorem insertion_sort_correct : forall (l : natlist),
@@ -1692,17 +1763,6 @@ Proof.
     rewrite IHt.
     reflexivity. Qed.
   
-
-
-
-
-
-
-
-
-
-
-
 
 
 End NatList.
