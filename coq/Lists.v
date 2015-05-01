@@ -1215,10 +1215,12 @@ End Dictionary.
 
 (** Sorting stuff **)
 
-(** Preliminary lemmas **)
+(** Preliminary lemmas:
+    Here we prove some general facts that will be useful
+    later on. *)
 
 
-(* Count distributes over append with plus *)
+(** Count distributes over append with plus *)
 Theorem append_add_counts : forall (x y : natlist) (v : nat),
   count v (x ++ y) = count v x + count v y.
 Proof.
@@ -1228,8 +1230,8 @@ Proof.
     SCase "v = h". simpl. rewrite Casev. rewrite IHt. simpl. reflexivity.
     SCase "v != h". simpl. rewrite Casev. rewrite IHt. reflexivity. Qed.
 
-(* Helper for later: If v is not present in a list l, it is not
-   present in the tail of l *)
+(** Helper for later: If v is not present in a list l, it is not
+    present in the tail of l *)
 Lemma count_helper : forall (v h : nat) (l : natlist),
   count v (h :: l) = 0 -> count v l = 0.
 Proof.
@@ -1238,7 +1240,7 @@ Proof.
   Case "v <= h". inversion H.
   Case "v > h". apply H. Qed.
 
-
+(** Disjunction of opposites is always true *)
 Lemma orb_x_negx_true : forall (b : bool),
   orb b (negb b) = true.
 Proof.
@@ -1246,7 +1248,9 @@ Proof.
   Case "b = true". reflexivity.
   Case "b = false". reflexivity. Qed.
 
-(** Helpful properties of ble_nat **)
+(** Helpful properties of ble_nat:
+    Here we assume some basic properties of the less than 
+    or equal relation.*)
 
 Fixpoint leq_than_all (v : nat) (l : natlist) : bool :=
   match l with
@@ -1298,13 +1302,18 @@ Proof.
 Lemma ble_nat_helper1 : forall (u v w: nat),
   ble_nat u v = false -> ble_nat u w = true -> beq_nat v w = false.
 Proof.
+  intros u v w. intros H. intros H'.
   Admitted.
 
 
+(** Sorting basics: 
+    Here we introduce predicates that test whether a list
+    is sorted, and whether one list is a permutation of another.
+    We use these two properties to define what it means for a 
+    sorting algorithm to be correct: it has to produce a sorted
+    list which is a permutation of the original list *)
 
-
-(** Sorting basics **)
-
+(** Sortedness predicate: compare first two elements, and recurse *)
 Fixpoint is_sorted (l : natlist) : bool :=
   match l with
   | [] => true
@@ -1314,10 +1323,12 @@ Fixpoint is_sorted (l : natlist) : bool :=
   end
   end.
 
+(** Permutation predicate: every natural number appears the
+    same number of times in the two lists *)
 Definition is_permutation (l l' : natlist) : Prop :=
   forall (v : nat), (count v l) = (count v l').
 
-(** Helpful properties of is_sorted **)
+(** Helpful properties of is_sorted *)
 
 Lemma sorted_unfold : forall (l : natlist) (v1 v2 : nat),
   is_sorted (v1 :: v2 :: l) = (andb (ble_nat v1 v2) (is_sorted (v2 :: l))).
@@ -1330,8 +1341,8 @@ Proof.
   intros l v. intros H. simpl.
   destruct l as [ | h t].
   Case "l = []". simpl. reflexivity.
-  Case "l = h t". 
-    rewrite -> sorted_unfold in H. apply andb_true_elim2 in H. rewrite H.
+  Case "l = h t". simpl in H.
+    (* rewrite -> sorted_unfold in H.*) apply andb_true_elim2 in H. rewrite H.
     reflexivity. Qed.  
 
 Lemma sorted_from_tail : forall (l : natlist) (v h : nat),
