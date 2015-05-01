@@ -1341,8 +1341,8 @@ Proof.
   intros l v. intros H. simpl.
   destruct l as [ | h t].
   Case "l = []". simpl. reflexivity.
-  Case "l = h t". simpl in H.
-    (* rewrite -> sorted_unfold in H.*) apply andb_true_elim2 in H. rewrite H.
+  Case "l = h t".
+    rewrite -> sorted_unfold in H. apply andb_true_elim2 in H. rewrite H.
     reflexivity. Qed.  
 
 Lemma sorted_from_tail : forall (l : natlist) (v h : nat),
