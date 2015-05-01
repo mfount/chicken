@@ -1,4 +1,0 @@
-Require Export InsertionSortAlgorithm.
-
-Extraction Language Ocaml.
-Extraction Library InsertionSortAlgorithm.
