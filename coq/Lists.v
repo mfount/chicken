@@ -1220,7 +1220,7 @@ End Dictionary.
     later on. *)
 
 
-(** Count distributes over append with plus *)
+(** Count distributes over append as addition *)
 Theorem append_add_counts : forall (x y : natlist) (v : nat),
   count v (x ++ y) = count v x + count v y.
 Proof.
@@ -1248,15 +1248,17 @@ Proof.
   Case "b = true". reflexivity.
   Case "b = false". reflexivity. Qed.
 
+(** Equality is transitive *)
+Theorem trans_eq : forall (n m o : nat),
+  n = m -> m = o -> n = o.
+Proof.
+  intros n m o eq1 eq2. rewrite -> eq1. rewrite -> eq2. reflexivity.  Qed.
+
 (** Helpful properties of ble_nat:
     Here we assume some basic properties of the less than 
     or equal relation.*)
 
-Fixpoint leq_than_all (v : nat) (l : natlist) : bool :=
-  match l with
-  | [] => true
-  | h :: t => andb (ble_nat v h) (leq_than_all v t)
-  end.
+
 
 Lemma ble_nat_helper : forall (u v : nat),
   ble_nat (S u) v = true -> ble_nat u v = true.
@@ -1330,11 +1332,14 @@ Definition is_permutation (l l' : natlist) : Prop :=
 
 (** Helpful properties of is_sorted *)
 
-Lemma sorted_unfold : forall (l : natlist) (v1 v2 : nat),
-  is_sorted (v1 :: v2 :: l) = (andb (ble_nat v1 v2) (is_sorted (v2 :: l))).
+(** Appending an element smaller than the head to a sorted list
+    preserves sortedness *)
+Lemma sorted_from_tail : forall (l : natlist) (v h : nat),
+  andb (ble_nat v h) (is_sorted (h :: l)) = true -> is_sorted (v :: h :: l) = true.
 Proof.
-  intros l v1 v2. simpl. reflexivity. Qed.
+  intros l v h. intros H. simpl in H. simpl. apply H. Qed.
 
+(** For a sorted list, the tail is sorted *)      
 Lemma sorted_implies_subsorted : forall (l : natlist) (v : nat),
   is_sorted (v :: l) = true -> is_sorted l = true.
 Proof.
@@ -1342,18 +1347,30 @@ Proof.
   destruct l as [ | h t].
   Case "l = []". simpl. reflexivity.
   Case "l = h t".
-    rewrite -> sorted_unfold in H. apply andb_true_elim2 in H. rewrite H.
-    reflexivity. Qed.  
+    simpl in H.  apply andb_true_elim2 in H.
+    destruct t as [ | h' t'].
+    SCase "t = []". simpl. reflexivity.
+    SCase "t = h' t'". apply sorted_from_tail. apply H. Qed.  
 
-Lemma sorted_from_tail : forall (l : natlist) (v h : nat),
-  andb (ble_nat v h) (is_sorted (h :: l)) = true -> is_sorted (v :: h :: l) = true.
-Proof.
-  intros l v h. intros H. simpl in H. simpl. rewrite -> H. reflexivity. Qed.
-      
+(** Predicate that tests whether an element is less than or equal to
+    all elements in a given list. This will be useful later on
+    when we prove correctness of insertion sort, so we'll prove
+    some properties of that predicate now. *)
+Fixpoint leq_than_all (v : nat) (l : natlist) : bool :=
+  match l with
+  | [] => true
+  | h :: t => andb (ble_nat v h) (leq_than_all v t)
+  end.
+
+(** For a sorted list, the head is <= all elements of the tail *)
 Lemma sorted_implies_head_leq_than_all : forall (v : nat) (l : natlist),
   is_sorted (v :: l) = true -> leq_than_all v l = true.
 Proof.
   intros v l. intros H. induction l as [ | h t].
+  (* we induct on the list l: the rest is piecing 
+     the inequalities in the right way and doing casework
+     unfolding is_sorted and leq_than_all. The key point is that
+     the two functions are defined in terms of the same recursion. *)
   Case "l = []". simpl. reflexivity.
   Case "l = h :: t". simpl.
     assert (Lemma1 : is_sorted (v :: h :: t) = true).
@@ -1381,7 +1398,9 @@ Proof.
   rewrite Lemma6. simpl. reflexivity. Qed.
  
 
-(** Helpful properties of is_permutation **)
+(** Helpful properties of is_permutation: among other things, here we show
+    that the permutation relation we've defined is an equivalence
+    relation: that is, it is reflexive, symmetric and transitive. *)
 
 Theorem is_permutation_reflexive : forall (l : natlist),
   is_permutation l l.
@@ -1394,16 +1413,13 @@ Proof.
   intros l l'. intros H. unfold is_permutation in H. symmetry in H.
   unfold is_permutation. apply H. Qed.
 
-Theorem trans_eq : forall (n m o : nat),
-  n = m -> m = o -> n = o.
-Proof.
-  intros n m o eq1 eq2. rewrite -> eq1. rewrite -> eq2. reflexivity.  Qed.
-
 Theorem is_permutation_transitive : forall (l l' l'' : natlist),
   is_permutation l l' -> is_permutation l' l'' -> is_permutation l l''.
 Proof.
   intros l l' l''. intros H1. intros H2. unfold is_permutation in H1, H2.
   unfold is_permutation. intros v.
+  (* the rest of the proof is just an application of transitivity of
+     equality. *)
   assert (Lemma1 : count v l = count v l').
     Case "Proof of Lemma 1". apply H1.
   assert (Lemma2 : count v l' = count v l'').
@@ -1411,20 +1427,26 @@ Proof.
   apply trans_eq with (m := count v l').
   rewrite Lemma1. reflexivity. rewrite Lemma2. reflexivity. Qed.
 
-
-
+(** If two lists can be broken into parts that are permutations of one 
+    another, the lists are permutations of one another *)
 Theorem is_permutation_append : forall (x x' y y' : natlist),
   is_permutation x y -> is_permutation x' y' -> is_permutation (x ++ x') (y ++ y').
 Proof.
   intros x x' y y'. intros H. intros H'. 
   unfold is_permutation. 
-  intros v. rewrite append_add_counts. rewrite append_add_counts. 
+  intros v. 
+  (* at this point, the theorem is a simple consequence of 
+     the fact that count distributes over append as addition *)
+  rewrite append_add_counts. rewrite append_add_counts. 
   unfold is_permutation in H, H'. rewrite H. rewrite H'. reflexivity. Qed.
 
+(** For a list of length 2, transpositing the elements is a 
+    permutation. *)
 Theorem is_permutation_transposition : forall (v h : nat),
   is_permutation (v :: [h]) (h :: [v]).
 Proof.
   intros v h. unfold is_permutation. intros v0.
+  (* this is just a lot of casework *)
   destruct (beq_nat v0 v) eqn:Casev.
   destruct (beq_nat v0 h) eqn:Caseh.
   Case "v0 = v, v0 = h". simpl. rewrite Casev. rewrite Caseh. reflexivity.
@@ -1433,31 +1455,39 @@ Proof.
   Case "v0 != v, v0 = h". simpl. rewrite Casev. rewrite Caseh. reflexivity.
   Case "v0 != v, v0 != h". simpl. rewrite Casev. rewrite Caseh. reflexivity. Qed.
   
+(** Swapping the first two elements in a list is a permutation *)
  Theorem is_permutation_swap_first : forall (l : natlist) (v h : nat),
   is_permutation (v :: h :: l) (h :: v :: l).
 Proof.
   intros l v h.
+  (* the goal follows readily by combining is_permutation_transposition
+     with is_permutation_append *)
   assert (Lemma1 : is_permutation (v :: [h]) (h :: [v])).
     Case "Proof of Lemma 1". apply is_permutation_transposition.
   apply is_permutation_append with (x := (v :: [h]))
                                    (x' := l) (y := (h :: [v])) (y' := l).
   apply is_permutation_transposition. apply is_permutation_reflexive. Qed.
     
-
+(** Prepending the same element to two lists that are permutations
+    of each other preserves the permutation relation. *)
 Theorem is_permutation_same_head : forall (v : nat) (l l' : natlist),
   is_permutation l l' -> is_permutation (v :: l) (v :: l').
 Proof.
   intros v l l'. intros H.
+  (* this easily follows by is_permutation_append *)
   apply is_permutation_append with (x := [v]) (x' := l) (y := [v]) (y' := l').
   apply is_permutation_reflexive. apply H. Qed. 
 
+(** Insertion sort : algorithm.
+    Here we define the implementation of insertion sort
+    we'll be using. *)
 
-
-
-(** Insertion sort : algorithm **)
-
+(** Insert an element in its place in a sorted list.
+   This is the main subroutine for insertion sort. *)
 Fixpoint insert (v : nat) (l : natlist) : natlist :=
   match l with
+  (* keep in mind that we're assuming l is sorted for this function
+     to make sense *)
   | [] => [v]
   | h :: t => match ble_nat v h with
               | true => v :: h :: t
@@ -1465,6 +1495,8 @@ Fixpoint insert (v : nat) (l : natlist) : natlist :=
               end
   end.
 
+(** This is the insertion sort algorithm: sort the tail
+    recursively and insert the head. *)
 Fixpoint insertion_sort (l : natlist) : natlist :=
   match l with
   | [] => []
@@ -1473,10 +1505,15 @@ Fixpoint insertion_sort (l : natlist) : natlist :=
 
 
 
-(** Insertion sort : correctness **)
+(** Insertion sort : correctness.
+    Here we show insertion sort is correct, that is, for every list 
+    l, (insertion_sort l) is a sorted list and a permutation of l. *)
 
-(* Permutation correctness *)
-  
+(** Permutation correctness: here we show that for every list l,
+    (insertion_sort l) is a permutation of l. *)
+
+(* First, we show that the insert subroutine gives a permutation
+   in the obvious way *)
 Theorem insert_is_permutation : forall (v : nat) (l : natlist),
   is_permutation (v :: l) (insert v l).
 Proof.
@@ -1495,6 +1532,18 @@ Proof.
         apply is_permutation_same_head with (v := h) (l := (v :: t)) 
                                                      (l' := (insert v t)).
         apply IHt. Qed.
+
+Theorem insertion_sort_is_permutation : forall (l : natlist),
+  is_permutation l (insertion_sort l).
+Proof.
+  intros l. induction l as [ | h t].
+  Case "l = []".
+  simpl. apply is_permutation_reflexive.
+  Case "l = h :: t".
+  simpl.
+  assert (Lemma1 : is_permutation (insert h (insertion_sort t)) (h :: (insertion_sort t))).
+  Admitted.
+  
 
 (* Sortedness correctness *)
 
