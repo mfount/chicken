@@ -1,4 +1,4 @@
-MODULES := Basics Induction Lists Poly MoreCoq Logic InsertionSort
+MODULES := Basics Induction Lists Poly MoreCoq Logic InsertionSort InsertionSortAlgorithm
 VS := $(MODULES:%=%.v)
 
 .PHONY: coq clean
