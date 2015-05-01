@@ -1215,17 +1215,23 @@ End Dictionary.
 
 (** Sorting stuff **)
 
-(** Preliminary lemmas **)
+(** Preliminary lemmas:
+    Here we prove some general facts that will be useful
+    later on. *)
 
+
+(** Count distributes over append with plus *)
 Theorem append_add_counts : forall (x y : natlist) (v : nat),
   count v (x ++ y) = count v x + count v y.
 Proof.
   intros x y v. induction x as [ | h t].
-  Case "y = []". simpl. reflexivity.
-  Case "y = h :: t". destruct (beq_nat v h) eqn:Casev.
+  Case "x = []". simpl. reflexivity.
+  Case "x = h :: t". destruct (beq_nat v h) eqn:Casev.
     SCase "v = h". simpl. rewrite Casev. rewrite IHt. simpl. reflexivity.
     SCase "v != h". simpl. rewrite Casev. rewrite IHt. reflexivity. Qed.
 
+(** Helper for later: If v is not present in a list l, it is not
+    present in the tail of l *)
 Lemma count_helper : forall (v h : nat) (l : natlist),
   count v (h :: l) = 0 -> count v l = 0.
 Proof.
@@ -1234,7 +1240,7 @@ Proof.
   Case "v <= h". inversion H.
   Case "v > h". apply H. Qed.
 
-
+(** Disjunction of opposites is always true *)
 Lemma orb_x_negx_true : forall (b : bool),
   orb b (negb b) = true.
 Proof.
@@ -1242,7 +1248,9 @@ Proof.
   Case "b = true". reflexivity.
   Case "b = false". reflexivity. Qed.
 
-(** Helpful properties of ble_nat **)
+(** Helpful properties of ble_nat:
+    Here we assume some basic properties of the less than 
+    or equal relation.*)
 
 Fixpoint leq_than_all (v : nat) (l : natlist) : bool :=
   match l with
@@ -1294,13 +1302,18 @@ Proof.
 Lemma ble_nat_helper1 : forall (u v w: nat),
   ble_nat u v = false -> ble_nat u w = true -> beq_nat v w = false.
 Proof.
+  intros u v w. intros H. intros H'.
   Admitted.
 
 
+(** Sorting basics: 
+    Here we introduce predicates that test whether a list
+    is sorted, and whether one list is a permutation of another.
+    We use these two properties to define what it means for a 
+    sorting algorithm to be correct: it has to produce a sorted
+    list which is a permutation of the original list *)
 
-
-(** Sorting basics **)
-
+(** Sortedness predicate: compare first two elements, and recurse *)
 Fixpoint is_sorted (l : natlist) : bool :=
   match l with
   | [] => true
@@ -1310,10 +1323,12 @@ Fixpoint is_sorted (l : natlist) : bool :=
   end
   end.
 
+(** Permutation predicate: every natural number appears the
+    same number of times in the two lists *)
 Definition is_permutation (l l' : natlist) : Prop :=
   forall (v : nat), (count v l) = (count v l').
 
-(** Helpful properties of is_sorted **)
+(** Helpful properties of is_sorted *)
 
 Lemma sorted_unfold : forall (l : natlist) (v1 v2 : nat),
   is_sorted (v1 :: v2 :: l) = (andb (ble_nat v1 v2) (is_sorted (v2 :: l))).
@@ -1326,7 +1341,7 @@ Proof.
   intros l v. intros H. simpl.
   destruct l as [ | h t].
   Case "l = []". simpl. reflexivity.
-  Case "l = h t". 
+  Case "l = h t".
     rewrite -> sorted_unfold in H. apply andb_true_elim2 in H. rewrite H.
     reflexivity. Qed.  
 
@@ -1565,49 +1580,35 @@ Proof.
     assert (Lemma4: is_sorted (insert v t) = true).
       SCase "Proof of Lemma 4". rewrite Lemma3 in IHt. apply IHt. reflexivity.
   destruct (insert v t) as [ | h' t'] eqn:Caseinsert.
-    Case "insert v t = []".
-      destruct (ble_nat v h) eqn:Casevh. 
-      rewrite H in Lemma1. apply Lemma1. simpl. reflexivity.
-      simpl. reflexivity.
-    Case "insert v t = h' :: t'".
-      destruct (ble_nat v h) eqn:Casevh.
-      SCase "v <= h".
-        rewrite H in Lemma1. apply Lemma1. simpl. reflexivity.
-      SCase "v > h".
+    SCase "insert v t = []". destruct (ble_nat v h) eqn:Casevh. 
+      rewrite H in Lemma1. apply Lemma1. simpl. reflexivity. simpl. reflexivity.
+    SCase "insert v t = h' :: t'". destruct (ble_nat v h) eqn:Casevh.
+      SSCase "v <= h". rewrite H in Lemma1. apply Lemma1. simpl. reflexivity.
+      SSCase "v > h".
         assert (Lemma5 : ble_nat h v = true).
-          apply ble_nat_anticomm. 
-          apply Casevh.
+          SSSCase "Proof of Lemma 5". apply ble_nat_anticomm. apply Casevh.
         assert (Lemma6 : leq_than_all h t = true).
-          apply sorted_implies_head_leq_than_all.
-          apply H.
+          SSSCase "Proof of Lemma 6".
+            apply sorted_implies_head_leq_than_all. apply H.
         assert (Lemma7 : leq_than_all h (insert v t) = true).
-          apply insertion_helper.
-          apply Lemma6.
-          apply Lemma5.
+          SSSCase "Proof of Lemma 7". 
+            apply insertion_helper. apply Lemma6. apply Lemma5.
         assert (Lemma8 : ble_nat h h' = true).
-          rewrite Caseinsert in Lemma7.
-          simpl in Lemma7.
-          apply andb_true_elim1 in Lemma7.
-          apply Lemma7.
+          SSSCase "Proof of Lemma 8".
+            rewrite Caseinsert in Lemma7. simpl in Lemma7. 
+            apply andb_true_elim1 in Lemma7. apply Lemma7.
       apply sorted_from_tail. rewrite Lemma8. rewrite Lemma4. simpl. reflexivity. Qed.
       
 
 Theorem insertion_sort_correct : forall (l : natlist),
   is_sorted (insertion_sort l) = true.
 Proof.
-  intros l.
-  induction l as [ | h t].
-  Case "l = []".
-    simpl.
-    reflexivity.
-  Case "l = h :: t".
-    simpl.
+  intros l. induction l as [ | h t].
+  Case "l = []". simpl. reflexivity.
+  Case "l = h :: t". simpl.
     apply insert_preserves_sortedness with (v:=h) in IHt.
-    rewrite IHt.
-    reflexivity. Qed.
+    rewrite IHt. reflexivity. Qed.
   
-
-
 End NatList.
 
 
