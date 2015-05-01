@@ -33,7 +33,21 @@ Proof.
   inversion H.
 
 Theorem ble_nat2 : forall (x : nat),
-  ble_nat x (S x).
+  ble_nat x (S x) = true.
+Proof.
+  intros x.
+  induction x as [ | x'].
+  simpl. reflexivity.
+  simpl. apply IHx'. Qed.
+
+Theorem ble_nat3 : forall (x y : nat),
+  ble_nat x (x + y) = true.
+Proof.
+  intros x y.
+  induction x as [ | x'].
+  simpl. reflexivity.
+  simpl. apply IHx'. Qed.
+  
 
 
 Theorem ble_nat_alt : forall (x y : nat),
