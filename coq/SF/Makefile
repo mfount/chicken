@@ -1,4 +1,4 @@
-MODULES := Basics Induction Lists Poly MoreCoq Logic
+MODULES := Basics Induction Lists Poly MoreCoq Logic Sf
 VS := $(MODULES:%=%.v)
 
 .PHONY: coq clean
@@ -7,7 +7,7 @@ coq: Makefile.coq
 	$(MAKE) -f Makefile.coq
 
 Makefile.coq: Makefile $(VS)
-	coq_makefile -R . Chicken $(VS) -o Makefile.coq
+	coq_makefile -R . Sf $(VS) -o Makefile.coq
 
 clean:: Makefile.coq
 	$(MAKE) -f Makefile.coq clean
