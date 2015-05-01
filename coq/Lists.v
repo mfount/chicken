@@ -1217,15 +1217,19 @@ End Dictionary.
 
 (** Preliminary lemmas **)
 
+
+(* Count distributes over append with plus *)
 Theorem append_add_counts : forall (x y : natlist) (v : nat),
   count v (x ++ y) = count v x + count v y.
 Proof.
   intros x y v. induction x as [ | h t].
-  Case "y = []". simpl. reflexivity.
-  Case "y = h :: t". destruct (beq_nat v h) eqn:Casev.
+  Case "x = []". simpl. reflexivity.
+  Case "x = h :: t". destruct (beq_nat v h) eqn:Casev.
     SCase "v = h". simpl. rewrite Casev. rewrite IHt. simpl. reflexivity.
     SCase "v != h". simpl. rewrite Casev. rewrite IHt. reflexivity. Qed.
 
+(* Helper for later: If v is not present in a list l, it is not
+   present in the tail of l *)
 Lemma count_helper : forall (v h : nat) (l : natlist),
   count v (h :: l) = 0 -> count v l = 0.
 Proof.
