@@ -1,4 +1,3 @@
-Require Export Lists.
 Require Export InsertionSortAlgorithm.
 
 (** Sorting stuff **)
@@ -46,45 +45,8 @@ Proof.
     Here we assume some basic properties of the less than 
     or equal relation.*)
 
-Theorem minus_help : forall (x y : nat),
-  ble_nat x y = true -> x + (minus y x) = y.
-Proof.
-  intros x y. intros H.
-  induction x as [ | x'].
-  simpl. admit.
-  simpl. admit. Qed.
 
-Theorem ble_nat3 : forall (x y : nat),
-  ble_nat x (x + y) = true.
-Proof.
-  intros x y.
-  induction x as [ | x'].
-  simpl. reflexivity.
-  simpl. apply IHx'. Qed.
 
-Theorem ble_nat_alt1 : forall (x y : nat),
-  (exists (z : nat), x + z = y) -> ble_nat x y = true.
-Proof.
-  intros x y H.
-  destruct H as [z G].
-  assert (Lemma1 : ble_nat x (x + z) = true).
-    apply ble_nat3.
-  rewrite G in Lemma1.
-  apply Lemma1. Qed.
-  
-Theorem ble_nat_alt2 : forall (x y : nat),
-  ble_nat x y = true -> exists (z : nat), x + z = y.
-Proof.
-  intros x y.
-  intros H.
-  assert (Lemma1 : x + (minus y x) = y).
-    apply minus_help. apply H.
-  exists (minus y x). apply Lemma1. Qed.
-
-Definition ble_nat_alt (x y : nat) : Prop :=
-  exists (z : nat), x + z = y.
-
-(*
 Lemma ble_nat_helper : forall (u v : nat),
   ble_nat (S u) v = true -> ble_nat u v = true.
 Proof.
@@ -94,7 +56,7 @@ Proof.
   simpl in H.
   inversion H.
   simpl in H.
-  Admitted. *)
+  Admitted.
 
 Theorem ble_nat_transitive : forall (u v w : nat),
   ble_nat u v = true -> ble_nat v w = true -> ble_nat u w = true.
@@ -102,34 +64,34 @@ Proof.
   intros u v w.
   intros H.
   intros H'.
-  apply ble_nat_alt2 in H.
-  apply ble_nat_alt2 in H'.
-  apply ble_nat_alt1.
-  destruct H as [z H].
-  destruct H' as [z' H'].
-  rewrite <- H in H'.
-  exists (z + z').
-  rewrite plus_assoc.
-  apply H'. Qed.
+  induction v as [ | v'].
+  destruct u as [ | u'].
+  reflexivity.
+  simpl in H.
+  inversion H.
+  Admitted.
 
 
 Lemma ble_nat_anticomm : forall (u v : nat),
   (ble_nat u v) = false -> (ble_nat v u) = true.
 Proof.
-  Admitted.
-(*
   intros u v.
   intros H.
   induction u as [ | u'].
-  simpl in H. inversion H.
-  destruct (beq_nat u' v) eqn:Caseu'v.
-  assert (Lemma1 : ble_nat (S u') v = false).
-  *)
-  
+  Case "u = 0".
+  simpl. simpl in H.
+  destruct (ble_nat v 0).
+  reflexivity.
+  rewrite H. reflexivity. 
+  induction v as [ | v'].
+  simpl. reflexivity.
+  simpl. simpl in IHu'.
+  Admitted.
 
 Lemma ble_nat_helper1 : forall (u v w: nat),
   ble_nat u v = false -> ble_nat u w = true -> beq_nat v w = false.
 Proof.
+  intros u v w. intros H. intros H'.
   Admitted.
 
 
@@ -352,15 +314,8 @@ Proof.
   apply Lemma1. Qed.
   
 
-(** Sortedness correctness:
-   here we show that insertion_sort produces a sorted list. *)
+(* Sortedness correctness *)
 
-(** We first give an alternative characterization of the leq_than_all
-    function that makes it possible to relate it to is_permutation.
-    Namely, v is <= all elements of l iff for every n < v, n does not 
-    appear in l. *)
-
-(* This is the first direction of the equivalence *)
 Theorem leq_than_all_alternative_def : forall (v : nat) (l : natlist),
   (leq_than_all v l) = true -> (forall (n : nat), (ble_nat v n) = false -> count n l = 0).
 Proof.
@@ -383,7 +338,6 @@ Proof.
         apply H'. apply Lemma2.
   rewrite Lemma3. reflexivity. reflexivity. Qed.    
   
-(* This is the second direction of the equivalence *)
 Theorem leq_than_all_alternative_def1 : forall (v : nat) (l : natlist),
   (forall (n : nat), (ble_nat v n) = false -> count n l = 0) -> (leq_than_all v l) = true.
 Proof. 
@@ -403,9 +357,6 @@ Proof.
     SSCase "Proof of Lemma 4". apply H. apply Casevh.
   simpl in Lemma4. rewrite <- beq_nat_refl in Lemma4. inversion Lemma4. Qed.
 
-(* The previous two theorems allow us to give an easy proof of the fact 
-   that if v is <= all elements of l, then v is <= all elements of l'
-   for any permutation l' of l. *)
 Theorem leq_than_all_invariant_permutation : forall (v : nat) (l l' : natlist),
   is_permutation l l' -> (leq_than_all v l) = true -> (leq_than_all v l') = true.
 Proof. 
@@ -417,9 +368,7 @@ Proof.
       assert (Lemma21 : count n l = count n l'). apply H.
       rewrite <- Lemma21. apply Lemma1.
   apply leq_than_all_alternative_def1. apply Lemma2. Qed.
-
-(** This is a helper fact we'll use later on in the proof that
-    insert preserves sortedness *)  
+  
 Theorem insertion_helper : forall (l : natlist) (v h: nat),
   leq_than_all v l = true -> ble_nat v h = true -> leq_than_all v (insert h l) = true.
 Proof.
@@ -431,9 +380,7 @@ Proof.
   apply leq_than_all_invariant_permutation with (l := (h :: l)).
   apply Lemma2. apply Lemma1. Qed.
 
-(** This is perhaps the crux of the argument that insertion_sort 
-    produces a sorted list. It says that whenever l is sorted,
-    insert v l is also sorted. *)     
+     
 Theorem insert_preserves_sortedness : forall (v : nat) (l : natlist),
   is_sorted l = true -> is_sorted (insert v l) = true.
 Proof.
@@ -456,13 +403,6 @@ Proof.
     SCase "insert v t = h' :: t'". destruct (ble_nat v h) eqn:Casevh.
       SSCase "v <= h". rewrite H in Lemma1. apply Lemma1. simpl. reflexivity.
       SSCase "v > h".
-      (* This is by far the most interesting case; here we use all the statements
-         we proved about the leq_than_all function. The intuition is that 
-         h is <= any element of t, because l = h :: t is sorted,
-         and h is also <= v because h < v in this case.
-         It then follows by our helpers that h is <= any element
-         of (insert v t), hence h <= the first element of (insert v t),
-         which is precisely h'. *)
         assert (Lemma5 : ble_nat h v = true).
           SSSCase "Proof of Lemma 5". apply ble_nat_anticomm. apply Casevh.
         assert (Lemma6 : leq_than_all h t = true).
@@ -477,8 +417,7 @@ Proof.
             apply andb_true_elim1 in Lemma7. apply Lemma7.
       apply sorted_from_tail. rewrite Lemma8. rewrite Lemma4. simpl. reflexivity. Qed.
       
-(** Finally, we wrap up by a straightforward inductive proof that
-    Insertion sort produces a sorted list. *)
+
 Theorem insertion_sort_correct : forall (l : natlist),
   is_sorted (insertion_sort l) = true.
 Proof.
