@@ -1220,43 +1220,27 @@ End Dictionary.
 Theorem append_add_counts : forall (x y : natlist) (v : nat),
   count v (x ++ y) = count v x + count v y.
 Proof.
-  intros x y v.
-  induction x as [ | h t].
-  Case "y = []".
-    simpl. 
-    reflexivity.
-  Case "y = h :: t".
-    destruct (beq_nat v h) eqn:Casev.
-      SCase "v = h".
-        simpl. 
-        rewrite Casev.
-        rewrite IHt.
-        simpl.
-        reflexivity.
-      SCase "v != h".
-        simpl.
-        rewrite Casev.
-        rewrite IHt.
-        reflexivity. Qed.
+  intros x y v. induction x as [ | h t].
+  Case "y = []". simpl. reflexivity.
+  Case "y = h :: t". destruct (beq_nat v h) eqn:Casev.
+    SCase "v = h". simpl. rewrite Casev. rewrite IHt. simpl. reflexivity.
+    SCase "v != h". simpl. rewrite Casev. rewrite IHt. reflexivity. Qed.
 
 Lemma count_helper : forall (v h : nat) (l : natlist),
   count v (h :: l) = 0 -> count v l = 0.
 Proof.
-  intros v h l.
-  intros H.
-  simpl in H.
+  intros v h l. intros H. simpl in H.
   destruct (beq_nat v h) eqn:Casevh.
-  inversion H.
-  apply H. Qed.
+  Case "v <= h". inversion H.
+  Case "v > h". apply H. Qed.
 
 
 Lemma orb_x_negx_true : forall (b : bool),
   orb b (negb b) = true.
 Proof.
-  intros b.
-  destruct b.
-  reflexivity.
-  reflexivity. Qed.
+  intros b. destruct b.
+  Case "b = true". reflexivity.
+  Case "b = false". reflexivity. Qed.
 
 (** Helpful properties of ble_nat **)
 
@@ -1334,83 +1318,52 @@ Definition is_permutation (l l' : natlist) : Prop :=
 Lemma sorted_unfold : forall (l : natlist) (v1 v2 : nat),
   is_sorted (v1 :: v2 :: l) = (andb (ble_nat v1 v2) (is_sorted (v2 :: l))).
 Proof.
-  intros l v1 v2.
-  simpl.
-  reflexivity. Qed.
+  intros l v1 v2. simpl. reflexivity. Qed.
 
 Lemma sorted_implies_subsorted : forall (l : natlist) (v : nat),
   is_sorted (v :: l) = true -> is_sorted l = true.
 Proof.
-  intros l v.
-  intros H.
-  simpl.
+  intros l v. intros H. simpl.
   destruct l as [ | h t].
-  Case "l = []".
-    simpl.
-    reflexivity.
-  Case "l = h t".
-    rewrite -> sorted_unfold in H.
-    apply andb_true_elim2 in H.
-    rewrite H.
+  Case "l = []". simpl. reflexivity.
+  Case "l = h t". 
+    rewrite -> sorted_unfold in H. apply andb_true_elim2 in H. rewrite H.
     reflexivity. Qed.  
 
 Lemma sorted_from_tail : forall (l : natlist) (v h : nat),
   andb (ble_nat v h) (is_sorted (h :: l)) = true -> is_sorted (v :: h :: l) = true.
 Proof.
-  intros l v h.
-  intros H.
-  simpl in H.
-  simpl.
-  rewrite -> H.
-  reflexivity. Qed.
+  intros l v h. intros H. simpl in H. simpl. rewrite -> H. reflexivity. Qed.
       
 Lemma sorted_implies_head_leq_than_all : forall (v : nat) (l : natlist),
   is_sorted (v :: l) = true -> leq_than_all v l = true.
 Proof.
-  intros v l.
-  intros H.
-  induction l as [ | h t].
-  Case "l = []".
-  simpl.
-  reflexivity.
-  Case "l = h :: t".
-  simpl.
-  assert (Lemma1 : is_sorted (v :: h :: t) = true).
-  SCase "Proof of Lemma 1".
-    apply H.
-  assert (Lemma2 : ble_nat v h = true).
-  SCase "Proof of Lemma 2".
-    simpl in Lemma1.
-    apply andb_true_elim1 in Lemma1.
-    apply Lemma1.
+  intros v l. intros H. induction l as [ | h t].
+  Case "l = []". simpl. reflexivity.
+  Case "l = h :: t". simpl.
+    assert (Lemma1 : is_sorted (v :: h :: t) = true).
+      SCase "Proof of Lemma 1". apply H.
+    assert (Lemma2 : ble_nat v h = true).
+      SCase "Proof of Lemma 2". simpl in Lemma1. apply andb_true_elim1 in Lemma1.
+        apply Lemma1.
   rewrite Lemma2.
   assert (Lemma3 : is_sorted t = true).
-  SCase "Proof of Lemma 3".
-    apply sorted_implies_subsorted in H.
-    apply sorted_implies_subsorted in H.
-    apply H.
+    SCase "Proof of Lemma 3". apply sorted_implies_subsorted in H.
+      apply sorted_implies_subsorted in H. apply H.
   destruct t as [ | h' t'].
-  SCase "t = []".
-    simpl. reflexivity.
-  SCase "t = h' :: t'".
-  apply sorted_implies_subsorted in H.
-  simpl in H.
-  apply andb_true_elim1 in H.
+  SCase "t = []". simpl. reflexivity.
+  SCase "t = h' :: t'". 
+    apply sorted_implies_subsorted in H. simpl in H. apply andb_true_elim1 in H.
   assert (Lemma4 : ble_nat v h' = true).
-  SSCase "Proof of Lemma 4".
-    apply ble_nat_transitive with (v := h).
-    apply Lemma2.
-    apply H.
+    SSCase "Proof of Lemma 4".
+      apply ble_nat_transitive with (v := h). apply Lemma2. apply H.
   assert (Lemma5 : is_sorted (v :: h' :: t') = true).
-    apply sorted_from_tail.
-    rewrite Lemma4.
-    rewrite Lemma3.
-    simpl. reflexivity.
+    SSCase "Proof of Lemma 5".
+      apply sorted_from_tail. rewrite Lemma4. rewrite Lemma3. simpl. reflexivity.
   assert (Lemma6 : leq_than_all v (h' :: t') = true).
-    apply IHt.
-    apply Lemma5.
-  rewrite Lemma6.
-  simpl. reflexivity. Qed.
+    SSCase "Proof of Lemma 6".
+      apply IHt. apply Lemma5.
+  rewrite Lemma6. simpl. reflexivity. Qed.
  
 
 (** Helpful properties of is_permutation **)
@@ -1418,110 +1371,70 @@ Proof.
 Theorem is_permutation_reflexive : forall (l : natlist),
   is_permutation l l.
 Proof.
-  intros l.
-  unfold is_permutation.
-  reflexivity. Qed.
+  intros l. unfold is_permutation. reflexivity. Qed.
 
 Theorem is_permutation_symmetric : forall (l l' : natlist),
   is_permutation l l' -> is_permutation l' l.
 Proof.
-  intros l l'.
-  intros H.
-  unfold is_permutation in H. symmetry in H.
+  intros l l'. intros H. unfold is_permutation in H. symmetry in H.
   unfold is_permutation. apply H. Qed.
 
 Theorem trans_eq : forall (n m o : nat),
   n = m -> m = o -> n = o.
 Proof.
-  intros n m o eq1 eq2. rewrite -> eq1. rewrite -> eq2. 
-  reflexivity.  Qed.
-
-
+  intros n m o eq1 eq2. rewrite -> eq1. rewrite -> eq2. reflexivity.  Qed.
 
 Theorem is_permutation_transitive : forall (l l' l'' : natlist),
   is_permutation l l' -> is_permutation l' l'' -> is_permutation l l''.
 Proof.
-  intros l l' l''.
-  intros H1.
-  intros H2.
-  unfold is_permutation in H1, H2.
-  unfold is_permutation.
-  intros v.
-  assert (Z : count v l = count v l').
-    apply H1.
-  assert (Y : count v l' = count v l'').
-    apply H2.
+  intros l l' l''. intros H1. intros H2. unfold is_permutation in H1, H2.
+  unfold is_permutation. intros v.
+  assert (Lemma1 : count v l = count v l').
+    Case "Proof of Lemma 1". apply H1.
+  assert (Lemma2 : count v l' = count v l'').
+    Case "Proof of Lemma 2". apply H2.
   apply trans_eq with (m := count v l').
-    rewrite Z. reflexivity.
-    rewrite Y. reflexivity. Qed.
+  rewrite Lemma1. reflexivity. rewrite Lemma2. reflexivity. Qed.
 
 
 
 Theorem is_permutation_append : forall (x x' y y' : natlist),
   is_permutation x y -> is_permutation x' y' -> is_permutation (x ++ x') (y ++ y').
 Proof.
-  intros x x' y y'.
-  intros H.
-  intros H'.
-  unfold is_permutation.
-  intros v.
-  rewrite append_add_counts.
-  rewrite append_add_counts.
-  unfold is_permutation in H, H'.
-  rewrite H.
-  rewrite H'.
-  reflexivity. Qed.
+  intros x x' y y'. intros H. intros H'. 
+  unfold is_permutation. 
+  intros v. rewrite append_add_counts. rewrite append_add_counts. 
+  unfold is_permutation in H, H'. rewrite H. rewrite H'. reflexivity. Qed.
 
 Theorem is_permutation_transposition : forall (v h : nat),
   is_permutation (v :: [h]) (h :: [v]).
 Proof.
-  intros v h.
-  unfold is_permutation.
-  intros v0.
+  intros v h. unfold is_permutation. intros v0.
   destruct (beq_nat v0 v) eqn:Casev.
   destruct (beq_nat v0 h) eqn:Caseh.
-  Case "v0 = v, v0 = h".
-    simpl. 
-    rewrite Casev.
-    rewrite Caseh.
-    reflexivity.
-  Case "v0 = v, v0 != h".
-    simpl.
-    rewrite Casev.
-    rewrite Caseh.
-    reflexivity.
+  Case "v0 = v, v0 = h". simpl. rewrite Casev. rewrite Caseh. reflexivity.
+  Case "v0 = v, v0 != h". simpl. rewrite Casev. rewrite Caseh. reflexivity.
   destruct (beq_nat v0 h) eqn:Caseh.
-  Case "v0 != v, v0 = h".
-    simpl.
-    rewrite Casev.
-    rewrite Caseh.
-    reflexivity.
-  Case "v0 != v, v0 != h".
-    simpl.
-    rewrite Casev.
-    rewrite Caseh.
-    reflexivity. Qed.
+  Case "v0 != v, v0 = h". simpl. rewrite Casev. rewrite Caseh. reflexivity.
+  Case "v0 != v, v0 != h". simpl. rewrite Casev. rewrite Caseh. reflexivity. Qed.
   
  Theorem is_permutation_swap_first : forall (l : natlist) (v h : nat),
   is_permutation (v :: h :: l) (h :: v :: l).
 Proof.
   intros l v h.
   assert (Lemma1 : is_permutation (v :: [h]) (h :: [v])).
-  Case "Proof of Lemma 1".
-    apply is_permutation_transposition.
-  apply is_permutation_append with (x := (v :: [h])) (x' := l) (y := (h :: [v])) (y' := l).
-  apply is_permutation_transposition.
-  apply is_permutation_reflexive. Qed.
+    Case "Proof of Lemma 1". apply is_permutation_transposition.
+  apply is_permutation_append with (x := (v :: [h]))
+                                   (x' := l) (y := (h :: [v])) (y' := l).
+  apply is_permutation_transposition. apply is_permutation_reflexive. Qed.
     
 
 Theorem is_permutation_same_head : forall (v : nat) (l l' : natlist),
   is_permutation l l' -> is_permutation (v :: l) (v :: l').
 Proof.
-  intros v l l'.
-  intros H.
+  intros v l l'. intros H.
   apply is_permutation_append with (x := [v]) (x' := l) (y := [v]) (y' := l').
-  apply is_permutation_reflexive.
-  apply H. Qed. 
+  apply is_permutation_reflexive. apply H. Qed. 
 
 
 
@@ -1552,21 +1465,20 @@ Fixpoint insertion_sort (l : natlist) : natlist :=
 Theorem insert_is_permutation : forall (v : nat) (l : natlist),
   is_permutation (v :: l) (insert v l).
 Proof.
-  intros v l.
-  induction l as [ | h t].
-  Case "l = []".
-    simpl. apply is_permutation_reflexive.
+  intros v l. induction l as [ | h t].
+  Case "l = []". simpl. apply is_permutation_reflexive.
   Case "l = h :: t".
   destruct (ble_nat v h) eqn:Case1.
     SCase "v <= h".
-      simpl. rewrite -> Case1. apply is_permutation_reflexive.
+      simpl. rewrite Case1. apply is_permutation_reflexive.
     SCase "v > h".
       simpl. rewrite -> Case1.
       assert (Lemma1 : is_permutation (v :: h :: t) (h :: v :: t)).
-        apply is_permutation_swap_first.
+        SSCase "Proof of Lemma 1". apply is_permutation_swap_first.
       apply is_permutation_transitive with (l' := (h :: v :: t)).
-        apply Lemma1.
-        apply is_permutation_same_head with (v := h) (l := (v :: t)) (l' := (insert v t)).
+        apply Lemma1. 
+        apply is_permutation_same_head with (v := h) (l := (v :: t)) 
+                                                     (l' := (insert v t)).
         apply IHt. Qed.
 
 (* Sortedness correctness *)
@@ -1574,136 +1486,84 @@ Proof.
 Theorem leq_than_all_alternative_def : forall (v : nat) (l : natlist),
   (leq_than_all v l) = true -> (forall (n : nat), (ble_nat v n) = false -> count n l = 0).
 Proof.
-  intros v l.
-  intros H.
-  intros n.
-  intros H'.
-  induction l as [ | h t].
-  Case "l = []".
-    simpl.
-    reflexivity.
-  Case "l = h :: t".
-    simpl.
-  assert (Helper1 : leq_than_all v (h :: t) = true).
-  SCase "Proof of Helper 1".
-    rewrite H. reflexivity.
-  assert (Helper2 : leq_than_all v (h :: t) = true).
-  SCase "Proof of Helper 1".
-    rewrite H. reflexivity.
-  assert (Lemma1: leq_than_all v t = true).
-  SCase "Proof of Lemma 1".
-    simpl in Helper1.
-    apply andb_true_elim2 in Helper1.
-    apply Helper1.
-  rewrite Lemma1 in IHt.
-  rewrite IHt.
-  assert (Lemma2: ble_nat v h = true).
-  SCase "Proof of Lemma 2".
-    simpl in Helper2.
-    apply andb_true_elim1 in Helper2.
-    apply Helper2.
-  assert (Lemma3: beq_nat n h = false).
-  SCase "Proof of Lemma 3".
-    apply ble_nat_helper1 with (u := v).
-  apply H'.
-  apply Lemma2.
-  rewrite Lemma3. reflexivity.
-  reflexivity. Qed.    
+  intros v l. intros H. intros n. intros H'. induction l as [ | h t].
+  Case "l = []". simpl. reflexivity.
+  Case "l = h :: t". simpl.
+    assert (Helper1 : leq_than_all v (h :: t) = true).
+      SCase "Proof of Helper 1". rewrite H. reflexivity.
+    assert (Helper2 : leq_than_all v (h :: t) = true).
+      SCase "Proof of Helper 1". rewrite H. reflexivity.
+    assert (Lemma1: leq_than_all v t = true).
+      SCase "Proof of Lemma 1". simpl in Helper1. apply andb_true_elim2 in Helper1.
+        apply Helper1.
+    rewrite Lemma1 in IHt. rewrite IHt.
+    assert (Lemma2: ble_nat v h = true).
+      SCase "Proof of Lemma 2". simpl in Helper2. apply andb_true_elim1 in Helper2.
+        apply Helper2.
+    assert (Lemma3: beq_nat n h = false).
+      SCase "Proof of Lemma 3". apply ble_nat_helper1 with (u := v).
+        apply H'. apply Lemma2.
+  rewrite Lemma3. reflexivity. reflexivity. Qed.    
   
 Theorem leq_than_all_alternative_def1 : forall (v : nat) (l : natlist),
   (forall (n : nat), (ble_nat v n) = false -> count n l = 0) -> (leq_than_all v l) = true.
 Proof. 
-  intros v l.
-  intros H.
-  induction l as [ | h t].
-  Case "l = []".
-    simpl. reflexivity.
-  Case "l = h :: t".
-  simpl.
+  intros v l. intros H. induction l as [ | h t].
+  Case "l = []". simpl. reflexivity.
+  Case "l = h :: t". simpl.
   assert (Lemma1 : forall (n : nat), count n (h :: t) = 0 -> count n t = 0).
-  SCase "Proof of Lemma 1".
-    intros n.
-    apply count_helper.
+    SCase "Proof of Lemma 1". intros n. apply count_helper.
   assert (Lemma2 : forall n : nat, ble_nat v n = false -> count n t = 0).
-  SCase "Proof of Lemma 2".
-    intros n H'.
-    apply Lemma1. 
-    apply H.
-    apply H'.
+    SCase "Proof of Lemma 2". intros n H'. apply Lemma1. apply H. apply H'.
   assert (Lemma3 : leq_than_all v t = true).
-  SCase "Proof of Lemma 3".
-    apply IHt.
-    apply Lemma2.
-  rewrite Lemma3.
-  destruct (ble_nat v h) eqn:Casevh.
-  SCase "v <= h".
-    simpl.
-    reflexivity.
+    SCase "Proof of Lemma 3". apply IHt. apply Lemma2.
+  rewrite Lemma3. destruct (ble_nat v h) eqn:Casevh.
+  SCase "v <= h". simpl. reflexivity.
   SCase "v > h".
   assert (Lemma4 : count h (h :: t) = 0).
-  SSCase "Proof of Lemma 4".
-    apply H. apply Casevh.
-  simpl in Lemma4. rewrite <- beq_nat_refl in Lemma4.
-  inversion Lemma4. Qed.
+    SSCase "Proof of Lemma 4". apply H. apply Casevh.
+  simpl in Lemma4. rewrite <- beq_nat_refl in Lemma4. inversion Lemma4. Qed.
 
 Theorem leq_than_all_invariant_permutation : forall (v : nat) (l l' : natlist),
   is_permutation l l' -> (leq_than_all v l) = true -> (leq_than_all v l') = true.
 Proof. 
-  intros v l l'.
-  intros H.
-  intros H'.
-  unfold is_permutation in H.
+  intros v l l'. intros H. intros H'. unfold is_permutation in H.
   assert (Lemma1 : forall (n : nat), (ble_nat v n) = false -> count n l = 0). 
-    apply leq_than_all_alternative_def. apply H'.
+    Case "Proof of Lemma 1". apply leq_than_all_alternative_def. apply H'.
   assert (Lemma2 : forall (n : nat), (ble_nat v n) = false -> count n l' = 0).
-    intros n.
-    assert (Lemma21 : count n l = count n l').
-      apply H.
-    rewrite <- Lemma21.
-    apply Lemma1.
+    Case "Proof of Lemma 2". intros n.
+      assert (Lemma21 : count n l = count n l'). apply H.
+      rewrite <- Lemma21. apply Lemma1.
   apply leq_than_all_alternative_def1. apply Lemma2. Qed.
   
 Theorem insertion_helper : forall (l : natlist) (v h: nat),
   leq_than_all v l = true -> ble_nat v h = true -> leq_than_all v (insert h l) = true.
 Proof.
-  intros l v h.
-  intros H.
-  intros H'.
+  intros l v h. intros H. intros H'.
   assert (Lemma1 : leq_than_all v (h :: l) = true).
-  Case "Proof of Lemma 1".
-    simpl.
-    rewrite H.
-    rewrite H'.
-    simpl. reflexivity.
+    Case "Proof of Lemma 1". simpl. rewrite H. rewrite H'. simpl. reflexivity.
   assert (Lemma2 : is_permutation (h :: l) (insert h l)).
-  Case "Proof of Lemma 2".
-    apply insert_is_permutation.
+    Case "Proof of Lemma 2". apply insert_is_permutation.
   apply leq_than_all_invariant_permutation with (l := (h :: l)).
-  apply Lemma2.
-  apply Lemma1. Qed.
+  apply Lemma2. apply Lemma1. Qed.
 
      
 Theorem insert_preserves_sortedness : forall (v : nat) (l : natlist),
   is_sorted l = true -> is_sorted (insert v l) = true.
 Proof.
-  intros v l.
-  intros H.
-  induction l as [ | h t].
-  simpl. reflexivity.
-  simpl.
-
-  assert (Lemma1: andb (ble_nat v h) (is_sorted (h :: t)) = true  -> is_sorted (v :: h :: t) = true).
-    apply sorted_from_tail.
-
-  assert (Lemma2 : is_sorted (h :: t) = true).
-    rewrite H. reflexivity.
-
-  assert (Lemma3: is_sorted t = true).
-    apply sorted_implies_subsorted in Lemma2. rewrite -> Lemma2. reflexivity.
-
-  assert (Lemma4: is_sorted (insert v t) = true).
-    rewrite Lemma3 in IHt. apply IHt. reflexivity.
-
+  intros v l. intros H. induction l as [ | h t].
+  Case "l = []". simpl. reflexivity.
+  Case "l = h :: t". simpl.
+    assert (Lemma1: andb (ble_nat v h) (is_sorted (h :: t)) = true  
+                    -> is_sorted (v :: h :: t) = true).
+      SCase "Proof of Lemma 1". apply sorted_from_tail.
+    assert (Lemma2 : is_sorted (h :: t) = true).
+      SCase "Proof of Lemma 2". rewrite H. reflexivity.
+    assert (Lemma3: is_sorted t = true).
+      SCase "Proof of Lemma 3".
+        apply sorted_implies_subsorted in Lemma2. rewrite -> Lemma2. reflexivity.
+    assert (Lemma4: is_sorted (insert v t) = true).
+      SCase "Proof of Lemma 4". rewrite Lemma3 in IHt. apply IHt. reflexivity.
   destruct (insert v t) as [ | h' t'] eqn:Caseinsert.
     Case "insert v t = []".
       destruct (ble_nat v h) eqn:Casevh. 
