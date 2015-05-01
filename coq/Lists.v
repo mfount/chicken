@@ -1513,7 +1513,7 @@ Fixpoint insertion_sort (l : natlist) : natlist :=
     (insertion_sort l) is a permutation of l. *)
 
 (* First, we show that the insert subroutine gives a permutation
-   in the obvious way *)
+   of what we would get if we just inserted in the first position. *)
 Theorem insert_is_permutation : forall (v : nat) (l : natlist),
   is_permutation (v :: l) (insert v l).
 Proof.
@@ -1533,6 +1533,7 @@ Proof.
                                                      (l' := (insert v t)).
         apply IHt. Qed.
 
+(* Now it's easy to show the main lemma *)
 Theorem insertion_sort_is_permutation : forall (l : natlist),
   is_permutation l (insertion_sort l).
 Proof.
