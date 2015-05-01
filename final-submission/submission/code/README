@@ -21,8 +21,11 @@ makefile.
 
 Within the code directory, just run make.
 
-The compiler will create a bunch of files used by coq, along with some OCaml translations
-of the sorting algorithm. 
+The compiler will create a bunch of files used by coq, along with some OCaml
+translations of the sorting algorithm. 
+
+The `ml` directory contains copies of all ml files generated during the build
+process.
 
 ###############################
 #  Stepping through the code  #
