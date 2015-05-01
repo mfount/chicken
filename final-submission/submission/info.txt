@@ -1,2 +1,2 @@
-title: chicken (as in, ``We're too chicken to use unverified sorting algorithms.'')
+title: chicken: Sorting, Verifiably.
 seas-usernames: mfount, bwetherfield, amakelov, chankang

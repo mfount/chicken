@@ -1,0 +1,27 @@
+###################################
+#                                 #
+#  chicken: Sorting, Verifiably.  #
+#                                 #
+#  Aleksandar Makelov             #
+#  Benjamin Wetherfield           #
+#  Chan Kang                      #
+#  Michael Fountaine              #
+#                                 #
+#  cs51 Project, Spring '15       #
+#                                 #
+###################################
+
+
+######################
+#  Building chicken  #
+######################
+
+Make-ing modules and what the modules are
+
+###############################
+#  Stepping through the code  #
+###############################
+
+#####################################################
+#  Exporting to OCaml and using the verified sorter #
+#####################################################
