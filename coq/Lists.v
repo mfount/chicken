@@ -1429,6 +1429,10 @@ Lemma ble_nat_helper : forall (u v : nat),
 Proof.
   intros u v.
   intros H.
+  induction v as [ | v'].
+  simpl in H.
+  inversion H.
+  simpl in H.
   Admitted.
 
 Theorem ble_nat_transitive : forall (u v w : nat),
@@ -1453,9 +1457,31 @@ Proof.
     inversion H.
   *)
 
+Lemma ble_nat_anticomm : forall (u v : nat),
+  (ble_nat u v) = false -> (ble_nat v u) = true.
+Proof.
+  intros u v.
+  intros H.
+  induction u as [ | u'].
+  Case "u = 0".
+  simpl. simpl in H.
+  destruct (ble_nat v 0).
+  reflexivity.
+  rewrite H. reflexivity. 
+  induction v as [ | v'].
+  simpl. reflexivity.
+  simpl. simpl in IHu'.
+  Admitted.
+
+Lemma ble_nat_helper1 : forall (u v w: nat),
+  ble_nat u v = false -> ble_nat u w = true -> beq_nat v w = false.
+Proof.
+  Admitted.
+     
+
 Theorem leq_than_all_alternative_def : forall (v : nat) (l : natlist),
   (leq_than_all v l) = true -> (forall (n : nat), (ble_nat v n) = false -> count n l = 0).
-Proof. 
+Proof.
   intros v l.
   intros H.
   intros n.
@@ -1484,9 +1510,56 @@ Proof.
     simpl in Helper2.
     apply andb_true_elim1 in Helper2.
     apply Helper2.
-    Admitted.
+  assert (Lemma3: beq_nat n h = false).
+  SCase "Proof of Lemma 3".
+    apply ble_nat_helper1 with (u := v).
+  apply H'.
+  apply Lemma2.
+  rewrite Lemma3. reflexivity.
+  reflexivity. Qed.    
   
-    
+Lemma count_helper : forall (v h : nat) (l : natlist),
+  count v (h :: l) = 0 -> count v l = 0.
+Proof.
+  intros v h l.
+  intros H.
+  simpl in H.
+  destruct (beq_nat v h) eqn:Casevh.
+  inversion H.
+  apply H. Qed.
+
+
+Theorem leq_than_all_alternative_def1 : forall (v : nat) (l : natlist),
+  (forall (n : nat), (ble_nat v n) = false -> count n l = 0) -> (leq_than_all v l) = true.
+Proof. 
+  intros v l.
+  intros H.
+  induction l as [ | h t].
+  Case "l = []".
+    simpl. reflexivity.
+  Case "l = h :: t".
+  simpl.
+  assert (Lemma1 : forall (n : nat), count n (h :: t) = 0 -> count n t = 0).
+  SCase "Proof of Lemma 1".
+    intros n.
+    apply count_helper.
+  assert (Lemma2 : forall n : nat, ble_nat v n = false -> count n t = 0).
+  intros n H'.
+  apply Lemma1. 
+  apply H.
+  apply H'.
+  Admitted.
+
+(*
+  assert (Lemma1 : forall (n : nat), count n (h :: t) = 0 -> count n t = 0).
+  SCase "Proof of Lemma 1".
+    intros n.
+    apply count_helper.
+  assert (Lemma2 : forall n : nat, ble_nat v n = false -> count n t = 0).
+  SCase "Proof of Lemma 2".
+  intros n. 
+  intros m in Lemma1.
+  *)
 
 Theorem less_than_all_invariant_permutation : forall (v : nat) (l l' : natlist),
   is_permutation l l' -> (leq_than_all v l) = true -> (leq_than_all v l') = true.
@@ -1495,7 +1568,17 @@ Proof.
   intros H.
   intros H'.
   unfold is_permutation in H.
-  Admitted.
+  assert (Lemma1 : forall (n : nat), (ble_nat v n) = false -> count n l = 0). 
+    apply leq_than_all_alternative_def. apply H'.
+  assert (Lemma2 : forall (n : nat), (ble_nat v n) = false -> count n l' = 0).
+    intros n.
+    assert (Lemma21 : count n l = count n l').
+      apply H.
+    rewrite <- Lemma21.
+    apply Lemma1.
+  apply leq_than_all_alternative_def1. apply Lemma2. Qed.
+    
+      
      
 
 
@@ -1541,22 +1624,6 @@ Proof.
   destruct b.
   reflexivity.
   reflexivity. Qed.
-
-Lemma ble_nat_anticomm : forall (u v : nat),
-  (ble_nat u v) = false -> (ble_nat v u) = true.
-Proof.
-  intros u v.
-  intros H.
-  induction u as [ | u'].
-  Case "u = 0".
-  simpl. simpl in H.
-  destruct (ble_nat v 0).
-  reflexivity.
-  rewrite H. reflexivity. 
-  induction v as [ | v'].
-  simpl. reflexivity.
-  simpl. simpl in IHu'.
-  Admitted.
      
 
 Theorem insert_preserves_sortedness : forall (v : nat) (l : natlist),
@@ -1580,14 +1647,15 @@ Proof.
   assert (Lemma4: is_sorted (insert v t) = true).
     rewrite Lemma3 in IHt. apply IHt. reflexivity.
 
-  destruct (insert v t) as [ | h' t'].
+  destruct (insert v t) as [ | h' t'] eqn:Caseinsert.
     Case "insert v t = []".
-      destruct (ble_nat v h). rewrite H in Lemma1. apply Lemma1. simpl. reflexivity.
+      destruct (ble_nat v h) eqn:Casevh. 
+      rewrite H in Lemma1. apply Lemma1. simpl. reflexivity.
       simpl. reflexivity.
     Case "insert v t = h' :: t'".
       assert (Lemma5: (ble_nat v h = false) -> ble_nat h h' = true).
         admit.
-      destruct (ble_nat v h).
+      destruct (ble_nat v h) eqn:Casevh.
       rewrite H in Lemma1. apply Lemma1. simpl. reflexivity.
       apply sorted_from_tail. rewrite Lemma5. rewrite Lemma4. simpl. reflexivity.
       reflexivity. Qed.
